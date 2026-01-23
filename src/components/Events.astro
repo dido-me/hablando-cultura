@@ -1,0 +1,75 @@
+---
+// Events Component - Próximos Eventos
+---
+
+<section class="py-24 bg-slate-900 relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-96 h-96 bg-[var(--primary)] rounded-full blur-[150px] opacity-20"></div>
+    <div class="absolute bottom-0 left-0 w-96 h-96 bg-blue-600 rounded-full blur-[150px] opacity-10"></div>
+    
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+        <div class="text-center mb-16">
+            <h2 class="font-display text-4xl lg:text-5xl font-bold text-white mb-6">Próximos Eventos</h2>
+            <p class="text-slate-400 max-w-2xl mx-auto text-lg">Únete a experiencias transformadoras que cambiarán tu perspectiva y potenciarán tu crecimiento personal y profesional.</p>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Evento 1: Conferencia -->
+            <div class="glass-card rounded-[2rem] p-8 lg:p-10 hover:-translate-y-1 transition-transform duration-500">
+                <div class="flex justify-between items-start mb-8">
+                    <span class="inline-block px-4 py-1.5 bg-slate-700/50 border border-slate-600 text-white text-xs font-medium rounded-full backdrop-blur-sm">Conferencia Magistral</span>
+                    <span class="text-white font-bold tracking-tight">Mar 2026</span>
+                </div>
+                <h3 class="font-display text-2xl lg:text-3xl font-bold text-white mb-4 leading-tight">Liderazgo del Futuro: Transformando Organizaciones</h3>
+                <p class="text-slate-400 mb-8 leading-relaxed">Una experiencia inmersiva de 2 días donde aprenderás las estrategias más avanzadas de liderazgo empresarial en el sector cultural.</p>
+                <div class="space-y-3 pt-6 border-t border-slate-700/50">
+                    <div class="flex items-center text-slate-300 gap-3">
+                        <span class="material-symbols-outlined text-[var(--primary)]">calendar_month</span>
+                        <span class="text-sm">15-16 de Marzo, 2026</span>
+                    </div>
+                    <div class="flex items-center text-slate-300 gap-3">
+                        <span class="material-symbols-outlined text-[var(--primary)]">location_on</span>
+                        <span class="text-sm">Ciudad de México, México</span>
+                    </div>
+                    <div class="flex items-center text-slate-300 gap-3">
+                        <span class="material-symbols-outlined text-[var(--secondary)]">group</span>
+                        <span class="text-sm font-medium text-[var(--secondary)]">Cupos Limitados</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Evento 2: Masterclass -->
+            <div class="glass-card rounded-[2rem] overflow-hidden group hover:-translate-y-1 transition-transform duration-500 relative flex flex-col justify-between">
+                <div class="absolute inset-0 z-0">
+                    <img alt="Masterclass Background" class="w-full h-full object-cover opacity-30 group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRzGjetHz3qW6_tp1ePBG8jtfdbkC3AUuP7tVh-qH5DznSy0VOPezRbrGaWAqhGJquOvLVnMMtrcvoM-ykCJMc78P6mcSDdHkIHkrTL2jGVNFVXAKoRk0C3mkm2yX57pua3RrIAOdQ4fDXP7gzgj-E9ILa-oe5bxq3q4amQe-sOslXUImP0Q04HeMxFLZWs7JcP4W5w-lRCAW7je7rQB46DmLPHVCW4Hf7bF3rnBWTQqErkvylCbEDwf187IF2aPV0EijQUhOp5ws" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/80 to-slate-900/60"></div>
+                </div>
+                <div class="relative z-10 p-8 lg:p-10 flex flex-col h-full">
+                    <div class="flex justify-between items-start mb-12">
+                        <span class="inline-block px-4 py-1.5 bg-[var(--primary)] text-white text-xs font-bold rounded-full shadow-lg shadow-purple-900/50">Workshop Virtual</span>
+                        <span class="text-white font-bold tracking-tight opacity-80">Abr 2026</span>
+                    </div>
+                    <div class="flex-grow flex items-center justify-center mb-12">
+                        <div class="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center group-hover:scale-110 transition-transform cursor-pointer">
+                            <span class="material-symbols-outlined text-white text-3xl ml-1">play_arrow</span>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-display text-2xl lg:text-3xl font-bold text-white mb-4 leading-tight">Masterclass: Mentalidad de Abundancia</h3>
+                        <p class="text-slate-400 mb-6 text-sm line-clamp-2">Descubre cómo desarrollar una mentalidad que atraiga oportunidades y acelere tu éxito personal y profesional.</p>
+                        <div class="space-y-2 text-xs font-medium text-slate-400">
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-sm">event</span> 22 de Abril, 2026
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-sm">schedule</span> 3 horas intensivas
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-sm">language</span> Acceso mundial
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

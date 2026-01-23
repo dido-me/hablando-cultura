@@ -1,0 +1,52 @@
+---
+// Blog Component - Últimas noticias
+import { getCollection } from "astro:content";
+
+// Obtener los últimos 3 posts
+const allPosts = await getCollection("blog");
+const latestPosts = allPosts
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+  .slice(0, 3);
+
+// Formatear fecha
+function formatDate(date: Date): string {
+  return date.toLocaleDateString("es-ES", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  }).toUpperCase();
+}
+---
+
+<section class="py-24 bg-[var(--lavender)]" id="blog">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="flex justify-between items-end mb-16">
+            <div>
+                <h2 class="font-display text-4xl font-bold text-slate-900 mb-4">Últimas noticias</h2>
+                <p class="text-slate-600">Actualidad, tendencias y consejos sobre gestión cultural.</p>
+            </div>
+            <a class="hidden md:flex items-center gap-2 text-[var(--primary)] font-bold hover:underline" href="/blog">
+                Ver todas <span class="material-symbols-outlined">arrow_right_alt</span>
+            </a>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {latestPosts.map((post) => (
+                <a href={`/blog/${post.slug}`} class="bg-white rounded-3xl overflow-hidden shadow-sm group hover:shadow-xl transition-all">
+                    <div class="aspect-video overflow-hidden">
+                        <img alt={post.data.title} class="w-full h-full object-cover group-hover:scale-105 transition-all" src={post.data.heroImage} />
+                    </div>
+                    <div class="p-8">
+                        <span class="text-xs font-bold text-slate-400">{formatDate(post.data.pubDate)}</span>
+                        <h3 class="font-bold text-lg mt-2 group-hover:text-[var(--primary)] transition-colors">{post.data.title}</h3>
+                    </div>
+                </a>
+            ))}
+        </div>
+        <!-- Mobile link -->
+        <div class="mt-8 text-center md:hidden">
+            <a class="inline-flex items-center gap-2 text-[var(--primary)] font-bold hover:underline" href="/blog">
+                Ver todos los artículos <span class="material-symbols-outlined">arrow_right_alt</span>
+            </a>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,52 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* CSS Variables */
+:root {
+    --primary: #6d28d9;
+    --secondary: #facc15;
+    --lavender: #f5f3ff;
+    --dark-bg: #0f172a;
+    --card-glass: rgba(255, 255, 255, 0.03);
+}
+
+/* Typography */
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.font-display {
+    font-family: 'Outfit', sans-serif;
+}
+
+/* Material Icons */
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Custom Effects */
+.grayscale-hover {
+    filter: grayscale(100%);
+    transition: all 0.4s ease;
+}
+
+.grayscale-hover:hover {
+    filter: grayscale(0%);
+}
+
+/* Header Styles */
+.sticky-header {
+    @apply sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100;
+}
+
+/* Glass Card Effect */
+.glass-card {
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.9));
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Text Glow Effect */
+.text-glow {
+    text-shadow: 0 0 20px rgba(109, 40, 217, 0.5);
+}

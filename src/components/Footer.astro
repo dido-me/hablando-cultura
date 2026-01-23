@@ -1,0 +1,53 @@
+---
+// Footer Component - Pie de página y contacto
+import TextFlip from './TextFlip';
+---
+
+<footer class="bg-[#020617] text-white pt-32 pb-12 relative overflow-hidden" id="contacto">
+    <div class="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-[#0f172a] to-[#020617]"></div>
+    
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 text-center">
+        <!-- YouTube/Spotify CTA con animación -->
+        <div class="mb-24 transform md:scale-110">
+            <TextFlip 
+                client:load 
+                platforms={[
+                    {
+                        name: 'YouTube',
+                        color: '#ef4444',
+                        image: '/fotos-karolay/1.webp'
+                    },
+                    {
+                        name: 'Spotify',
+                        color: '#22c55e',
+                        image: '/fotos-karolay/1.webp'
+                    }
+                ]}
+                interval={5000}
+            />
+        </div>
+        
+        <!-- Divider -->
+        <div class="w-full h-px bg-slate-800/50 max-w-lg mx-auto mb-12"></div>
+        
+        <!-- Legal Links -->
+        <div class="flex flex-wrap justify-center gap-8 mb-12 text-slate-400 text-sm font-medium">
+            <a class="hover:text-white transition-colors" href="#">Términos Legales</a>
+            <a class="hover:text-white transition-colors" href="#">Privacidad</a>
+            <a class="hover:text-white transition-colors" href="#">Cookies</a>
+            <a class="hover:text-white transition-colors" href="#">Política de Reembolsos</a>
+        </div>
+        
+        <!-- Changelog -->
+        <div class="flex justify-center">
+            <a class="flex items-center gap-2 text-slate-500 hover:text-white transition-colors text-xs font-medium px-4 py-2 rounded-full hover:bg-white/5 border border-transparent hover:border-white/10" href="#">
+                <span class="material-symbols-outlined text-sm">campaign</span>
+                Changelog
+            </a>
+        </div>
+    </div>
+</footer>
+
+<style>
+    /* Estilos adicionales si son necesarios */
+</style>

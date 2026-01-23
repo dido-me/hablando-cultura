@@ -1,0 +1,130 @@
+---
+// Hero Component - Sección principal de bienvenida con carrusel
+const images = [
+    { src: "/fotos-karolay/1.webp", alt: "Karolay Ramírez - Foto 1" },
+    { src: "/fotos-karolay/2.webp", alt: "Karolay Ramírez - Foto 2" },
+    { src: "/fotos-karolay/3.webp", alt: "Karolay Ramírez - Foto 3" },
+];
+---
+
+<section class="relative py-20 lg:py-32 overflow-hidden bg-white" id="inicio">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col lg:flex-row items-center gap-16">
+        <div class="flex-1 text-center lg:text-left">
+            <h1 class="font-display text-5xl lg:text-7xl font-extrabold tracking-tight text-slate-900 leading-[1.1] mb-6">
+                Atrévete a <span class="text-[var(--primary)]">emprender</span> en arte y cultura
+            </h1>
+            <p class="text-xl text-slate-600 mb-10 max-w-xl">
+                Yo te acompaño para hacer realidad tu sueño. Estrategia y gestión para proyectos que impactan.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <a class="px-8 py-4 bg-[var(--primary)] text-white font-bold rounded-full hover:shadow-xl hover:scale-105 transition-all" href="#proyectos">
+                    Conoce mis proyectos
+                </a>
+                <a class="px-8 py-4 border-2 border-[var(--primary)] text-[var(--primary)] font-bold rounded-full hover:bg-purple-50 transition-all" href="#ebook">
+                    Descargar E-book
+                </a>
+            </div>
+        </div>
+        <div class="flex-1 relative">
+            <div class="hero-carousel relative w-full aspect-[4/5] lg:aspect-square rounded-3xl overflow-hidden shadow-2xl">
+                {images.map((image, index) => (
+                    <img 
+                        alt={image.alt} 
+                        class={`carousel-slide absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${index === 0 ? 'opacity-100' : 'opacity-0'}`}
+                        src={image.src}
+                        data-index={index}
+                    />
+                ))}
+                <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none"></div>
+                
+                <!-- Indicadores del carrusel -->
+                <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                    {images.map((_, index) => (
+                        <button 
+                            class={`carousel-dot w-2 h-2 rounded-full transition-all duration-300 ${index === 0 ? 'bg-white w-6' : 'bg-white/50 hover:bg-white/75'}`}
+                            data-index={index}
+                            aria-label={`Ir a imagen ${index + 1}`}
+                        />
+                    ))}
+                </div>
+            </div>
+            <div class="absolute -bottom-6 -left-6 bg-white p-6 rounded-2xl shadow-xl border border-slate-100 hidden md:block">
+                <span class="text-[var(--secondary)] font-black text-4xl block">+15</span>
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Años de Experiencia</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function initCarousel() {
+        const carousel = document.querySelector('.hero-carousel');
+        if (!carousel) return;
+        
+        const slides = carousel.querySelectorAll('.carousel-slide');
+        const dots = carousel.querySelectorAll('.carousel-dot');
+        let currentIndex = 0;
+        const totalSlides = slides.length;
+        let intervalId: ReturnType<typeof setInterval>;
+
+        function showSlide(index: number) {
+            slides.forEach((slide, i) => {
+                if (i === index) {
+                    slide.classList.remove('opacity-0');
+                    slide.classList.add('opacity-100');
+                } else {
+                    slide.classList.remove('opacity-100');
+                    slide.classList.add('opacity-0');
+                }
+            });
+
+            dots.forEach((dot, i) => {
+                if (i === index) {
+                    dot.classList.remove('bg-white/50', 'w-2');
+                    dot.classList.add('bg-white', 'w-6');
+                } else {
+                    dot.classList.remove('bg-white', 'w-6');
+                    dot.classList.add('bg-white/50', 'w-2');
+                }
+            });
+
+            currentIndex = index;
+        }
+
+        function nextSlide() {
+            const next = (currentIndex + 1) % totalSlides;
+            showSlide(next);
+        }
+
+        function startAutoplay() {
+            intervalId = setInterval(nextSlide, 4000);
+        }
+
+        function stopAutoplay() {
+            clearInterval(intervalId);
+        }
+
+        // Click en indicadores
+        dots.forEach((dot) => {
+            dot.addEventListener('click', () => {
+                const index = parseInt(dot.getAttribute('data-index') || '0');
+                showSlide(index);
+                stopAutoplay();
+                startAutoplay();
+            });
+        });
+
+        // Pausar al hacer hover
+        carousel.addEventListener('mouseenter', stopAutoplay);
+        carousel.addEventListener('mouseleave', startAutoplay);
+
+        // Iniciar autoplay
+        startAutoplay();
+    }
+
+    // Ejecutar cuando el DOM esté listo
+    document.addEventListener('DOMContentLoaded', initCarousel);
+    
+    // Para navegación con View Transitions de Astro
+    document.addEventListener('astro:after-swap', initCarousel);
+</script>
