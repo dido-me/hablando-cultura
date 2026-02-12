@@ -1,4 +1,6 @@
 ---
+export const prerender = true;
+
 import Layout from "../../layouts/Layout.astro";
 import { getCollection } from "astro:content";
 import { 
@@ -364,19 +366,23 @@ const categorySlug = CATEGORY_SLUGS[post.data.category as BlogCategory] || post.
         Suscríbete a mi newsletter y recibe más contenido sobre gestión cultural
         directamente en tu correo.
       </p>
-      <form class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+      <form id="subscribe-form" class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
         <input
+          name="email"
+          required
           type="email"
           placeholder="tu@email.com"
           class="flex-1 px-6 py-4 rounded-full bg-white/10 border border-white/20 text-white placeholder-slate-400 focus:outline-none focus:border-[var(--primary)]"
         />
         <button
+          id="subscribe-btn"
           type="submit"
           class="px-8 py-4 rounded-full bg-[var(--primary)] text-white font-bold hover:bg-[var(--primary)]/90 transition-all"
         >
           Suscribirme
         </button>
       </form>
+      <p id="subscribe-message" class="text-center text-sm mt-4 hidden"></p>
     </div>
   </section>
 
@@ -420,6 +426,46 @@ const categorySlug = CATEGORY_SLUGS[post.data.category as BlogCategory] || post.
     </div>
   </footer>
 </Layout>
+
+<script>
+  const subForm = document.getElementById("subscribe-form") as HTMLFormElement;
+  const subBtn = document.getElementById("subscribe-btn") as HTMLButtonElement;
+  const subMsg = document.getElementById("subscribe-message") as HTMLParagraphElement;
+
+  subForm?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const formData = new FormData(subForm);
+    const email = formData.get("email") as string;
+
+    subBtn.disabled = true;
+    subBtn.textContent = "Enviando...";
+    subMsg.classList.add("hidden");
+
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        subMsg.textContent = "¡Te has suscrito exitosamente! Revisa tu correo.";
+        subMsg.className = "text-center text-sm mt-4 text-green-400 font-semibold";
+        subForm.reset();
+      } else {
+        subMsg.textContent = data.error || "Ocurrió un error. Intenta de nuevo.";
+        subMsg.className = "text-center text-sm mt-4 text-red-400 font-semibold";
+      }
+    } catch {
+      subMsg.textContent = "Error de conexión. Intenta de nuevo.";
+      subMsg.className = "text-center text-sm mt-4 text-red-400 font-semibold";
+    } finally {
+      subBtn.disabled = false;
+      subBtn.textContent = "Suscribirme";
+    }
+  });
+</script>
 
 <style>
   /* Estilos para el contenido del artículo */

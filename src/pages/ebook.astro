@@ -1,4 +1,6 @@
 ---
+export const prerender = true;
+
 import Layout from "../layouts/Layout.astro";
 ---
 
@@ -66,25 +68,26 @@ import Layout from "../layouts/Layout.astro";
             <div class="max-w-xl mx-auto">
                 <div class="bg-purple-50 rounded-3xl p-8 lg:p-12 space-y-8">
                     <div class="text-center">
-                        <h2 class="font-display text-3xl font-bold text-slate-900 mb-3">Descarga tu ebook</h2>
+                        <h2 class="font-display text-3xl font-bold text-slate-900 mb-3">Obtén tu ebook</h2>
                         <p class="text-slate-600">Ingresa tus datos y te enviaremos el ebook a tu correo.</p>
                     </div>
-                    <form class="space-y-4">
-                        <input class="w-full px-6 py-4 rounded-full border-slate-200 focus:ring-[var(--primary)] focus:border-[var(--primary)]" placeholder="Tu nombre" type="text" />
-                        <input class="w-full px-6 py-4 rounded-full border-slate-200 focus:ring-[var(--primary)] focus:border-[var(--primary)]" placeholder="Tu email" type="email" />
+                    <form id="ebook-form" class="space-y-4">
+                        <input name="name" required class="w-full px-6 py-4 rounded-full border-slate-200 focus:ring-[var(--primary)] focus:border-[var(--primary)]" placeholder="Tu nombre" type="text" />
+                        <input name="email" required class="w-full px-6 py-4 rounded-full border-slate-200 focus:ring-[var(--primary)] focus:border-[var(--primary)]" placeholder="Tu email" type="email" />
                         <label class="flex items-center gap-3 cursor-pointer">
-                            <input class="rounded text-[var(--primary)] focus:ring-[var(--primary)]" type="checkbox" />
+                            <input name="whatsapp" class="rounded text-[var(--primary)] focus:ring-[var(--primary)]" type="checkbox" />
                             <span class="text-sm text-slate-500">Deseo unirme a la comunidad de WhatsApp</span>
                         </label>
-                        <button class="w-full px-8 py-4 bg-[var(--primary)] text-white font-bold rounded-full shadow-lg hover:bg-purple-800 transition-all" type="submit">
-                            Descargar ahora
+                        <button id="ebook-btn" disabled class="w-full px-8 py-4 bg-[var(--primary)] text-white font-bold rounded-full shadow-lg hover:bg-purple-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[var(--primary)]" type="submit">
+                            Obtener libro
                         </button>
+                        <p id="ebook-message" class="text-center text-sm hidden"></p>
                     </form>
                     <div class="flex items-center justify-center gap-4 text-xs font-semibold text-slate-400">
                         <span>Aceptamos:</span>
-                        <div class="flex gap-3">
-                            <span class="bg-white px-2 py-1 rounded border border-slate-100">Yape</span>
-                            <span class="bg-white px-2 py-1 rounded border border-slate-100">Plin</span>
+                        <div class="flex gap-3 items-center">
+                            <img src="/pagos/yape.png" alt="Yape" class="h-8" />
+                            <img src="/pagos/plin.png" alt="Plin" class="h-8" />
                         </div>
                     </div>
                 </div>
@@ -101,6 +104,65 @@ import Layout from "../layouts/Layout.astro";
             loop: true,
             zoomable: true,
             draggable: true,
+        });
+
+        const form = document.getElementById("ebook-form") as HTMLFormElement;
+        const btn = document.getElementById("ebook-btn") as HTMLButtonElement;
+        const msg = document.getElementById("ebook-message") as HTMLParagraphElement;
+        const nameInput = form.querySelector('input[name="name"]') as HTMLInputElement;
+        const emailInput = form.querySelector('input[name="email"]') as HTMLInputElement;
+        const whatsappCheck = form.querySelector('input[name="whatsapp"]') as HTMLInputElement;
+
+        function validateForm() {
+            const nameOk = nameInput.value.trim().length > 0;
+            const emailOk = emailInput.value.trim().length > 0 && emailInput.validity.valid;
+            btn.disabled = !(nameOk && emailOk);
+        }
+
+        nameInput.addEventListener("input", validateForm);
+        emailInput.addEventListener("input", validateForm);
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const name = formData.get("name") as string;
+            const email = formData.get("email") as string;
+            const whatsapp = whatsappCheck.checked;
+
+            btn.disabled = true;
+            btn.textContent = "Enviando...";
+            msg.classList.add("hidden");
+
+            try {
+                const res = await fetch("/api/ebook", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ name, email, whatsapp }),
+                });
+                const data = await res.json();
+
+                if (res.ok) {
+                    msg.textContent = "¡Revisa tu correo! Te hemos enviado el ebook.";
+                    msg.className = "text-center text-sm text-green-600 font-semibold";
+
+                    if (whatsapp) {
+                        const waUrl = import.meta.env.PUBLIC_WHATSAPP_GROUP_URL;
+                        if (waUrl) window.open(waUrl, "_blank");
+                    }
+
+                    form.reset();
+                } else {
+                    msg.textContent = data.error || "Ocurrió un error. Intenta de nuevo.";
+                    msg.className = "text-center text-sm text-red-600 font-semibold";
+                }
+            } catch {
+                msg.textContent = "Error de conexión. Intenta de nuevo.";
+                msg.className = "text-center text-sm text-red-600 font-semibold";
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "Obtener libro";
+                validateForm();
+            }
         });
     </script>
 </Layout>
