@@ -1,16 +1,62 @@
 ---
 // Clients Component - Logos de clientes/aliados
+const logos = [
+    { src: "/marcas/Imagotipo_FestivaCine.png", alt: "FestivaCine" },
+    { src: "/marcas/LOGOTIPOS_Mesa.png", alt: "Logotipos Mesa" },
+    { src: "/marcas/POWERED_BY_VELTRAC_Negro.png", alt: "Powered by Veltrac" },
+    { src: "/marcas/VMF_PRO_DIGITAL_2.png", alt: "VMF Pro Digital" },
+];
 ---
 
 <section class="py-16 bg-slate-50">
     <div class="max-w-7xl mx-auto px-6 lg:px-8">
         <h3 class="text-center text-slate-400 text-sm font-bold uppercase tracking-widest mb-12">Confían en mí</h3>
-        <div class="flex flex-wrap justify-center items-center gap-12 opacity-80">
-            <span class="text-2xl font-black text-slate-400 grayscale-hover cursor-default">PUCP</span>
-            <span class="text-2xl font-black text-slate-400 grayscale-hover cursor-default">Veltrac Music</span>
-            <span class="text-2xl font-black text-slate-400 grayscale-hover cursor-default">CineStar</span>
-            <span class="text-2xl font-black text-slate-400 grayscale-hover cursor-default">MINCUL</span>
-            <span class="text-2xl font-black text-slate-400 grayscale-hover cursor-default">IBERESCENAS</span>
+        <div class="logos-grid">
+            {logos.map((logo) => (
+                <div class="logo-cell">
+                    <img src={logo.src} alt={logo.alt} loading="lazy" />
+                </div>
+            ))}
         </div>
     </div>
 </section>
+
+<style>
+    .logos-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 2.5rem 3rem;
+    }
+
+    .logo-cell {
+        /* Caja uniforme para todos los logos */
+        width: 160px;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .logo-cell img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        filter: grayscale(100%);
+        opacity: 0.6;
+        transition: filter 0.3s ease, opacity 0.3s ease;
+    }
+
+    .logo-cell img:hover {
+        filter: grayscale(0%);
+        opacity: 1;
+    }
+
+    @media (min-width: 768px) {
+        .logo-cell {
+            width: 180px;
+            height: 90px;
+        }
+    }
+</style>

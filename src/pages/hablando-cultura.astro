@@ -1,0 +1,496 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { getLatestVideos } from "../lib/youtube";
+
+const latestVideos = await getLatestVideos("@hablandocultura", 3);
+
+function formatDate(dateStr: string): string {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString("es-ES", { day: "2-digit", month: "short", year: "numeric" });
+}
+---
+
+<Layout title="Hablando Cultura | Podcast de Arte, Cultura y Emprendimiento">
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-[#0f172a]/90 backdrop-blur-md border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a class="font-display font-extrabold text-xl tracking-tighter text-white" href="/">
+                    KAROLAY RAMIREZ
+                </a>
+                <nav class="hidden md:flex items-center gap-6">
+                    <a href="/" class="text-sm font-semibold text-slate-300 hover:text-white transition-colors">Inicio</a>
+                    <a href="/blog" class="text-sm font-semibold text-slate-300 hover:text-white transition-colors">Blog</a>
+                    <a href="#episodios" class="text-sm font-semibold text-slate-300 hover:text-white transition-colors">Episodios</a>
+                    <a href="#comunidad" class="px-5 py-2 bg-[var(--primary)] text-white text-sm font-bold rounded-full hover:bg-purple-500 transition-all">Comunidad</a>
+                </nav>
+                <div class="flex items-center gap-2 md:hidden">
+                    <a href="/" class="text-sm font-semibold text-slate-300 hover:text-white transition-colors flex items-center gap-1">
+                        <span class="material-symbols-outlined text-base">arrow_back</span>
+                        Inicio
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section - Inmersivo -->
+    <section class="relative min-h-screen flex items-center overflow-hidden bg-[#0f172a]">
+        <!-- Background image con overlay -->
+        <div class="absolute inset-0">
+            <img src="/fotos-karolay/2.webp" alt="Hablando Cultura Podcast" class="w-full h-full object-cover opacity-30" />
+            <div class="absolute inset-0 bg-gradient-to-r from-[#0f172a] via-[#0f172a]/80 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-transparent to-[#0f172a]/50"></div>
+        </div>
+
+        <!-- Decorative elements -->
+        <div class="absolute top-1/4 right-1/4 w-96 h-96 bg-[var(--primary)]/20 rounded-full blur-[120px] animate-pulse"></div>
+        <div class="absolute bottom-1/4 left-1/3 w-64 h-64 bg-purple-500/10 rounded-full blur-[100px]"></div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 pt-32 pb-20">
+            <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+                <div class="flex-1 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full mb-8 border border-white/10">
+                        <span class="relative flex h-3 w-3">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                        </span>
+                        <span class="text-sm font-semibold text-green-300">Nuevo episodio cada semana</span>
+                    </div>
+
+                    <h1 class="font-display text-5xl md:text-7xl lg:text-8xl font-extrabold text-white leading-[1.05] mb-6">
+                        Hablando<br/>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary)] via-purple-400 to-[var(--secondary)]">Cultura</span>
+                    </h1>
+
+                    <p class="text-lg md:text-xl text-slate-300 max-w-xl mb-10 leading-relaxed">
+                        Un podcast para quienes viven, crean y emprenden desde el arte y la cultura
+                    </p>
+
+                    <!-- Platform buttons -->
+                    <div class="flex flex-wrap gap-4 justify-center lg:justify-start">
+                        <a href="https://www.youtube.com/@hablandocultura" target="_blank" rel="noopener noreferrer" class="group flex items-center gap-3 px-6 py-3.5 bg-red-600 hover:bg-red-500 text-white font-bold rounded-full transition-all hover:scale-105 hover:shadow-lg hover:shadow-red-500/25">
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"></path></svg>
+                            YouTube
+                        </a>
+                        <a href="https://open.spotify.com/show/hablandocultura" target="_blank" rel="noopener noreferrer" class="group flex items-center gap-3 px-6 py-3.5 bg-green-600 hover:bg-green-500 text-white font-bold rounded-full transition-all hover:scale-105 hover:shadow-lg hover:shadow-green-500/25">
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"></path></svg>
+                            Spotify
+                        </a>
+                        <a href="https://www.tiktok.com/@hablandocultura?_r=1&_t=ZS-93NqZUxbiee" target="_blank" rel="noopener noreferrer" class="group flex items-center gap-3 px-6 py-3.5 bg-white/10 hover:bg-white/20 text-white font-bold rounded-full transition-all hover:scale-105 border border-white/20">
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"></path></svg>
+                            TikTok
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Imagen circular del podcast host -->
+                <div class="flex-shrink-0 relative">
+                    <div class="w-72 h-72 md:w-96 md:h-96 rounded-full overflow-hidden border-4 border-[var(--primary)]/50 shadow-2xl shadow-purple-500/20 relative">
+                        <img src="/fotos-karolay/1.webp" alt="Karolay Ramirez - Host de Hablando Cultura" class="w-full h-full object-cover" />
+                    </div>
+                    <!-- Microphone badge -->
+                    <div class="absolute -bottom-2 -right-2 bg-[var(--secondary)] w-20 h-20 rounded-full flex items-center justify-center shadow-xl">
+                        <span class="material-symbols-outlined text-3xl text-slate-900">mic</span>
+                    </div>
+                    <!-- Sound wave decoration -->
+                    <div class="absolute top-1/2 -left-8 -translate-y-1/2 flex flex-col gap-1.5 opacity-60">
+                        <div class="w-6 h-1 bg-[var(--primary)] rounded-full sound-bar" style="animation-delay: 0s"></div>
+                        <div class="w-10 h-1 bg-[var(--primary)] rounded-full sound-bar" style="animation-delay: 0.15s"></div>
+                        <div class="w-4 h-1 bg-[var(--primary)] rounded-full sound-bar" style="animation-delay: 0.3s"></div>
+                        <div class="w-8 h-1 bg-[var(--primary)] rounded-full sound-bar" style="animation-delay: 0.45s"></div>
+                        <div class="w-5 h-1 bg-[var(--primary)] rounded-full sound-bar" style="animation-delay: 0.6s"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scroll indicator -->
+            <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-slate-400">
+                <span class="text-xs font-semibold tracking-widest uppercase">Descubre mas</span>
+                <span class="material-symbols-outlined animate-bounce">expand_more</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="py-24 bg-white relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[var(--primary)] via-purple-400 to-[var(--secondary)]"></div>
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div>
+                    <span class="inline-block px-4 py-1.5 bg-purple-100 text-[var(--primary)] text-xs font-bold uppercase tracking-widest rounded-full mb-6">Sobre el podcast</span>
+                    <h2 class="font-display text-4xl md:text-5xl font-bold text-slate-900 mb-6 leading-tight">
+                        De que trata<br/><span class="text-[var(--primary)]">Hablando Cultura</span>?
+                    </h2>
+                    <p class="text-lg text-slate-600 mb-6 leading-relaxed">
+                        <strong>Hablando Cultura</strong> es un podcast semanal dirigido a amantes del arte y la cultura, gestores culturales, artistas, estudiantes y personas interesadas en los emprendimientos culturales en el Peru y Latinoamerica.
+                    </p>
+                    <p class="text-lg text-slate-600 leading-relaxed">
+                        Cada episodio es un espacio de conversacion, reflexion y aprendizaje donde exploramos las multiples formas de trabajar en arte y cultura, visibilizando experiencias reales, procesos creativos y caminos posibles dentro de las industrias culturales y creativas.
+                    </p>
+                </div>
+
+                <!-- Feature cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="p-6 bg-[var(--lavender)] rounded-2xl hover:shadow-lg transition-all duration-300 group">
+                        <div class="w-12 h-12 bg-[var(--primary)] rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined text-white">visibility</span>
+                        </div>
+                        <h3 class="font-display font-bold text-slate-900 mb-2">Visibilizar</h3>
+                        <p class="text-sm text-slate-600">Las diversas formas de trabajar en arte y cultura en el Peru y Latinoamerica.</p>
+                    </div>
+                    <div class="p-6 bg-[var(--lavender)] rounded-2xl hover:shadow-lg transition-all duration-300 group">
+                        <div class="w-12 h-12 bg-[var(--primary)] rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined text-white">favorite</span>
+                        </div>
+                        <h3 class="font-display font-bold text-slate-900 mb-2">Fortalecer</h3>
+                        <p class="text-sm text-slate-600">La importancia del arte y la cultura en el desarrollo humano, personal y espiritual.</p>
+                    </div>
+                    <div class="p-6 bg-[var(--lavender)] rounded-2xl hover:shadow-lg transition-all duration-300 group">
+                        <div class="w-12 h-12 bg-[var(--primary)] rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined text-white">rocket_launch</span>
+                        </div>
+                        <h3 class="font-display font-bold text-slate-900 mb-2">Impulsar</h3>
+                        <p class="text-sm text-slate-600">El emprendimiento cultural como motor de transformacion social y economica.</p>
+                    </div>
+                    <div class="p-6 bg-[var(--lavender)] rounded-2xl hover:shadow-lg transition-all duration-300 group">
+                        <div class="w-12 h-12 bg-[var(--primary)] rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined text-white">share</span>
+                        </div>
+                        <h3 class="font-display font-bold text-slate-900 mb-2">Compartir</h3>
+                        <p class="text-sm text-slate-600">Herramientas, aprendizajes y experiencias sobre emprendimientos culturales.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Target Audience Section -->
+    <section class="py-24 bg-[var(--lavender)] relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="inline-block px-4 py-1.5 bg-white text-[var(--primary)] text-xs font-bold uppercase tracking-widest rounded-full mb-6">Para quien es</span>
+                <h2 class="font-display text-4xl md:text-5xl font-bold text-slate-900 mb-4">
+                    Este podcast es para ti si...
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                <div class="bg-white p-8 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 group">
+                    <div class="text-4xl mb-4">🎨</div>
+                    <p class="text-slate-700 font-medium">Te apasiona el <strong class="text-[var(--primary)]">arte y la cultura</strong>.</p>
+                </div>
+                <div class="bg-white p-8 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 group">
+                    <div class="text-4xl mb-4">🎭</div>
+                    <p class="text-slate-700 font-medium">Eres <strong class="text-[var(--primary)]">artista, gestor(a) cultural, creador(a)</strong> o emprendedor(a) cultural.</p>
+                </div>
+                <div class="bg-white p-8 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 group">
+                    <div class="text-4xl mb-4">📚</div>
+                    <p class="text-slate-700 font-medium">Estudias o deseas trabajar en alguna <strong class="text-[var(--primary)]">industria cultural o creativa</strong>.</p>
+                </div>
+                <div class="bg-white p-8 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 group">
+                    <div class="text-4xl mb-4">💡</div>
+                    <p class="text-slate-700 font-medium">Buscas <strong class="text-[var(--primary)]">inspiracion, referentes</strong> y nuevas formas de desarrollar proyectos culturales.</p>
+                </div>
+                <div class="bg-white p-8 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 group md:col-span-2 lg:col-span-2">
+                    <div class="text-4xl mb-4">🌎</div>
+                    <p class="text-slate-700 font-medium">Quieres conocer <strong class="text-[var(--primary)]">experiencias reales</strong> del sector cultural en el Peru y Latinoamerica.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Latest Episodes Section (dynamic from YouTube RSS) -->
+    {latestVideos.length > 0 && (
+    <section class="py-24 bg-[#0f172a] relative overflow-hidden" id="episodios">
+        <!-- Decorative -->
+        <div class="absolute top-0 right-0 w-96 h-96 bg-[var(--primary)]/10 rounded-full blur-[120px]"></div>
+        <div class="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/10 rounded-full blur-[100px]"></div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="inline-block px-4 py-1.5 bg-white/10 text-green-300 text-xs font-bold uppercase tracking-widest rounded-full mb-6 border border-white/10">
+                    <span class="inline-flex items-center gap-2">
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                        </span>
+                        Ultimos episodios
+                    </span>
+                </span>
+                <h2 class="font-display text-4xl md:text-5xl font-bold text-white mb-4">
+                    Lo mas reciente
+                </h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">Los episodios mas recientes directamente desde nuestro canal de YouTube.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {latestVideos.map((video) => (
+                    <a href={video.url} target="_blank" rel="noopener noreferrer" class="group block">
+                        <div class="relative aspect-video rounded-2xl overflow-hidden mb-4 border border-white/10">
+                            <img
+                                src={video.thumbnail}
+                                alt={video.title}
+                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                loading="lazy"
+                            />
+                            <!-- Play overlay -->
+                            <div class="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-all duration-300 flex items-center justify-center">
+                                <div class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-red-500/30">
+                                    <svg class="w-7 h-7 fill-white ml-1" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="font-display font-bold text-white text-sm md:text-base line-clamp-2 group-hover:text-purple-300 transition-colors mb-1">{video.title}</h3>
+                        <span class="text-xs text-slate-500">{formatDate(video.published)}</span>
+                    </a>
+                ))}
+            </div>
+
+            <!-- CTA to YouTube -->
+            <div class="text-center mt-12">
+                <a href="https://www.youtube.com/@hablandocultura" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-3 px-8 py-4 bg-red-600 hover:bg-red-500 text-white font-bold rounded-full transition-all hover:scale-105 hover:shadow-lg hover:shadow-red-500/25">
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"></path></svg>
+                    Ver todos los episodios en YouTube
+                </a>
+            </div>
+        </div>
+    </section>
+    )}
+
+    <!-- Featured Episodes Section (highlighted/curated) -->
+    <section class={`py-24 relative overflow-hidden ${latestVideos.length > 0 ? 'bg-[#1a1f35]' : 'bg-[#0f172a]'}`} id={latestVideos.length > 0 ? 'destacados' : 'episodios'}>
+        <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="inline-block px-4 py-1.5 bg-white/10 text-purple-300 text-xs font-bold uppercase tracking-widest rounded-full mb-6 border border-white/10">Episodios destacados</span>
+                <h2 class="font-display text-4xl md:text-5xl font-bold text-white mb-4">
+                    {latestVideos.length > 0 ? 'Episodios que no te puedes perder' : 'Mira nuestros episodios'}
+                </h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">Conversaciones que inspiran, educan y conectan con el poder transformador del arte y la cultura.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Episode 1 -->
+                <div class="group">
+                    <div class="relative aspect-video rounded-2xl overflow-hidden mb-4 border border-white/10">
+                        <iframe
+                            class="w-full h-full"
+                            src="https://www.youtube.com/embed/rf7ygkZB4Gg"
+                            title="Hablando Cultura - Episodio"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+
+                <!-- Episode 2 -->
+                <div class="group">
+                    <div class="relative aspect-video rounded-2xl overflow-hidden mb-4 border border-white/10">
+                        <iframe
+                            class="w-full h-full"
+                            src="https://www.youtube.com/embed/bu7XACTYQbg"
+                            title="Hablando Cultura - Episodio"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+
+                <!-- Episode 3 - Cuarta Temporada -->
+                <div class="group relative">
+                    <div class="absolute -top-3 -right-3 z-10 px-3 py-1 bg-[var(--secondary)] text-xs font-black rounded-full text-slate-900">4ta Temporada</div>
+                    <div class="relative aspect-video rounded-2xl overflow-hidden mb-4 border border-white/10">
+                        <iframe
+                            class="w-full h-full"
+                            src="https://www.youtube.com/embed/cNQgIHgZevI"
+                            title="Hablando Cultura - Cuarta Temporada"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA to YouTube -->
+            <div class="text-center mt-12">
+                <a href="https://www.youtube.com/@hablandocultura" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-3 px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-bold rounded-full transition-all hover:scale-105 border border-white/20">
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"></path></svg>
+                    Ver mas en YouTube
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section class="py-24 bg-white relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="relative bg-gradient-to-br from-[var(--primary)] to-purple-900 rounded-[2rem] p-12 md:p-20 overflow-hidden">
+                <!-- Decorative circles -->
+                <div class="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+                <div class="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2"></div>
+
+                <div class="relative z-10 max-w-3xl mx-auto text-center">
+                    <span class="inline-block px-4 py-1.5 bg-white/20 text-white text-xs font-bold uppercase tracking-widest rounded-full mb-8">Nuestra mision</span>
+                    <h2 class="font-display text-3xl md:text-4xl font-bold text-white mb-8 leading-tight">
+                        Creemos en el emprendimiento cultural como una fuerza capaz de transformar vidas, comunidades y territorios.
+                    </h2>
+                    <p class="text-lg text-purple-100 leading-relaxed mb-6">
+                        Nuestra mision es contribuir al fortalecimiento del ecosistema cultural, generando conocimiento, reflexion y visibilidad para el arte y la cultura, integrando el desarrollo personal y espiritual como parte del crecimiento creativo y reconociendo que la cultura tambien es un motor clave para la economia de un pais.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Host Section -->
+    <section class="py-24 bg-[var(--lavender)]">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row items-center gap-16">
+                <div class="relative flex-shrink-0">
+                    <img src="/fotos-karolay/3.webp" alt="Karolay Ramirez" class="w-80 h-80 object-cover rounded-3xl shadow-2xl" />
+                    <div class="absolute -bottom-4 -right-4 bg-[var(--secondary)] px-6 py-3 rounded-2xl shadow-lg">
+                        <span class="font-display font-bold text-slate-900">Host & Creadora</span>
+                    </div>
+                </div>
+                <div class="flex-1">
+                    <span class="inline-block px-4 py-1.5 bg-white text-[var(--primary)] text-xs font-bold uppercase tracking-widest rounded-full mb-6">Conoce a la host</span>
+                    <h2 class="font-display text-4xl font-bold text-slate-900 mb-6">Karolay Ramirez</h2>
+                    <p class="text-lg text-slate-600 mb-6 leading-relaxed">
+                        Gestora cultural, comunicadora audiovisual y emprendedora con mas de 15 anios de experiencia en el sector cultural. Fundadora del Festival de Cine de Ancash y creadora de Hablando Cultura.
+                    </p>
+                    <p class="text-lg text-slate-600 mb-8 leading-relaxed">
+                        Hablando Cultura nace con la intencion de acercar el arte y la cultura a mas personas, mostrando su impacto en el desarrollo humano, social y economico.
+                    </p>
+                    <div class="flex flex-wrap gap-3">
+                        <a href="https://www.instagram.com/hablandocultura/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 px-5 py-2.5 bg-white rounded-full text-sm font-semibold text-slate-700 hover:text-[var(--primary)] hover:shadow-md transition-all border border-slate-200">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path></svg>
+                            Instagram
+                        </a>
+                        <a href="https://www.linkedin.com/in/cynramir/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 px-5 py-2.5 bg-white rounded-full text-sm font-semibold text-slate-700 hover:text-[var(--primary)] hover:shadow-md transition-all border border-slate-200">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.761 0 5-2.239 5-5v-14c0-2.761-2.239-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path></svg>
+                            LinkedIn
+                        </a>
+                        <a href="https://www.facebook.com/share/1BvTBB3w2N/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 px-5 py-2.5 bg-white rounded-full text-sm font-semibold text-slate-700 hover:text-[var(--primary)] hover:shadow-md transition-all border border-slate-200">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385h-3.047v-3.47h3.047v-2.642c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953h-1.514c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385c5.737-.9 10.125-5.864 10.125-11.854z"></path></svg>
+                            Facebook
+                        </a>
+                        <a href="https://www.tiktok.com/@hablandocultura?_r=1&_t=ZS-93NqZUxbiee" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 px-5 py-2.5 bg-white rounded-full text-sm font-semibold text-slate-700 hover:text-[var(--primary)] hover:shadow-md transition-all border border-slate-200">
+                            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"></path></svg>
+                            TikTok
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community CTA Section -->
+    <section class="py-24 bg-[#0f172a] relative overflow-hidden" id="comunidad">
+        <div class="absolute inset-0">
+            <img src="/fotos-karolay/3.webp" alt="" class="w-full h-full object-cover opacity-10" />
+            <div class="absolute inset-0 bg-gradient-to-b from-[#0f172a] via-[#0f172a]/90 to-[#0f172a]"></div>
+        </div>
+
+        <div class="relative z-10 max-w-4xl mx-auto px-6 lg:px-8 text-center">
+            <h2 class="font-display text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+                Escucha, comparte y se parte de la comunidad
+            </h2>
+            <p class="text-xl text-slate-300 mb-12 max-w-2xl mx-auto leading-relaxed">
+                <strong class="text-white">Hablando Cultura</strong> no es solo un podcast, es una comunidad que cree en el poder transformador del arte y la cultura.
+            </p>
+
+            <!-- Action cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+                <div class="glass-card rounded-2xl p-8 text-center">
+                    <div class="text-4xl mb-4">🎧</div>
+                    <h3 class="font-display font-bold text-white text-lg mb-2">Escucha</h3>
+                    <p class="text-sm text-slate-400">Nuestros episodios cada semana</p>
+                </div>
+                <div class="glass-card rounded-2xl p-8 text-center">
+                    <div class="text-4xl mb-4">📢</div>
+                    <h3 class="font-display font-bold text-white text-lg mb-2">Comparte</h3>
+                    <p class="text-sm text-slate-400">Las historias que te inspiran</p>
+                </div>
+                <div class="glass-card rounded-2xl p-8 text-center">
+                    <div class="text-4xl mb-4">🤝</div>
+                    <h3 class="font-display font-bold text-white text-lg mb-2">Conecta</h3>
+                    <p class="text-sm text-slate-400">Con personas que crean y transforman desde la cultura</p>
+                </div>
+            </div>
+
+            <p class="font-display text-2xl font-bold text-white mb-10">Bienvenidas y bienvenidos a Hablando Cultura.</p>
+
+            <!-- Social links grid -->
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="https://www.youtube.com/@hablandocultura" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 px-6 py-3 bg-red-600 hover:bg-red-500 text-white font-bold rounded-full transition-all hover:scale-105">
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"></path></svg>
+                    YouTube
+                </a>
+                <a href="https://open.spotify.com/show/hablandocultura" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 px-6 py-3 bg-green-600 hover:bg-green-500 text-white font-bold rounded-full transition-all hover:scale-105">
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"></path></svg>
+                    Spotify
+                </a>
+                <a href="https://www.instagram.com/hablandocultura/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-500 hover:to-pink-400 text-white font-bold rounded-full transition-all hover:scale-105">
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path></svg>
+                    Instagram
+                </a>
+                <a href="https://www.facebook.com/share/1BvTBB3w2N/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-full transition-all hover:scale-105">
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385h-3.047v-3.47h3.047v-2.642c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953h-1.514c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385c5.737-.9 10.125-5.864 10.125-11.854z"></path></svg>
+                    Facebook
+                </a>
+                <a href="https://www.tiktok.com/@hablandocultura?_r=1&_t=ZS-93NqZUxbiee" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 px-6 py-3 bg-white/10 hover:bg-white/20 text-white font-bold rounded-full transition-all hover:scale-105 border border-white/20">
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"></path></svg>
+                    TikTok
+                </a>
+                <a href="https://www.linkedin.com/in/cynramir/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 px-6 py-3 bg-blue-700 hover:bg-blue-600 text-white font-bold rounded-full transition-all hover:scale-105">
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.761 0 5-2.239 5-5v-14c0-2.761-2.239-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path></svg>
+                    LinkedIn
+                </a>
+                <a href="mailto:hablandocultura@gmail.com" class="flex items-center gap-3 px-6 py-3 bg-white/10 hover:bg-white/20 text-white font-bold rounded-full transition-all hover:scale-105 border border-white/20">
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"></path></svg>
+                    Email
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-[#020617] py-12">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <a class="font-display font-extrabold text-xl tracking-tighter text-white" href="/">
+                    KAROLAY RAMIREZ
+                </a>
+                <p class="text-slate-500 text-sm">&copy; {new Date().getFullYear()} Karolay Ramirez. Todos los derechos reservados.</p>
+                <div class="flex items-center gap-3">
+                    <a class="text-slate-400 hover:text-white transition-colors" href="https://www.instagram.com/hablandocultura/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path></svg>
+                    </a>
+                    <a class="text-slate-400 hover:text-white transition-colors" href="https://www.facebook.com/share/1BvTBB3w2N/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385h-3.047v-3.47h3.047v-2.642c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953h-1.514c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385c5.737-.9 10.125-5.864 10.125-11.854z"></path></svg>
+                    </a>
+                    <a class="text-slate-400 hover:text-white transition-colors" href="https://www.tiktok.com/@hablandocultura?_r=1&_t=ZS-93NqZUxbiee" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"></path></svg>
+                    </a>
+                    <a class="text-slate-400 hover:text-white transition-colors" href="https://www.linkedin.com/in/cynramir/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.761 0 5-2.239 5-5v-14c0-2.761-2.239-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</Layout>
+
+<style>
+    /* Sound bar animation */
+    @keyframes soundWave {
+        0%, 100% { width: 0.75rem; }
+        50% { width: 2rem; }
+    }
+    .sound-bar {
+        animation: soundWave 1.2s ease-in-out infinite;
+    }
+</style>

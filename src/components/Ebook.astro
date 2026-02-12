@@ -1,5 +1,5 @@
 ---
-// Ebook Component - Descarga de E-book
+// Ebook Component - Sección promocional del E-book
 ---
 
 <section class="py-24 bg-white" id="ebook">
@@ -7,7 +7,7 @@
         <div class="bg-purple-50 rounded-[3rem] p-8 lg:p-20 flex flex-col lg:flex-row items-center gap-16 overflow-hidden relative">
             <div class="absolute -top-10 -right-10 w-64 h-64 bg-purple-100 rounded-full blur-3xl opacity-50"></div>
             <div class="w-full lg:w-1/2">
-                <img alt="Ebook Cover" class="w-full h-auto rounded-2xl shadow-2xl rotate-2" src="/ebook/ebook-portada.webp" />
+                <img alt="Ebook Cover" class="w-full h-auto rounded-2xl shadow-2xl rotate-2" src="/ebook/1.jpeg" />
             </div>
             <div class="w-full lg:w-1/2 space-y-8 relative">
                 <div>
@@ -15,24 +15,9 @@
                     <h2 class="font-display text-4xl font-bold text-slate-900 mb-4">10 Pasos para tu Proyecto Cultural</h2>
                     <p class="text-slate-600">Empieza hoy mismo con la metodología que he perfeccionado en más de 15 años de carrera.</p>
                 </div>
-                <form class="space-y-4">
-                    <input class="w-full px-6 py-4 rounded-full border-slate-200 focus:ring-[var(--primary)] focus:border-[var(--primary)]" placeholder="Tu nombre" type="text" />
-                    <input class="w-full px-6 py-4 rounded-full border-slate-200 focus:ring-[var(--primary)] focus:border-[var(--primary)]" placeholder="Tu email" type="email" />
-                    <label class="flex items-center gap-3 cursor-pointer">
-                        <input class="rounded text-[var(--primary)] focus:ring-[var(--primary)]" type="checkbox" />
-                        <span class="text-sm text-slate-500">Deseo unirme a la comunidad de WhatsApp</span>
-                    </label>
-                    <button class="w-full px-8 py-4 bg-[var(--primary)] text-white font-bold rounded-full shadow-lg hover:bg-purple-800 transition-all" type="submit">
-                        Descargar ahora
-                    </button>
-                </form>
-                <div class="pt-4 flex items-center gap-4 text-xs font-semibold text-slate-400">
-                    <span>Aceptamos:</span>
-                    <div class="flex gap-3">
-                        <span class="bg-white px-2 py-1 rounded border border-slate-100">Yape</span>
-                        <span class="bg-white px-2 py-1 rounded border border-slate-100">Plin</span>
-                    </div>
-                </div>
+                <a href="/ebook" class="inline-block w-full text-center px-8 py-4 bg-[var(--primary)] text-white font-bold rounded-full shadow-lg hover:bg-purple-800 transition-all">
+                    Quiero mi ebook
+                </a>
             </div>
         </div>
     </div>

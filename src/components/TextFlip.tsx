@@ -4,6 +4,7 @@ interface Platform {
     name: string;
     color: string;
     image: string;
+    url: string;
 }
 
 interface TextFlipProps {
@@ -84,7 +85,7 @@ export default function TextFlip({ platforms, interval = 3500 }: TextFlipProps) 
             </span>
             
             {/* Contenedor de la imagen */}
-            <div className="relative group cursor-pointer mx-2">
+            <a href={displayedPlatform.url} target="_blank" rel="noopener noreferrer" className="relative group cursor-pointer mx-2">
                 <div 
                     className="absolute -inset-2 rounded-2xl blur-xl transition-all duration-500"
                     style={{
@@ -121,17 +122,22 @@ export default function TextFlip({ platforms, interval = 3500 }: TextFlipProps) 
                     </div>
                     {/* Overlay con icono de play */}
                     <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-colors z-10">
-                        <div 
+                        <div
                             className="w-12 h-12 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-all duration-300"
                             style={{
                                 backgroundColor: displayedPlatform.color,
                             }}
                         >
-                            <span className="material-symbols-outlined text-white text-2xl">play_arrow</span>
+                            <span
+                                className="material-symbols-outlined text-2xl"
+                                style={{
+                                    color: displayedPlatform.color === '#ffffff' ? '#000000' : '#ffffff',
+                                }}
+                            >play_arrow</span>
                         </div>
                     </div>
                 </div>
-            </div>
+            </a>
             
             {/* Texto con efecto flip 3D letra por letra */}
             <span className="inline-flex text-3xl md:text-5xl tracking-tight">

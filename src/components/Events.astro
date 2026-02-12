@@ -1,75 +1,219 @@
 ---
-// Events Component - Próximos Eventos
+import { getUpcomingEvents } from '@/lib/google-calendar';
+import type { CalendarEvent } from '@/lib/types/google-calendar';
+
+const events: CalendarEvent[] = await getUpcomingEvents();
 ---
 
 <section class="py-24 bg-slate-900 relative overflow-hidden">
     <div class="absolute top-0 right-0 w-96 h-96 bg-[var(--primary)] rounded-full blur-[150px] opacity-20"></div>
     <div class="absolute bottom-0 left-0 w-96 h-96 bg-blue-600 rounded-full blur-[150px] opacity-10"></div>
-    
+
     <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         <div class="text-center mb-16">
             <h2 class="font-display text-4xl lg:text-5xl font-bold text-white mb-6">Próximos Eventos</h2>
             <p class="text-slate-400 max-w-2xl mx-auto text-lg">Únete a experiencias transformadoras que cambiarán tu perspectiva y potenciarán tu crecimiento personal y profesional.</p>
         </div>
-        
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <!-- Evento 1: Conferencia -->
-            <div class="glass-card rounded-[2rem] p-8 lg:p-10 hover:-translate-y-1 transition-transform duration-500">
-                <div class="flex justify-between items-start mb-8">
-                    <span class="inline-block px-4 py-1.5 bg-slate-700/50 border border-slate-600 text-white text-xs font-medium rounded-full backdrop-blur-sm">Conferencia Magistral</span>
-                    <span class="text-white font-bold tracking-tight">Mar 2026</span>
-                </div>
-                <h3 class="font-display text-2xl lg:text-3xl font-bold text-white mb-4 leading-tight">Liderazgo del Futuro: Transformando Organizaciones</h3>
-                <p class="text-slate-400 mb-8 leading-relaxed">Una experiencia inmersiva de 2 días donde aprenderás las estrategias más avanzadas de liderazgo empresarial en el sector cultural.</p>
-                <div class="space-y-3 pt-6 border-t border-slate-700/50">
-                    <div class="flex items-center text-slate-300 gap-3">
-                        <span class="material-symbols-outlined text-[var(--primary)]">calendar_month</span>
-                        <span class="text-sm">15-16 de Marzo, 2026</span>
-                    </div>
-                    <div class="flex items-center text-slate-300 gap-3">
-                        <span class="material-symbols-outlined text-[var(--primary)]">location_on</span>
-                        <span class="text-sm">Ciudad de México, México</span>
-                    </div>
-                    <div class="flex items-center text-slate-300 gap-3">
-                        <span class="material-symbols-outlined text-[var(--secondary)]">group</span>
-                        <span class="text-sm font-medium text-[var(--secondary)]">Cupos Limitados</span>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Evento 2: Masterclass -->
-            <div class="glass-card rounded-[2rem] overflow-hidden group hover:-translate-y-1 transition-transform duration-500 relative flex flex-col justify-between">
-                <div class="absolute inset-0 z-0">
-                    <img alt="Masterclass Background" class="w-full h-full object-cover opacity-30 group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRzGjetHz3qW6_tp1ePBG8jtfdbkC3AUuP7tVh-qH5DznSy0VOPezRbrGaWAqhGJquOvLVnMMtrcvoM-ykCJMc78P6mcSDdHkIHkrTL2jGVNFVXAKoRk0C3mkm2yX57pua3RrIAOdQ4fDXP7gzgj-E9ILa-oe5bxq3q4amQe-sOslXUImP0Q04HeMxFLZWs7JcP4W5w-lRCAW7je7rQB46DmLPHVCW4Hf7bF3rnBWTQqErkvylCbEDwf187IF2aPV0EijQUhOp5ws" />
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/80 to-slate-900/60"></div>
-                </div>
-                <div class="relative z-10 p-8 lg:p-10 flex flex-col h-full">
-                    <div class="flex justify-between items-start mb-12">
-                        <span class="inline-block px-4 py-1.5 bg-[var(--primary)] text-white text-xs font-bold rounded-full shadow-lg shadow-purple-900/50">Workshop Virtual</span>
-                        <span class="text-white font-bold tracking-tight opacity-80">Abr 2026</span>
-                    </div>
-                    <div class="flex-grow flex items-center justify-center mb-12">
-                        <div class="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center group-hover:scale-110 transition-transform cursor-pointer">
-                            <span class="material-symbols-outlined text-white text-3xl ml-1">play_arrow</span>
+
+        {events.length > 0 ? (
+            <div class="events-carousel-wrapper relative">
+                <!-- Flecha izquierda -->
+                {events.length > 2 && (
+                    <button
+                        id="carousel-prev"
+                        disabled
+                        class="hidden lg:flex absolute -left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-slate-800/80 border border-slate-700 items-center justify-center text-white hover:bg-slate-700 transition-colors backdrop-blur-sm disabled:opacity-30 disabled:cursor-not-allowed"
+                        aria-label="Eventos anteriores"
+                    >
+                        <span class="material-symbols-outlined">chevron_left</span>
+                    </button>
+                )}
+
+                <!-- Carousel container -->
+                <div id="events-carousel" class="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 -mx-2 px-2 scrollbar-hide">
+                    {events.map((event) => (
+                        <div class="glass-card rounded-[2rem] p-8 lg:p-10 hover:-translate-y-1 transition-transform duration-500 snap-start shrink-0 w-[85vw] sm:w-[420px] lg:w-[calc(50%-12px)]">
+                            <div class="flex justify-between items-start mb-8">
+                                <span class="inline-block px-4 py-1.5 bg-slate-700/50 border border-slate-600 text-white text-xs font-medium rounded-full backdrop-blur-sm">
+                                    {event.eventType}
+                                </span>
+                                <span class="text-white font-bold tracking-tight">{event.monthYear}</span>
+                            </div>
+                            <h3 class="font-display text-2xl lg:text-3xl font-bold text-white mb-4 leading-tight">
+                                {event.title}
+                            </h3>
+                            {event.description && (
+                                <div class="event-description text-slate-400 mb-8 leading-relaxed" set:html={event.description} />
+                            )}
+                            {event.attachments.length > 0 && (
+                                <div class="flex flex-wrap gap-3 mb-8">
+                                    {event.attachments.map((attachment) => (
+                                        <a href={attachment.url} target="_blank" rel="noopener noreferrer"
+                                           class="inline-flex items-center gap-2 px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-slate-300 text-sm hover:bg-slate-600/50 transition-colors">
+                                            <img src={attachment.iconUrl} alt="" class="w-4 h-4" />
+                                            <span class="truncate max-w-[200px]">{attachment.title}</span>
+                                            <span class="material-symbols-outlined text-sm">open_in_new</span>
+                                        </a>
+                                    ))}
+                                </div>
+                            )}
+                            <div class="space-y-3 pt-6 border-t border-slate-700/50">
+                                <div class="flex items-center text-slate-300 gap-3">
+                                    <span class="material-symbols-outlined text-[var(--primary)]">calendar_month</span>
+                                    <span class="text-sm">{event.formattedDate}</span>
+                                </div>
+                                {event.location && (
+                                    <div class="flex items-center text-slate-300 gap-3">
+                                        <span class="material-symbols-outlined text-[var(--primary)]">location_on</span>
+                                        <span class="text-sm">{event.location}</span>
+                                    </div>
+                                )}
+                                {event.meetLink && (
+                                    <div class="flex items-center text-slate-300 gap-3">
+                                        <span class="material-symbols-outlined text-[var(--primary)]">videocam</span>
+                                        <a href={event.meetLink} target="_blank" rel="noopener noreferrer"
+                                           class="text-sm text-[var(--primary)] hover:text-purple-400 transition-colors">
+                                            Unirse a Google Meet
+                                        </a>
+                                    </div>
+                                )}
+                            </div>
                         </div>
-                    </div>
-                    <div>
-                        <h3 class="font-display text-2xl lg:text-3xl font-bold text-white mb-4 leading-tight">Masterclass: Mentalidad de Abundancia</h3>
-                        <p class="text-slate-400 mb-6 text-sm line-clamp-2">Descubre cómo desarrollar una mentalidad que atraiga oportunidades y acelere tu éxito personal y profesional.</p>
-                        <div class="space-y-2 text-xs font-medium text-slate-400">
-                            <div class="flex items-center gap-2">
-                                <span class="material-symbols-outlined text-sm">event</span> 22 de Abril, 2026
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <span class="material-symbols-outlined text-sm">schedule</span> 3 horas intensivas
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <span class="material-symbols-outlined text-sm">language</span> Acceso mundial
-                            </div>
-                        </div>
-                    </div>
+                    ))}
                 </div>
+
+                <!-- Flecha derecha -->
+                {events.length > 2 && (
+                    <button
+                        id="carousel-next"
+                        class="hidden lg:flex absolute -right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-slate-800/80 border border-slate-700 items-center justify-center text-white hover:bg-slate-700 transition-colors backdrop-blur-sm disabled:opacity-30 disabled:cursor-not-allowed"
+                        aria-label="Siguientes eventos"
+                    >
+                        <span class="material-symbols-outlined">chevron_right</span>
+                    </button>
+                )}
+
             </div>
-        </div>
+        ) : (
+            <div class="text-center py-16">
+                <span class="material-symbols-outlined text-5xl text-slate-600 block mb-4">event_busy</span>
+                <p class="text-slate-400 text-lg">No hay eventos programados por el momento.</p>
+                <p class="text-slate-500 text-sm mt-2">Vuelve pronto para conocer nuestras próximas actividades.</p>
+            </div>
+        )}
     </div>
 </section>
+
+<style>
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+    .event-description :global(b),
+    .event-description :global(strong) {
+        color: rgb(226 232 240);
+        font-weight: 600;
+    }
+    .event-description :global(i),
+    .event-description :global(em) {
+        font-style: italic;
+    }
+    .event-description :global(u) {
+        text-decoration: underline;
+        text-underline-offset: 2px;
+    }
+    .event-description :global(a) {
+        color: rgb(168 85 247);
+        text-decoration: underline;
+        text-underline-offset: 2px;
+        transition: color 0.2s;
+    }
+    .event-description :global(a:hover) {
+        color: rgb(192 132 252);
+    }
+    .event-description :global(ul) {
+        list-style-type: disc;
+        padding-left: 1.25rem;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+    .event-description :global(ol) {
+        list-style-type: decimal;
+        padding-left: 1.25rem;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+    .event-description :global(li) {
+        margin-bottom: 0.25rem;
+    }
+    .event-description :global(br) {
+        content: "";
+        display: block;
+        margin-top: 0.25rem;
+    }
+</style>
+
+<script>
+    const carousel = document.getElementById('events-carousel');
+    const prevBtn = document.getElementById('carousel-prev');
+    const nextBtn = document.getElementById('carousel-next');
+
+    if (carousel) {
+        const cards = carousel.children;
+        let currentIndex = 0;
+
+        function getCardWidth(): number {
+            if (!cards.length) return 0;
+            const card = cards[0] as HTMLElement;
+            return card.offsetWidth + 24; // 24px = gap-6
+        }
+
+        function getActiveIndex(): number {
+            const containerLeft = carousel!.getBoundingClientRect().left;
+            let closestIndex = 0;
+            let closestDistance = Infinity;
+
+            Array.from(cards).forEach((card, i) => {
+                const distance = Math.abs((card as HTMLElement).getBoundingClientRect().left - containerLeft);
+                if (distance < closestDistance) {
+                    closestDistance = distance;
+                    closestIndex = i;
+                }
+            });
+
+            return closestIndex;
+        }
+
+        function updateState(): void {
+            const scrollLeft = carousel!.scrollLeft;
+            currentIndex = getActiveIndex();
+
+            if (prevBtn) {
+                (prevBtn as HTMLButtonElement).disabled = currentIndex <= 0;
+            }
+            if (nextBtn) {
+                const atEnd = scrollLeft + carousel!.clientWidth >= carousel!.scrollWidth - 10;
+                (nextBtn as HTMLButtonElement).disabled = atEnd;
+            }
+        }
+
+        function scrollToIndex(index: number): void {
+            const cardWidth = getCardWidth();
+            carousel!.scrollTo({ left: index * cardWidth, behavior: 'smooth' });
+        }
+
+        prevBtn?.addEventListener('click', () => {
+            scrollToIndex(Math.max(0, currentIndex - 1));
+        });
+
+        nextBtn?.addEventListener('click', () => {
+            scrollToIndex(Math.min(cards.length - 1, currentIndex + 1));
+        });
+
+        carousel.addEventListener('scroll', updateState, { passive: true });
+        updateState();
+    }
+</script>
