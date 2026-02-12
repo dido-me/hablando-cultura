@@ -1,16 +1,28 @@
 import { google } from "googleapis";
 
 function getAuth() {
-  const email = import.meta.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
-  const key = import.meta.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n");
+  const clientEmail = import.meta.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
+  const rawKey = import.meta.env.GOOGLE_PRIVATE_KEY;
 
-  if (!email || !key) {
-    throw new Error("Google Sheets credentials not configured");
+  if (!clientEmail || !rawKey) {
+    throw new Error(
+      "Google Sheets credentials not configured. Set GOOGLE_SERVICE_ACCOUNT_EMAIL and GOOGLE_PRIVATE_KEY."
+    );
   }
 
-  return new google.auth.JWT(email, undefined, key, [
-    "https://www.googleapis.com/auth/spreadsheets",
-  ]);
+  // Vite/dotenv with double-quoted values converts \n to real newlines already.
+  // If the key still has literal \n, convert them.
+  const privateKey = rawKey.includes("\\n")
+    ? rawKey.replace(/\\n/g, "\n")
+    : rawKey;
+
+  return new google.auth.GoogleAuth({
+    credentials: {
+      client_email: clientEmail,
+      private_key: privateKey,
+    },
+    scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+  });
 }
 
 export async function appendToSheet(
