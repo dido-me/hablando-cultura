@@ -97,11 +97,12 @@ export const SITE_INFO = {
   title: 'Gestión Cultural',
   description: 'Actualidad, tendencias y consejos sobre gestión cultural, emprendimiento y transformación digital en el sector creativo.',
   author: 'Karolay Ramírez',
-  email: 'contacto@karolayramirez.com',
+  email: 'hablandocultura@gmail.com',
   social: {
-    instagram: 'https://instagram.com/karolayramirez',
-    linkedin: 'https://linkedin.com/in/karolayramirez',
-    youtube: 'https://youtube.com/@karolayramirez',
+    instagram: 'https://www.instagram.com/hablandocultura/',
+    linkedin: 'https://www.linkedin.com/in/cynramir/',
+    facebook: 'https://www.facebook.com/share/1BvTBB3w2N/?mibextid=wwXIfr',
+    tiktok: 'https://www.tiktok.com/@hablandocultura',
   },
 } as const;
 
