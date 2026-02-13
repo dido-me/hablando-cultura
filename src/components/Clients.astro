@@ -25,17 +25,17 @@ const logos = [
 
 <style>
     .logos-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
         align-items: center;
-        justify-items: center;
-        gap: 2rem 1.5rem;
+        gap: 1.5rem 2rem;
     }
 
     .logo-cell {
-        width: 100%;
-        max-width: 140px;
-        height: 50px;
+        flex: 0 0 auto;
+        width: 120px;
+        height: 48px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -47,6 +47,7 @@ const logos = [
         object-fit: contain;
         filter: grayscale(100%);
         opacity: 0.6;
+        mix-blend-mode: multiply;
         transition: filter 0.3s ease, opacity 0.3s ease;
     }
 
@@ -55,15 +56,15 @@ const logos = [
         opacity: 1;
     }
 
-    /* Tablet: todos en una fila */
+    /* Tablet */
     @media (min-width: 640px) {
         .logos-grid {
-            grid-template-columns: repeat(6, 1fr);
-            gap: 1.5rem 2rem;
+            flex-wrap: nowrap;
+            gap: 2.5rem;
         }
 
         .logo-cell {
-            max-width: 150px;
+            width: 140px;
             height: 56px;
         }
     }
@@ -71,12 +72,12 @@ const logos = [
     /* Desktop */
     @media (min-width: 1024px) {
         .logos-grid {
-            gap: 2rem 3rem;
+            gap: 3.5rem;
         }
 
         .logo-cell {
-            max-width: 170px;
-            height: 64px;
+            width: 160px;
+            height: 60px;
         }
     }
 </style>
