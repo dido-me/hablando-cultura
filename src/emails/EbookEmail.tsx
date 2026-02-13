@@ -42,8 +42,8 @@ export default function EbookEmail({ name, downloadUrl }: EbookEmailProps) {
           <Section style={contentStyle}>
             <Text style={greetingStyle}>Hola {name},</Text>
             <Text style={paragraphStyle}>
-              Gracias por descargar mi ebook. Estoy emocionada de compartir
-              contigo esta metodologia que he perfeccionado en mas de 15 anos de
+              Gracias por tu interes en mi ebook. Estoy emocionada de compartir
+              contigo esta metodologia que he perfeccionado en mas de 10 anos de
               carrera en gestion y produccion cultural.
             </Text>
 
@@ -52,14 +52,15 @@ export default function EbookEmail({ name, downloadUrl }: EbookEmailProps) {
                 10 Pasos para tu Proyecto Cultural
               </Text>
               <Text style={highlightTextStyle}>
-                Dentro encontraras una guia practica con pasos claros y
-                accionables para llevar tu proyecto cultural al siguiente nivel.
+                Para adquirir tu ebook, llena el siguiente formulario y recibiras
+                una guia practica con pasos claros y accionables para llevar tu
+                proyecto cultural al siguiente nivel.
               </Text>
             </Section>
 
             <Section style={{ textAlign: "center" as const, margin: "32px 0" }}>
               <Button style={buttonStyle} href={downloadUrl}>
-                Descargar mi ebook
+                Llenar formulario
               </Button>
             </Section>
 
