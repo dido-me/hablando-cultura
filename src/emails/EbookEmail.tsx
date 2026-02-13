@@ -88,12 +88,8 @@ export default function EbookEmail({ name, downloadUrl }: EbookEmailProps) {
               cultural.
             </Text>
             <Text style={footerLinksStyle}>
-              <a href="https://www.instagram.com/hablandocultura/" style={linkStyle}>
-                Instagram
-              </a>
-              {" · "}
-              <a href="https://www.youtube.com/@hablandocultura" style={linkStyle}>
-                YouTube
+              <a href="mailto:hablandocultura@gmail.com" style={linkStyle}>
+                Correo
               </a>
               {" · "}
               <a href="https://www.linkedin.com/in/cynramir/" style={linkStyle}>
