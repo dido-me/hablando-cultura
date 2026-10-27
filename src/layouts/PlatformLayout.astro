@@ -1,0 +1,37 @@
+---
+// Layout de la plataforma de cursos: catálogo, cursos, cuenta y panel admin.
+import Layout from './Layout.astro';
+import SiteHeader from '../components/platform/SiteHeader.astro';
+
+interface Props {
+	title: string;
+	description?: string;
+	// Las páginas de cuenta y admin no deben aparecer en Google.
+	private?: boolean;
+}
+
+const { title, description, private: isPrivate = false } = Astro.props;
+---
+
+<Layout title={`${title} | Hablando Cultura`}>
+	<Fragment slot="head">
+		{description && <meta name="description" content={description} />}
+		{isPrivate && <meta name="robots" content="noindex, nofollow" />}
+	</Fragment>
+	<div class="flex min-h-screen flex-col">
+	<SiteHeader />
+	<main class="flex-1 bg-slate-50">
+		<slot />
+	</main>
+	<footer class="bg-[#020617] py-10 text-center text-sm text-slate-400">
+		<div class="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-between">
+			<p>© {new Date().getFullYear()} Hablando Cultura · Karolay Ramírez</p>
+			<nav class="flex gap-6" aria-label="Pie de página">
+				<a class="hover:text-white" href="/cursos">Cursos</a>
+				<a class="hover:text-white" href="/blog">Blog</a>
+				<a class="hover:text-white" href="/#contacto">Contacto</a>
+			</nav>
+		</div>
+	</footer>
+	</div>
+</Layout>

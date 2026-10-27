@@ -1,0 +1,10 @@
+---
+import PlatformLayout from '../../layouts/PlatformLayout.astro';
+import AdminSubscribers from '../../components/platform/AdminSubscribers';
+---
+
+<PlatformLayout title="Suscriptores" private>
+	<div class="max-w-7xl mx-auto px-6 lg:px-8 py-16">
+		<AdminSubscribers client:only="react" />
+	</div>
+</PlatformLayout>
