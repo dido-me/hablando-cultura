@@ -78,6 +78,7 @@ export default function AccountMenu() {
               <p className="mt-2 border-t border-slate-100 px-4 pb-1 pt-3 text-xs font-semibold uppercase tracking-wide text-slate-400">Administración</p>
               <MenuLink href="/admin/pagos" icon="payments">Pagos</MenuLink>
               <MenuLink href="/admin/suscriptores" icon="group">Suscriptores</MenuLink>
+              <MenuLink href="/admin/reclamos" icon="menu_book">Reclamos</MenuLink>
             </>
           )}
           <button

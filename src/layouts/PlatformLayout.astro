@@ -2,6 +2,7 @@
 // Layout de la plataforma de cursos: catálogo, cursos, cuenta y panel admin.
 import Layout from './Layout.astro';
 import SiteHeader from '../components/platform/SiteHeader.astro';
+import LegalFooter from '../components/LegalFooter.astro';
 
 interface Props {
 	title: string;
@@ -24,15 +25,16 @@ const { title, description, private: isPrivate = false } = Astro.props;
 		<slot />
 	</main>
 	<footer class="bg-[#020617] py-10 text-center text-sm text-slate-400">
-		<div class="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-between">
-			<p>© {new Date().getFullYear()} Hablando Cultura · Karolay Ramírez</p>
-			<nav class="flex gap-6" aria-label="Pie de página">
-				<a class="hover:text-white" href="/cursos">Cursos</a>
-				<a class="hover:text-white" href="/blog">Blog</a>
-				<a class="hover:text-white" href="/#contacto">Contacto</a>
-				<a class="hover:text-white" href="/terminos">Términos</a>
-				<a class="hover:text-white" href="/privacidad">Privacidad</a>
-			</nav>
+		<div class="max-w-7xl mx-auto px-6 lg:px-8 space-y-8">
+			<LegalFooter />
+			<div class="flex flex-col items-center gap-3 border-t border-slate-800 pt-6 sm:flex-row sm:justify-between">
+				<p>© {new Date().getFullYear()} Hablando Cultura · Karolay Ramírez</p>
+				<nav class="flex gap-6" aria-label="Pie de página">
+					<a class="hover:text-white" href="/cursos">Cursos</a>
+					<a class="hover:text-white" href="/blog">Blog</a>
+					<a class="hover:text-white" href="/ebook">E-book</a>
+				</nav>
+			</div>
 		</div>
 	</footer>
 	</div>

@@ -1,0 +1,72 @@
+---
+// Política de cambios y devoluciones para productos digitales (curso en línea y ebook).
+// Plazos estándar del comercio electrónico de contenido digital; Karolay puede ajustarlos.
+export const prerender = true;
+
+import PlatformLayout from '../layouts/PlatformLayout.astro';
+import { BUSINESS } from '../lib/platform/config';
+
+const updated = '27 de octubre de 2026';
+const requestDays = 7;
+const maxProgress = '20 %';
+---
+
+<PlatformLayout title="Política de cambios y devoluciones" description="Cuándo y cómo pedir la devolución de un curso en línea o un ebook de Hablando Cultura.">
+	<article class="max-w-3xl mx-auto px-6 lg:px-8 py-16 prose prose-slate prose-headings:font-display prose-headings:text-slate-900 prose-a:text-[var(--primary)]">
+		<h1>Política de cambios y devoluciones</h1>
+		<p class="text-sm text-slate-500">Última actualización: {updated}</p>
+
+		<p>
+			En Hablando Cultura vendemos productos digitales: <strong>cursos en línea</strong>, que se ven desde tu cuenta, y
+			<strong>ebooks</strong>, que se entregan en formato digital. Esta política explica cuándo puedes pedir la devolución
+			de tu dinero y cómo hacerlo.
+		</p>
+
+		<h2>Cambios</h2>
+		<p>
+			Como se trata de contenido digital, no hacemos cambios por otro producto. Si compraste el curso o el ebook por
+			error, revisa los casos de devolución de abajo.
+		</p>
+
+		<h2>Cuándo puedes pedir una devolución</h2>
+		<h3>Cursos en línea</h3>
+		<ul>
+			<li><strong>Dentro de los {requestDays} días calendario</strong> siguientes a la compra, siempre que no hayas avanzado más del {maxProgress} del curso. Pasado ese avance ya accediste a buena parte del contenido y no corresponde la devolución.</li>
+			<li><strong>Problemas técnicos:</strong> si no puedes acceder al curso por una falla de nuestra plataforma y no la resolvemos dentro de los {requestDays} días hábiles siguientes a tu aviso.</li>
+		</ul>
+		<h3>Ebooks</h3>
+		<ul>
+			<li><strong>Archivo dañado o no recibido:</strong> si el archivo no abre o no te llegó y no podemos enviarte uno correcto dentro de los {requestDays} días hábiles siguientes a tu aviso.</li>
+			<li>Una vez entregado un ebook que funciona correctamente no hay devolución, porque el contenido ya queda en tu poder.</li>
+		</ul>
+		<h3>En cualquier compra</h3>
+		<ul>
+			<li><strong>Cobro duplicado o monto equivocado:</strong> te devolvemos siempre lo cobrado de más.</li>
+		</ul>
+
+		<h2>Cuándo no corresponde la devolución</h2>
+		<ul>
+			<li>Si pasaron más de {requestDays} días calendario desde la compra del curso, o avanzaste más del {maxProgress}.</li>
+			<li>Si tu cuenta fue suspendida por compartirla o por descargar, copiar o difundir el contenido (ver los <a href="/terminos">Términos y condiciones</a>).</li>
+			<li>Si el motivo es una falla de tu equipo o de tu conexión a internet que no depende de nosotros.</li>
+		</ul>
+
+		<h2>Cómo pedirla</h2>
+		<ol>
+			<li>Escríbenos a <a href={`mailto:${BUSINESS.email}`}>{BUSINESS.email}</a> con el asunto "Devolución".</li>
+			<li>Incluye tu nombre, el correo de tu cuenta, el producto, la fecha de compra y el motivo.</li>
+			<li>Te respondemos en un plazo máximo de {requestDays} días hábiles.</li>
+		</ol>
+		<p>
+			Si la devolución procede, la hacemos al mismo medio de pago a través de Culqi. El dinero puede tardar entre 5 y 15
+			días hábiles en verse en tu cuenta, según tu banco. Al devolverse un curso se retira el acceso.
+		</p>
+
+		<h2>Libro de Reclamaciones</h2>
+		<p>
+			Si no estás de acuerdo con nuestra respuesta, puedes registrar un reclamo en nuestro
+			<a href="/libro-de-reclamaciones">Libro de Reclamaciones</a>. Esta política no limita los derechos que te reconoce el
+			Código de Protección y Defensa del Consumidor.
+		</p>
+	</article>
+</PlatformLayout>

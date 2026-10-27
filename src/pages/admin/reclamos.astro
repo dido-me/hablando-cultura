@@ -1,0 +1,10 @@
+---
+import PlatformLayout from '../../layouts/PlatformLayout.astro';
+import AdminComplaints from '../../components/platform/AdminComplaints';
+---
+
+<PlatformLayout title="Libro de Reclamaciones" private>
+	<div class="max-w-5xl mx-auto px-6 lg:px-8 py-16">
+		<AdminComplaints client:only="react" />
+	</div>
+</PlatformLayout>

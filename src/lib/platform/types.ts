@@ -152,3 +152,26 @@ export interface SubscriberStats {
   new_this_month: number;
   by_source: Record<string, number>;
 }
+
+export interface Complaint {
+  id: number;
+  number: string;
+  created_at: string;
+  kind: 'reclamo' | 'queja';
+  consumer_name: string;
+  consumer_document_type: string;
+  consumer_document_number: string;
+  consumer_address: string;
+  consumer_phone?: string;
+  consumer_email: string;
+  guardian_name?: string;
+  item_type: 'producto' | 'servicio';
+  item_description: string;
+  amount_cents?: number;
+  detail: string;
+  request: string;
+  status: 'pending' | 'answered';
+  response?: string;
+  responded_at?: string;
+  version: number;
+}

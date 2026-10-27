@@ -1,0 +1,44 @@
+---
+// Libro de Reclamaciones virtual (Código de Protección y Defensa del Consumidor, Ley 29571).
+export const prerender = true;
+
+import PlatformLayout from '../layouts/PlatformLayout.astro';
+import ComplaintForm from '../components/platform/ComplaintForm';
+import { BUSINESS } from '../lib/platform/config';
+---
+
+<PlatformLayout title="Libro de Reclamaciones" description="Libro de Reclamaciones virtual de Hablando Cultura.">
+	<div class="max-w-3xl mx-auto px-6 lg:px-8 py-16 space-y-8">
+		<header class="space-y-4">
+			<p class="inline-flex items-center gap-2 rounded-full bg-violet-50 px-3 py-1 text-sm font-semibold text-[var(--primary)]">
+				<span class="material-symbols-outlined text-lg">menu_book</span>
+				Libro de Reclamaciones
+			</p>
+			<h1 class="font-display text-4xl font-bold text-slate-900">Hoja de reclamación virtual</h1>
+			<p class="text-slate-600">
+				Conforme a lo establecido en el Código de Protección y Defensa del Consumidor, Ley N.º 29571, contamos con un
+				Libro de Reclamaciones a tu disposición. Al enviar la hoja recibirás una copia en tu correo con su número.
+			</p>
+		</header>
+
+		<section class="rounded-3xl bg-white p-6 ring-1 ring-slate-100 text-sm text-slate-700">
+			<h2 class="font-display text-lg font-bold text-slate-900">Datos del proveedor</h2>
+			<dl class="mt-3 grid gap-x-6 gap-y-2 sm:grid-cols-[10rem_1fr]">
+				<dt class="font-semibold">Nombre comercial</dt><dd>{BUSINESS.tradeName}</dd>
+				<dt class="font-semibold">Titular</dt><dd>{BUSINESS.name}</dd>
+				<dt class="font-semibold">RUC</dt><dd>{BUSINESS.ruc}</dd>
+				{BUSINESS.address && <><dt class="font-semibold">Domicilio</dt><dd>{BUSINESS.address}</dd></>}
+				<dt class="font-semibold">Correo</dt><dd><a class="text-[var(--primary)] underline" href={`mailto:${BUSINESS.email}`}>{BUSINESS.email}</a></dd>
+			</dl>
+		</section>
+
+		<ComplaintForm client:load />
+
+		<section class="space-y-2 text-xs text-slate-500">
+			<p><strong>Reclamo:</strong> disconformidad relacionada a los productos o servicios.</p>
+			<p><strong>Queja:</strong> disconformidad no relacionada a los productos o servicios; o malestar o descontento respecto a la atención al público.</p>
+			<p>El proveedor deberá dar respuesta al reclamo o queja en un plazo no mayor a quince (15) días hábiles.</p>
+			<p>La formulación del reclamo no impide acudir a otras vías de solución de controversias ni es requisito previo para interponer una denuncia ante el INDECOPI.</p>
+		</section>
+	</div>
+</PlatformLayout>
