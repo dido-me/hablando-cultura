@@ -41,6 +41,8 @@ export interface Lesson {
   duration_seconds: number;
   is_preview: boolean;
   resource_urls?: string[];
+  // Texto de refuerzo en Markdown; solo viene en la página de la lección.
+  content?: string;
 }
 
 export interface LessonProgress {
