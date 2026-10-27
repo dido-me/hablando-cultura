@@ -76,6 +76,7 @@ const messages: Record<string, string> = {
   'card payments are not configured': 'El pago con tarjeta no está disponible en este momento. Usa Yape o Plin directo.',
   'receipt uploads are not configured': 'La subida de comprobantes no está disponible en este momento.',
   'video playback is not configured': 'El video no está disponible en este momento.',
+  'downloads are not configured': 'La descarga no está disponible en este momento. Escríbenos y te ayudamos.',
   'the requested resource could not be found': 'No encontramos lo que buscas.',
   'unable to update the record due to an edit conflict, please try again': 'Alguien más cambió este registro. Recarga e intenta de nuevo.',
   'the server encountered a problem and could not process your request': 'Ocurrió un problema en el servidor. Intenta de nuevo en unos minutos.',

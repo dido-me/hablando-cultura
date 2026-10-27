@@ -8,6 +8,8 @@ import { duration } from '../../../lib/platform/format';
 
 const page = await getCourse(Astro.params.slug ?? '');
 if (!page) return Astro.redirect('/cursos', 302);
+// El ebook tiene su propia página de venta.
+if (page.course.kind === 'ebook') return Astro.redirect('/ebook', 301);
 
 const { course, lessons } = page;
 

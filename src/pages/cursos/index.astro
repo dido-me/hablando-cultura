@@ -14,20 +14,20 @@ try {
 }
 ---
 
-<PlatformLayout title="Cursos" description="Cursos de gestión cultural y emprendimiento artístico con Karolay Ramírez.">
+<PlatformLayout title="Cursos y ebooks" description="Cursos en video y ebooks de gestión cultural y emprendimiento artístico con Karolay Ramírez.">
 	<section class="max-w-7xl mx-auto px-6 lg:px-8 py-16">
-		<h1 class="font-display text-5xl font-bold text-slate-900">Cursos</h1>
+		<h1 class="font-display text-5xl font-bold text-slate-900">Cursos y ebooks</h1>
 		<p class="mt-3 max-w-2xl text-lg text-slate-600">Aprende a convertir tus ideas culturales en proyectos reales, a tu ritmo y desde donde estés.</p>
 
 		{failed && <p class="mt-10 rounded-2xl bg-red-50 px-4 py-3 text-sm text-red-800">No pudimos cargar los cursos. Intenta de nuevo en unos minutos.</p>}
-		{!failed && courses.length === 0 && <p class="mt-10 text-slate-500">Pronto publicaremos nuevos cursos.</p>}
+		{!failed && courses.length === 0 && <p class="mt-10 text-slate-500">Pronto publicaremos nuevos cursos y ebooks.</p>}
 
 		<div class="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
 			{courses.map((course) => (
-				<a href={`/cursos/${course.slug}`} class="group relative block overflow-hidden rounded-3xl bg-white shadow-sm transition-all duration-500 hover:shadow-2xl">
-					{course.current_price_cents < course.price_cents && (
-						<span class="absolute top-4 left-4 z-10 rounded-full bg-[var(--secondary)] px-3 py-1 text-xs font-bold">Preventa</span>
-					)}
+				<a href={course.kind === 'ebook' ? '/ebook' : `/cursos/${course.slug}`} class="group relative block overflow-hidden rounded-3xl bg-white shadow-sm transition-all duration-500 hover:shadow-2xl">
+					<span class="absolute top-4 left-4 z-10 rounded-full bg-[var(--secondary)] px-3 py-1 text-xs font-bold">
+						{course.kind === 'ebook' ? 'Ebook' : 'Curso en video'}{course.current_price_cents < course.price_cents && (course.kind === 'ebook' ? ' · Precio especial' : ' · Preventa')}
+					</span>
 					<div class="aspect-video overflow-hidden bg-[var(--lavender)]">
 						{course.cover_url && <img alt="" src={course.cover_url} class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />}
 					</div>
@@ -35,8 +35,11 @@ try {
 						<h2 class="font-display text-xl font-bold text-slate-900">{course.title}</h2>
 						{course.subtitle && <p class="mt-2 line-clamp-2 text-sm text-slate-500">{course.subtitle}</p>}
 						<div class="mt-6 flex items-center justify-between">
-							<span class="text-sm text-slate-500">{course.lesson_count} lecciones · {duration(course.total_duration_seconds)}</span>
-							<span class="font-display text-lg font-extrabold text-[var(--primary)]">{soles(course.current_price_cents)}</span>
+							<span class="text-sm text-slate-500">{course.kind === 'ebook' ? 'Ebook en PDF' : `${course.lesson_count} lecciones · ${duration(course.total_duration_seconds)}`}</span>
+							<span class="text-right">
+								{course.current_price_cents < course.price_cents && <span class="mr-2 text-sm text-slate-400 line-through">{soles(course.price_cents)}</span>}
+								<span class="font-display text-lg font-extrabold text-[var(--primary)]">{soles(course.current_price_cents)}</span>
+							</span>
 						</div>
 					</div>
 				</a>

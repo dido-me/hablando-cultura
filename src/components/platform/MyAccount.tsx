@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { api, clearSession, getToken, loadMe } from '../../lib/platform/api';
 import { date, methodLabels, soles, statusLabels } from '../../lib/platform/format';
 import type { Me } from '../../lib/platform/types';
+import DownloadButton from './DownloadButton';
 import { Alert, Badge, Button, Card, LinkButton, Loading, ProgressBar } from './ui';
 
 const statusTone = { pending: 'warning', approved: 'success', rejected: 'error' } as const;
@@ -67,10 +68,10 @@ export default function MyAccount() {
       )}
 
       <section>
-        <h2 className="font-display text-2xl font-bold text-slate-900">Mis cursos</h2>
+        <h2 className="font-display text-2xl font-bold text-slate-900">Mis cursos y ebooks</h2>
         {me.courses.length === 0 ? (
           <Card className="mt-4 text-center">
-            <p className="text-slate-600">Aún no tienes cursos.</p>
+            <p className="text-slate-600">Aún no tienes cursos ni ebooks.</p>
             <LinkButton href="/cursos" className="mt-4">
               Ver cursos
             </LinkButton>
@@ -82,6 +83,10 @@ export default function MyAccount() {
                 {course.cover_url && <img src={course.cover_url} alt="" className="aspect-video w-full object-cover" />}
                 <div className="space-y-4 p-6">
                   <h3 className="font-display text-xl font-bold text-slate-900">{course.title}</h3>
+                  {course.kind === 'ebook' ? (
+                    <DownloadButton slug={course.slug} className="w-full" />
+                  ) : (
+                    <>
                   <div className="space-y-1.5">
                     <ProgressBar value={course.completed_lessons} total={course.lesson_count} />
                     <p className="text-xs text-slate-500">
@@ -91,6 +96,8 @@ export default function MyAccount() {
                   <LinkButton href={`/cursos/${course.slug}/${course.next_lesson_slug ?? ''}`} className="w-full">
                     {course.course_completed ? 'Repasar' : course.completed_lessons > 0 ? 'Continuar' : 'Empezar'}
                   </LinkButton>
+                    </>
+                  )}
                 </div>
               </div>
             ))}
@@ -106,7 +113,7 @@ export default function MyAccount() {
               <thead className="border-b border-slate-100 text-xs uppercase tracking-wide text-slate-400">
                 <tr>
                   <th className="px-6 py-4 font-semibold">Fecha</th>
-                  <th className="px-6 py-4 font-semibold">Curso</th>
+                  <th className="px-6 py-4 font-semibold">Producto</th>
                   <th className="px-6 py-4 font-semibold">Medio</th>
                   <th className="px-6 py-4 font-semibold">Monto</th>
                   <th className="px-6 py-4 font-semibold">Estado</th>
