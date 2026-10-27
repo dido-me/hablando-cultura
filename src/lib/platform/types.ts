@@ -16,6 +16,8 @@ export interface User {
 export interface Course {
   id: number;
   slug: string;
+  // Un producto es un curso en video o un ebook para descargar.
+  kind: 'course' | 'ebook';
   title: string;
   subtitle?: string;
   description?: string;
