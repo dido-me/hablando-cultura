@@ -153,6 +153,17 @@ export function RegisterForm() {
         <Button type="submit" loading={loading} className="w-full">
           Crear cuenta
         </Button>
+        <p className="text-center text-xs text-slate-500">
+          Al crear tu cuenta aceptas los{' '}
+          <a href="/terminos" className="underline hover:text-[var(--primary)]">
+            Términos y condiciones
+          </a>{' '}
+          y la{' '}
+          <a href="/privacidad" className="underline hover:text-[var(--primary)]">
+            Política de privacidad
+          </a>
+          .
+        </p>
       </form>
     </AuthCard>
   );

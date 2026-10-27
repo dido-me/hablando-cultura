@@ -1,5 +1,6 @@
 ---
 // Header Component - Navegación principal
+import AccountMenu from './platform/AccountMenu';
 ---
 
 <header class="sticky-header">
@@ -15,10 +16,13 @@
                 <a class="text-sm font-semibold text-slate-600 hover:text-[var(--primary)] transition-colors" href="#proyectos">Proyectos</a>
                 <a class="text-sm font-semibold text-slate-600 hover:text-[var(--primary)] transition-colors" href="#ebook">E-book</a>
                 <a class="text-sm font-semibold text-slate-600 hover:text-[var(--primary)] transition-colors" href="#servicios">Servicios</a>
+                <a class="text-sm font-semibold text-slate-600 hover:text-[var(--primary)] transition-colors" href="/cursos">Cursos</a>
                 <a class="text-sm font-semibold text-slate-600 hover:text-[var(--primary)] transition-colors" href="/blog">Blog</a>
                 <a class="text-sm font-semibold text-slate-600 hover:text-[var(--primary)] transition-colors" href="#contacto">Contacto</a>
             </nav>
             <div class="flex items-center gap-2">
+                <!-- Cuenta de la plataforma de cursos (en el celular no entra junto a las redes) -->
+                <div class="hidden md:block mr-2"><AccountMenu client:load /></div>
                 <!-- Instagram -->
                 <a class="w-9 h-9 flex items-center justify-center text-slate-400 hover:text-[var(--primary)] transition-colors" href="https://www.instagram.com/hablandocultura/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
                     <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">

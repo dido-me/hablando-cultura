@@ -86,6 +86,10 @@ const categorySlug = CATEGORY_SLUGS[post.data.category as BlogCategory] || post.
             href="/#servicios">Servicios</a
           >
           <a
+            class="text-sm font-semibold text-slate-600 hover:text-[var(--primary)] transition-colors"
+            href="/cursos">Cursos</a
+          >
+          <a
             class="text-sm font-semibold text-[var(--primary)] border-b-2 border-[var(--primary)]"
             href="/blog">Blog</a
           >
@@ -380,6 +384,7 @@ const categorySlug = CATEGORY_SLUGS[post.data.category as BlogCategory] || post.
         </button>
       </form>
       <p id="subscribe-message" class="text-center text-sm mt-4 hidden"></p>
+      <p class="text-center text-xs text-slate-400 mt-3">Puedes darte de baja cuando quieras. Lee nuestra <a class="underline hover:text-white" href="/privacidad">Política de privacidad</a>.</p>
     </div>
   </section>
 
