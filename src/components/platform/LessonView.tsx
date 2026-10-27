@@ -1,11 +1,13 @@
-// Vista de una lección: video de Mux con URL firmada, temario con avance, y guardado del
-// progreso para retomar donde quedó. Al pasar el 90 % del video la lección cuenta como vista.
+// Vista de una lección: video de Mux con URL firmada, texto de refuerzo con su índice,
+// temario con avance, y guardado del progreso para retomar donde quedó. Al pasar el 90 %
+// del video la lección cuenta como vista.
 
 import MuxPlayer from '@mux/mux-player-react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { api, ApiError } from '../../lib/platform/api';
 import { duration } from '../../lib/platform/format';
 import type { CoursePage, LessonPage, LessonProgress } from '../../lib/platform/types';
+import { LessonArticle, LessonOutline, outline } from './LessonContent';
 import { Alert, LinkButton, Loading, ProgressBar } from './ui';
 
 const SAVE_EVERY_SECONDS = 15;
@@ -26,6 +28,7 @@ export default function LessonView({ courseSlug, lessonSlug }: Props) {
 
   const lastSaved = useRef(0);
   const done = useRef(false);
+  const sections = useMemo(() => outline(page?.lesson.content ?? ''), [page]);
 
   useEffect(() => {
     Promise.all([api<LessonPage>(`/v1/courses/${courseSlug}/lessons/${lessonSlug}`), api<CoursePage>(`/v1/courses/${courseSlug}`)])
@@ -111,14 +114,29 @@ export default function LessonView({ courseSlug, lessonSlug }: Props) {
         </div>
 
         <div>
-          <p className="text-sm font-semibold text-[var(--primary)]">
-            Lección {page.position} de {page.total}
-            {lesson.module_title && ` · ${lesson.module_title}`}
-          </p>
-          <h1 className="mt-1 font-display text-3xl font-bold text-slate-900">{lesson.title}</h1>
-          {resumeAt > 0 && <p className="mt-2 text-sm text-slate-500">Retomas donde te quedaste.</p>}
-          {lesson.summary && <p className="mt-4 whitespace-pre-line text-slate-600">{lesson.summary}</p>}
+          {lesson.module_title && <p className="text-sm font-semibold text-[var(--primary)]">{lesson.module_title}</p>}
+          <h1 className="mt-1 font-display text-3xl font-bold text-slate-900 md:text-4xl">{lesson.title}</h1>
+          <div className="mt-4 flex flex-wrap items-center gap-2 text-sm text-slate-600">
+            <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 ring-1 ring-slate-200">
+              <span className="material-symbols-outlined text-base">menu_book</span>
+              Lección {page.position} de {page.total}
+            </span>
+            {lesson.duration_seconds > 0 && (
+              <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 ring-1 ring-slate-200">
+                <span className="material-symbols-outlined text-base">schedule</span>
+                {duration(lesson.duration_seconds)}
+              </span>
+            )}
+            {resumeAt > 0 && <span className="text-slate-500">Retomas donde te quedaste.</span>}
+          </div>
+          {lesson.summary && !lesson.content && <p className="mt-4 whitespace-pre-line text-slate-600">{lesson.summary}</p>}
         </div>
+
+        {lesson.content && (
+          <div className="rounded-3xl bg-white p-6 ring-1 ring-slate-100 sm:p-10">
+            <LessonArticle content={lesson.content} />
+          </div>
+        )}
 
         {lesson.resource_urls && lesson.resource_urls.length > 0 && (
           <div className="rounded-3xl bg-white p-6 ring-1 ring-slate-100">
@@ -156,7 +174,11 @@ export default function LessonView({ courseSlug, lessonSlug }: Props) {
         </nav>
       </div>
 
-      <aside className="lg:sticky lg:top-28 lg:self-start">
+      <aside className="space-y-6 lg:sticky lg:top-28 lg:max-h-[calc(100vh-8rem)] lg:self-start lg:overflow-y-auto">
+        {/* El índice va primero, como en Academy; en el celular el texto ya se lee de corrido. */}
+        <div className="hidden lg:block">
+          <LessonOutline sections={sections} />
+        </div>
         <div className="rounded-3xl bg-white p-6 ring-1 ring-slate-100">
           <a href={coursePath} className="text-sm font-semibold text-slate-500 hover:text-[var(--primary)]">
             ← {course.course.title}
