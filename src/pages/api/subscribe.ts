@@ -2,7 +2,7 @@ import type { APIRoute } from "astro";
 import { render } from "@react-email/render";
 import SubscriptionEmail from "../../emails/SubscriptionEmail";
 import { sendEmail } from "../../lib/email";
-import { appendToSheet } from "../../lib/google-sheets";
+import { InvalidSubscriber, recordSubscriber } from "../../lib/subscribers";
 
 export const prerender = false;
 
@@ -26,20 +26,25 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    // Register in Google Sheets
+    // Register in the course platform's subscribers list. If the API is down the
+    // welcome email still goes out, as it did with Google Sheets.
     try {
-      await appendToSheet("Suscriptores", [
-        [email, new Date().toISOString(), "newsletter-blog"],
-      ]);
-    } catch (sheetError) {
-      console.error("Google Sheets error:", sheetError);
+      await recordSubscriber({ email, source: "newsletter-blog" });
+    } catch (error) {
+      if (error instanceof InvalidSubscriber) {
+        return new Response(
+          JSON.stringify({ error: "Email no valido" }),
+          { status: 400, headers: { "Content-Type": "application/json" } }
+        );
+      }
+      console.error("Subscribers API error:", error);
     }
 
     // Send welcome email
     const html = await render(SubscriptionEmail({ email }));
     await sendEmail(
       email,
-      "Bienvenido/a al newsletter de Hablando Cultura",
+      "Te damos la bienvenida al newsletter de Hablando Cultura",
       html
     );
 
