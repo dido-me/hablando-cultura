@@ -247,6 +247,13 @@ function CulqiPay({ courseSlug, courseTitle, priceCents, email, onPaid }: Props)
         <span className="material-symbols-outlined text-sm">lock</span>
         Pago seguro con Culqi · {courseTitle}
       </p>
+      <p className="text-center text-xs text-slate-500">
+        Al pagar aceptas los{' '}
+        <a href="/terminos" className="underline hover:text-[var(--primary)]">
+          Términos y condiciones
+        </a>
+        .
+      </p>
     </div>
   );
 }

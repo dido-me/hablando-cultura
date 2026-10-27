@@ -1,0 +1,97 @@
+---
+// Política de privacidad (Ley N.º 29733, de Protección de Datos Personales).
+// Borrador para que Karolay lo revise antes de publicar el sitio.
+export const prerender = true;
+
+import PlatformLayout from '../layouts/PlatformLayout.astro';
+
+const updated = '27 de octubre de 2026';
+const contact = 'hablandocultura@gmail.com';
+---
+
+<PlatformLayout title="Política de privacidad" description="Cómo Hablando Cultura recopila, usa y protege tus datos personales.">
+	<article class="max-w-3xl mx-auto px-6 lg:px-8 py-16 prose prose-slate prose-headings:font-display prose-headings:text-slate-900 prose-a:text-[var(--primary)]">
+		<h1>Política de privacidad</h1>
+		<p class="text-sm text-slate-500">Última actualización: {updated}</p>
+
+		<p>
+			En Hablando Cultura cuidamos tus datos personales. Esta política explica qué datos recopilamos cuando usas
+			hablandocultura.com, para qué los usamos, con quién los compartimos y cómo puedes ejercer tus derechos, de acuerdo
+			con la Ley N.º 29733, Ley de Protección de Datos Personales, y su reglamento.
+		</p>
+
+		<h2>Quién es responsable de tus datos</h2>
+		<p>
+			El responsable es Karolay Ramírez, a cargo de Hablando Cultura. Para cualquier consulta sobre tus datos escríbenos a
+			<a href={`mailto:${contact}`}>{contact}</a>.
+		</p>
+
+		<h2>Qué datos recopilamos</h2>
+		<ul>
+			<li><strong>Tu cuenta:</strong> nombre, correo y contraseña (guardada cifrada, nunca en texto plano). Si ingresas con Google, recibimos tu nombre, tu correo y un identificador de tu cuenta de Google.</li>
+			<li><strong>Tus compras:</strong> el curso, el monto, la fecha y el código de la operación. Los datos de tu tarjeta o de tu Yape los procesa directamente Culqi; nosotros no los vemos ni los guardamos.</li>
+			<li><strong>Tu avance:</strong> las lecciones que viste y el punto del video donde te quedaste, para que puedas continuar.</li>
+			<li><strong>Newsletter y ebook:</strong> tu correo, tu nombre y si quieres unirte a la comunidad de WhatsApp.</li>
+			<li><strong>Datos técnicos:</strong> la dirección IP y los registros del servidor, que usamos por seguridad y para evitar abusos, y métricas de reproducción de los videos.</li>
+		</ul>
+
+		<h2>Para qué los usamos</h2>
+		<ul>
+			<li>Crear y administrar tu cuenta.</li>
+			<li>Darte acceso a los cursos que compraste y guardar tu avance.</li>
+			<li>Procesar tus pagos y enviarte la confirmación.</li>
+			<li>Enviarte correos sobre tu cuenta, como la activación o el cambio de contraseña.</li>
+			<li>Enviarte el newsletter o el ebook, solo si te suscribiste. Puedes pedir tu baja cuando quieras.</li>
+			<li>Proteger el sitio y mejorar los cursos.</li>
+		</ul>
+		<p>No vendemos tus datos ni los usamos para publicidad de terceros.</p>
+
+		<h2>Con quién los compartimos</h2>
+		<p>Para funcionar usamos proveedores que tratan tus datos solo para prestarnos su servicio:</p>
+		<ul>
+			<li><strong>Culqi:</strong> procesa los pagos con tarjeta y Yape.</li>
+			<li><strong>Mux:</strong> aloja y transmite los videos de los cursos.</li>
+			<li><strong>Cloudflare:</strong> almacena archivos del sitio.</li>
+			<li><strong>Google:</strong> si eliges ingresar con tu cuenta de Google.</li>
+			<li><strong>Nuestro proveedor de correo y nuestro servidor de alojamiento.</strong></li>
+		</ul>
+		<p>
+			Algunos de estos proveedores están fuera del Perú, por ejemplo en Estados Unidos, por lo que tus datos pueden
+			transferirse a otros países. Al usar el sitio das tu consentimiento para esa transferencia, que se hace solo para las
+			finalidades descritas aquí.
+		</p>
+
+		<h2>Cuánto tiempo los guardamos</h2>
+		<p>
+			Guardamos los datos de tu cuenta mientras esté activa. Los datos de tus pagos los conservamos el tiempo que exigen
+			las normas tributarias. Si te das de baja del newsletter dejamos de enviarte correos, y si pides la eliminación de tus
+			datos los borramos, salvo los que debamos conservar por ley.
+		</p>
+
+		<h2>Tus derechos</h2>
+		<p>
+			Puedes pedir en cualquier momento el acceso, la rectificación, la cancelación o la oposición al tratamiento de tus
+			datos (derechos ARCO), así como retirar tu consentimiento. Escríbenos a <a href={`mailto:${contact}`}>{contact}</a>
+			indicando tu nombre, el correo de tu cuenta y lo que solicitas. Te responderemos dentro de los plazos que fija la ley.
+			Si consideras que no atendimos tu pedido, puedes acudir a la Autoridad Nacional de Protección de Datos Personales.
+		</p>
+
+		<h2>Seguridad</h2>
+		<p>
+			Usamos conexiones cifradas (HTTPS), guardamos las contraseñas cifradas y los videos solo se pueden ver con enlaces
+			temporales firmados. Aun así, ningún sistema es infalible: cuida tu contraseña y no la compartas.
+		</p>
+
+		<h2>Almacenamiento en tu navegador</h2>
+		<p>
+			Guardamos tu sesión en el almacenamiento local de tu navegador para que no tengas que ingresar en cada visita. No
+			usamos cookies de publicidad. Google y Culqi pueden usar sus propias cookies cuando usas sus servicios en el sitio.
+		</p>
+
+		<h2>Menores de edad</h2>
+		<p>Si eres menor de edad, necesitas la autorización de tu madre, padre o tutor para crear una cuenta y comprar un curso.</p>
+
+		<h2>Cambios en esta política</h2>
+		<p>Si cambiamos esta política, publicaremos la nueva versión en esta página con su fecha de actualización.</p>
+	</article>
+</PlatformLayout>

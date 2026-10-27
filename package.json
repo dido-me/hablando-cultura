@@ -19,7 +19,6 @@
     "@tailwindcss/vite": "^4.1.18",
     "astro": "^5.17.1",
     "glightbox": "^3.3.1",
-    "googleapis": "^171.4.0",
     "nodemailer": "^8.0.1",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
