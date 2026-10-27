@@ -1,0 +1,10 @@
+---
+import PlatformLayout from '../layouts/PlatformLayout.astro';
+import { ForgotPasswordForm } from '../components/platform/AuthForms';
+---
+
+<PlatformLayout title="Recuperar contraseña" private>
+	<div class="max-w-md mx-auto px-6 lg:px-8 py-16">
+		<ForgotPasswordForm client:only="react" />
+	</div>
+</PlatformLayout>

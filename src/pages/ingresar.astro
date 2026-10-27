@@ -1,0 +1,10 @@
+---
+import PlatformLayout from '../layouts/PlatformLayout.astro';
+import { LoginForm } from '../components/platform/AuthForms';
+---
+
+<PlatformLayout title="Ingresar" private>
+	<div class="max-w-md mx-auto px-6 lg:px-8 py-16">
+		<LoginForm client:only="react" />
+	</div>
+</PlatformLayout>
