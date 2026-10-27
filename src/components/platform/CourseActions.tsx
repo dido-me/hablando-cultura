@@ -6,14 +6,17 @@ import { api, getToken, loadMe } from '../../lib/platform/api';
 import { date, duration, soles } from '../../lib/platform/format';
 import type { Course, CoursePage, Me, Payment, Viewer } from '../../lib/platform/types';
 import Checkout from './Checkout';
+import DownloadButton from './DownloadButton';
 import { Alert, Button, LinkButton, ProgressBar, Spinner } from './ui';
 
 interface Props {
   course: Course;
   firstLessonSlug?: string;
+  // Página del producto, para volver después de ingresar (el ebook vive en /ebook).
+  pagePath?: string;
 }
 
-export default function CourseActions({ course, firstLessonSlug }: Props) {
+export default function CourseActions({ course, firstLessonSlug, pagePath }: Props) {
   const [me, setMe] = useState<Me | null>(null);
   const [viewer, setViewer] = useState<Viewer | null>(null);
   const [loading, setLoading] = useState(true);
@@ -22,6 +25,9 @@ export default function CourseActions({ course, firstLessonSlug }: Props) {
   const [resent, setResent] = useState(false);
 
   const coursePath = `/cursos/${course.slug}`;
+  const returnPath = pagePath ?? coursePath;
+  const isEbook = course.kind === 'ebook';
+  const buyLabel = isEbook ? 'Comprar el ebook' : 'Comprar el curso';
 
   const refresh = async () => {
     if (!getToken()) {
@@ -63,21 +69,26 @@ export default function CourseActions({ course, firstLessonSlug }: Props) {
         <span className="font-display text-4xl font-extrabold text-slate-900">{soles(course.current_price_cents)}</span>
         {presale && <span className="text-lg text-slate-400 line-through">{soles(course.price_cents)}</span>}
       </div>
-      {presale && <p className="mt-1 text-sm font-semibold text-amber-700">Precio de preventa hasta el {date(course.presale_until!)}</p>}
+      {presale && <p className="mt-1 text-sm font-semibold text-amber-700">{isEbook ? 'Precio especial' : `Precio de preventa hasta el ${date(course.presale_until!)}`}</p>}
 
       <ul className="mt-5 space-y-2 text-sm text-slate-600">
-        <li className="flex items-center gap-2">
-          <span className="material-symbols-outlined text-lg text-[var(--primary)]">play_circle</span>
-          {course.lesson_count} lecciones en video · {duration(course.total_duration_seconds)}
-        </li>
-        <li className="flex items-center gap-2">
-          <span className="material-symbols-outlined text-lg text-[var(--primary)]">all_inclusive</span>
-          Acceso sin fecha de vencimiento
-        </li>
-        <li className="flex items-center gap-2">
-          <span className="material-symbols-outlined text-lg text-[var(--primary)]">subtitles</span>
-          Subtítulos en español
-        </li>
+        {(isEbook
+          ? [
+              ['picture_as_pdf', 'Ebook en PDF'],
+              ['download', 'Descarga inmediata después del pago'],
+              ['all_inclusive', 'Disponible siempre en Mi cuenta'],
+            ]
+          : [
+              ['play_circle', `${course.lesson_count} lecciones en video · ${duration(course.total_duration_seconds)}`],
+              ['all_inclusive', 'Acceso sin fecha de vencimiento'],
+              ['subtitles', 'Subtítulos en español'],
+            ]
+        ).map(([icon, text]) => (
+          <li key={icon} className="flex items-center gap-2">
+            <span className="material-symbols-outlined text-lg text-[var(--primary)]">{icon}</span>
+            {text}
+          </li>
+        ))}
       </ul>
 
       <div className="mt-6 space-y-3">
@@ -87,15 +98,20 @@ export default function CourseActions({ course, firstLessonSlug }: Props) {
           </div>
         ) : !me ? (
           <>
-            <LinkButton href={`/registro?next=${encodeURIComponent(coursePath)}`} className="w-full">
-              Comprar el curso
+            <LinkButton href={`/registro?next=${encodeURIComponent(returnPath)}`} className="w-full">
+              {buyLabel}
             </LinkButton>
             <p className="text-center text-sm text-slate-500">
               ¿Ya tienes cuenta?{' '}
-              <a href={`/ingresar?next=${encodeURIComponent(coursePath)}`} className="font-semibold text-[var(--primary)] hover:underline">
+              <a href={`/ingresar?next=${encodeURIComponent(returnPath)}`} className="font-semibold text-[var(--primary)] hover:underline">
                 Ingresa
               </a>
             </p>
+          </>
+        ) : viewer?.enrolled && isEbook ? (
+          <>
+            {paid && <Alert tone="success">¡Pago confirmado! Ya puedes descargar tu ebook. También queda en Mi cuenta.</Alert>}
+            <DownloadButton slug={course.slug} className="w-full" />
           </>
         ) : viewer?.enrolled ? (
           <>
@@ -149,7 +165,7 @@ export default function CourseActions({ course, firstLessonSlug }: Props) {
               </Alert>
             )}
             <Button className="w-full" onClick={() => setBuying(true)}>
-              Comprar el curso
+              {buyLabel}
             </Button>
           </>
         )}
