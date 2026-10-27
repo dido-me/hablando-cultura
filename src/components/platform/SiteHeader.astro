@@ -1,0 +1,39 @@
+---
+// Header de la plataforma de cursos: enlaces que funcionan desde cualquier página (el
+// Header de la home usa anclas #) y el menú de cuenta.
+import AccountMenu from './AccountMenu';
+
+const path = Astro.url.pathname;
+const links = [
+  { href: '/', label: 'Inicio' },
+  { href: '/cursos', label: 'Cursos' },
+  { href: '/ebook', label: 'E-book' },
+  { href: '/blog', label: 'Blog' },
+];
+const active = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+---
+
+<header class="sticky-header">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="flex h-20 items-center justify-between gap-4">
+            <a class="font-display font-extrabold text-xl tracking-tighter text-slate-900" href="/">KAROLAY RAMÍREZ</a>
+            <nav class="hidden md:flex items-center space-x-8" aria-label="Principal">
+                {links.map((link) => (
+                    <a
+                        href={link.href}
+                        class:list={[
+                            'text-sm font-semibold transition-colors hover:text-[var(--primary)]',
+                            active(link.href) ? 'text-[var(--primary)]' : 'text-slate-600',
+                        ]}
+                    >
+                        {link.label}
+                    </a>
+                ))}
+            </nav>
+            <div class="flex items-center gap-3">
+                <a href="/cursos" class="md:hidden text-sm font-semibold text-slate-600 hover:text-[var(--primary)]">Cursos</a>
+                <AccountMenu client:load />
+            </div>
+        </div>
+    </div>
+</header>
