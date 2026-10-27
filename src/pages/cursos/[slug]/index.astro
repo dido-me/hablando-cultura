@@ -10,6 +10,14 @@ const page = await getCourse(Astro.params.slug ?? '');
 if (!page) return Astro.redirect('/cursos', 302);
 
 const { course, lessons } = page;
+
+// El temario se agrupa por bloque (module_title), como las etapas del curso.
+const modules: { title: string; lessons: typeof lessons }[] = [];
+for (const lesson of lessons) {
+	const last = modules.at(-1);
+	if (last && last.title === (lesson.module_title ?? '')) last.lessons.push(lesson);
+	else modules.push({ title: lesson.module_title ?? '', lessons: [lesson] });
+}
 ---
 
 <PlatformLayout title={course.title} description={course.subtitle ?? course.description}>
@@ -76,20 +84,28 @@ const { course, lessons } = page;
 			<section>
 				<h2 class="font-display text-2xl font-bold text-slate-900">Contenido del curso</h2>
 				<p class="mt-2 text-sm text-slate-500">{lessons.length} lecciones · {duration(course.total_duration_seconds)}</p>
-				<ol class="mt-4 divide-y divide-slate-100 overflow-hidden rounded-3xl bg-white ring-1 ring-slate-100">
-					{lessons.map((lesson) => (
-						<li class="flex items-start gap-4 px-6 py-4">
-							<span class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-violet-50 text-sm font-bold text-[var(--primary)]">{lesson.position}</span>
-							<div class="flex-1">
-								{lesson.module_title && <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">{lesson.module_title}</p>}
-								<p class="font-semibold text-slate-800">{lesson.title}</p>
-								{lesson.summary && <p class="mt-1 text-sm text-slate-500">{lesson.summary}</p>}
-							</div>
-							<span class="text-sm text-slate-400">{duration(lesson.duration_seconds)}</span>
-							{lesson.is_preview && <a href={`/cursos/${course.slug}/${lesson.slug}`} class="text-sm font-semibold text-[var(--primary)] hover:underline">Ver gratis</a>}
-						</li>
+				<div class="mt-4 space-y-6">
+					{modules.map((module) => (
+						<div class="overflow-hidden rounded-3xl bg-white ring-1 ring-slate-100">
+							{module.title && (
+								<h3 class="border-b border-slate-100 bg-[var(--lavender)] px-6 py-3 text-sm font-bold text-[var(--primary)]">{module.title}</h3>
+							)}
+							<ol class="divide-y divide-slate-100">
+								{module.lessons.map((lesson) => (
+									<li class="flex items-start gap-4 px-6 py-4">
+										<span class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-violet-50 text-sm font-bold text-[var(--primary)]">{lesson.position}</span>
+										<div class="flex-1">
+											<p class="font-semibold text-slate-800">{lesson.title}</p>
+											{lesson.summary && <p class="mt-1 text-sm text-slate-500">{lesson.summary}</p>}
+										</div>
+										<span class="whitespace-nowrap text-sm text-slate-400">{duration(lesson.duration_seconds)}</span>
+										{lesson.is_preview && <a href={`/cursos/${course.slug}/${lesson.slug}`} class="text-sm font-semibold text-[var(--primary)] hover:underline">Ver gratis</a>}
+									</li>
+								))}
+							</ol>
+						</div>
 					))}
-				</ol>
+				</div>
 			</section>
 		</div>
 	</div>
