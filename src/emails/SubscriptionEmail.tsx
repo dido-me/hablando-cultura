@@ -64,7 +64,7 @@ export default function SubscriptionEmail({ email }: SubscriptionEmailProps) {
             </Section>
 
             <Section style={{ textAlign: "center" as const, margin: "32px 0" }}>
-              <Button style={buttonStyle} href="https://hablandocultura.com/blog">
+              <Button style={buttonStyle} href="https://www.hablandocultura.pe/blog">
                 Explorar el blog
               </Button>
             </Section>

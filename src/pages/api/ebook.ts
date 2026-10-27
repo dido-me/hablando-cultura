@@ -27,7 +27,7 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     const downloadUrl =
-      import.meta.env.EBOOK_DOWNLOAD_URL || "https://hablandocultura.com/ebook";
+      import.meta.env.EBOOK_DOWNLOAD_URL || "https://www.hablandocultura.pe/ebook";
 
     // Register in the course platform's subscribers list. If the API is down the
     // ebook is still sent, as it was with Google Sheets.
