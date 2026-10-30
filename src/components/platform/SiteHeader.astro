@@ -1,16 +1,17 @@
 ---
-// Header de la plataforma de cursos: enlaces que funcionan desde cualquier página (el
-// Header de la home usa anclas #) y el menú de cuenta.
+// Header de la plataforma de cursos: enlaces a las secciones del sitio, el menú de cuenta y,
+// en el celular, el menú hamburguesa.
 import AccountMenu from './AccountMenu';
+import MobileMenu from '../MobileMenu.astro';
 
 const path = Astro.url.pathname;
+const active = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
 const links = [
   { href: '/', label: 'Inicio' },
   { href: '/cursos', label: 'Cursos' },
   { href: '/ebook', label: 'E-book' },
   { href: '/blog', label: 'Blog' },
-];
-const active = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+].map((link) => ({ ...link, active: active(link.href) }));
 ---
 
 <header class="sticky-header">
@@ -21,18 +22,19 @@ const active = (href: string) => (href === '/' ? path === '/' : path.startsWith(
                 {links.map((link) => (
                     <a
                         href={link.href}
+                        aria-current={link.active ? 'page' : undefined}
                         class:list={[
                             'text-sm font-semibold transition-colors hover:text-[var(--primary)]',
-                            active(link.href) ? 'text-[var(--primary)]' : 'text-slate-600',
+                            link.active ? 'text-[var(--primary)]' : 'text-slate-600',
                         ]}
                     >
                         {link.label}
                     </a>
                 ))}
             </nav>
-            <div class="flex items-center gap-3">
-                <a href="/cursos" class="md:hidden text-sm font-semibold text-slate-600 hover:text-[var(--primary)]">Cursos</a>
+            <div class="flex items-center gap-2">
                 <AccountMenu client:load />
+                <MobileMenu links={links} />
             </div>
         </div>
     </div>
