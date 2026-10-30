@@ -88,6 +88,7 @@ const messages: Record<string, string> = {
   'unable to update the record due to an edit conflict, please try again': 'Alguien más cambió este registro. Recarga e intenta de nuevo.',
   'the server encountered a problem and could not process your request': 'Ocurrió un problema en el servidor. Intenta de nuevo en unos minutos.',
   'a user with this email address already exists': 'Ya existe una cuenta con este correo. Ingresa con él.',
+  'registrations are closed': 'Las inscripciones abren pronto. Por ahora solo pueden ingresar las cuentas que ya existen.',
   'must be a valid email address': 'Escribe un correo válido.',
   'must be provided': 'Este campo es obligatorio.',
   'must be at least 8 bytes long': 'Debe tener al menos 8 caracteres.',
