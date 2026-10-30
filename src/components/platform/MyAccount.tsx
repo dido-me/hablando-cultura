@@ -125,7 +125,10 @@ export default function MyAccount() {
                     <td className="px-6 py-4 text-slate-500">{date(payment.created_at)}</td>
                     <td className="px-6 py-4 font-semibold text-slate-800">{payment.course_title}</td>
                     <td className="px-6 py-4 text-slate-600">{methodLabels[payment.method]}</td>
-                    <td className="px-6 py-4 text-slate-800">{soles(payment.amount_cents)}</td>
+                    <td className="px-6 py-4 text-slate-800">
+                      {soles(payment.amount_cents)}
+                      {payment.coupon_code && <span className="block text-xs text-emerald-700">Cupón {payment.coupon_code}</span>}
+                    </td>
                     <td className="px-6 py-4">
                       <Badge tone={statusTone[payment.status]}>{statusLabels[payment.status]}</Badge>
                       {payment.reject_reason && <p className="mt-1 text-xs text-red-600">{payment.reject_reason}</p>}

@@ -104,6 +104,31 @@ const messages: Record<string, string> = {
   'must not be more than 5 MB': 'El archivo debe pesar como máximo 5 MB.',
   "the receipt hasn't been uploaded yet": 'La captura no terminó de subirse. Intenta de nuevo.',
   'must be a JPG, PNG or WebP image, or a PDF, of at most 5 MB': 'Sube una imagen o un PDF de máximo 5 MB.',
+  // Cupones, al comprar.
+  "this coupon doesn't exist": 'Ese cupón no existe. Revisa que esté bien escrito.',
+  'this coupon is no longer available': 'Este cupón ya no está disponible.',
+  "this coupon isn't valid yet": 'Este cupón todavía no está vigente.',
+  'this coupon has expired': 'Este cupón ya venció.',
+  "this coupon doesn't apply to this product": 'Este cupón no aplica a este producto.',
+  'this coupon has no uses left': 'Este cupón ya se agotó.',
+  'the price with this coupon is below the minimum payment of S/ 3.00': 'Con este cupón el total queda por debajo del pago mínimo de S/ 3.00.',
+  'this coupon makes the product free; redeem it instead of paying': 'Con este cupón el producto es gratis. Recarga la página y vuelve a aplicarlo.',
+  "this coupon doesn't make the product free": 'Este cupón no cubre todo el precio.',
+  'the price changed, review it before paying': 'El precio cambió. Vuelve a aplicar tu cupón o recarga la página antes de pagar.',
+  // Cupones, en el panel.
+  'a coupon with this code already exists': 'Ya existe un cupón con este código.',
+  'must be 3 to 30 characters long': 'Debe tener entre 3 y 30 caracteres.',
+  'must contain only letters, digits and hyphens': 'Usa solo letras, números y guiones.',
+  'must be percent or amount': 'Elige porcentaje o monto fijo.',
+  'must be greater than zero': 'Debe ser mayor que cero.',
+  'must not be more than 100': 'No puede ser más de 100 %.',
+  'must not be more than S/ 100,000': 'No puede ser más de S/ 100,000.',
+  'must include at least one product': 'Elige al menos un producto.',
+  'must not contain duplicate values': 'Hay productos repetidos.',
+  'must be existing products': 'Elige productos que existan.',
+  'must be after the start date': 'Debe ser posterior a la fecha de inicio.',
+  'must not be more than 500 bytes long': 'Debe tener como máximo 500 caracteres.',
+  'this coupon has been used; deactivate it instead': 'Este cupón ya se usó: desactívalo en lugar de borrarlo.',
 };
 
 const translate = (text: string) => messages[text] ?? text;

@@ -1,5 +1,6 @@
 // Tarjeta de compra de la página del curso. Según quién mira muestra: ingresar para
 // comprar, activar la cuenta, comprar, pago en revisión o rechazado, o continuar el curso.
+// Un enlace con ?cupon=CODIGO abre el pago con ese cupón aplicado.
 
 import { useEffect, useState } from 'react';
 import { api, getToken, loadMe, notifyAccountChange } from '../../lib/platform/api';
@@ -21,11 +22,13 @@ export default function CourseActions({ course, firstLessonSlug, pagePath }: Pro
   const [viewer, setViewer] = useState<Viewer | null>(null);
   const [loading, setLoading] = useState(true);
   const [buying, setBuying] = useState(false);
-  const [paid, setPaid] = useState(false);
+  const [paid, setPaid] = useState<Payment | null>(null);
   const [resent, setResent] = useState(false);
+  const [coupon, setCoupon] = useState('');
 
   const coursePath = `/cursos/${course.slug}`;
-  const returnPath = pagePath ?? coursePath;
+  // Al ingresar o registrarse se vuelve a la página con el cupón del enlace.
+  const returnPath = (pagePath ?? coursePath) + (coupon ? `?cupon=${encodeURIComponent(coupon)}` : '');
   const isEbook = course.kind === 'ebook';
   const buyLabel = isEbook ? 'Comprar el ebook' : 'Comprar el curso';
 
@@ -46,14 +49,20 @@ export default function CourseActions({ course, firstLessonSlug, pagePath }: Pro
   };
 
   useEffect(() => {
+    setCoupon(new URLSearchParams(window.location.search).get('cupon')?.trim().toUpperCase() ?? '');
     refresh();
   }, []);
+
+  // Con un cupón en el enlace, el pago se abre solo en cuanto se sabe quién mira.
+  useEffect(() => {
+    if (coupon && !loading && me) setBuying(true);
+  }, [coupon, loading, me]);
 
   const presale = course.presale_price_cents && course.presale_until && course.current_price_cents < course.price_cents;
   const startSlug = viewer?.next_lesson_slug ?? firstLessonSlug;
 
-  const onPaid = (_: Payment) => {
-    setPaid(true);
+  const onPaid = (payment: Payment) => {
+    setPaid(payment);
     setBuying(false);
     refresh();
     // Los materiales del curso, en otra isla de la página, ya se pueden descargar.
@@ -100,6 +109,12 @@ export default function CourseActions({ course, firstLessonSlug, pagePath }: Pro
           </div>
         ) : !me ? (
           <>
+            {coupon && (
+              <p className="flex items-center gap-1.5 text-sm text-emerald-700">
+                <span className="material-symbols-outlined text-lg">sell</span>
+                Tu cupón <strong className="font-mono">{coupon}</strong> se aplicará al pagar.
+              </p>
+            )}
             <LinkButton href={`/registro?next=${encodeURIComponent(returnPath)}`} className="w-full">
               {buyLabel}
             </LinkButton>
@@ -112,12 +127,16 @@ export default function CourseActions({ course, firstLessonSlug, pagePath }: Pro
           </>
         ) : viewer?.enrolled && isEbook ? (
           <>
-            {paid && <Alert tone="success">¡Pago confirmado! Ya puedes descargar tu ebook. También queda en Mi cuenta.</Alert>}
+            {paid && <Alert tone="success">{paid.method === 'coupon' ? '¡Listo! Tu cupón cubrió todo el precio.' : '¡Pago confirmado!'} Ya puedes descargar tu ebook. También queda en Mi cuenta.</Alert>}
             <DownloadButton slug={course.slug} className="w-full" />
           </>
         ) : viewer?.enrolled ? (
           <>
-            {paid && <Alert tone="success">¡Pago confirmado! Ya tienes acceso. Te enviamos el comprobante por correo.</Alert>}
+            {paid && (
+              <Alert tone="success">
+                {paid.method === 'coupon' ? '¡Listo! Tu cupón cubrió todo el precio y ya tienes acceso.' : '¡Pago confirmado! Ya tienes acceso. Te enviamos el comprobante por correo.'}
+              </Alert>
+            )}
             <div className="space-y-2">
               <div className="flex justify-between text-xs font-semibold text-slate-500">
                 <span>Tu avance</span>
@@ -154,7 +173,15 @@ export default function CourseActions({ course, firstLessonSlug, pagePath }: Pro
           </Alert>
         ) : buying ? (
           <>
-            <Checkout courseSlug={course.slug} courseTitle={course.title} priceCents={course.current_price_cents} email={me.user.email} onPaid={onPaid} onSubmitted={onSubmitted} />
+            <Checkout
+              courseSlug={course.slug}
+              courseTitle={course.title}
+              priceCents={course.current_price_cents}
+              email={me.user.email}
+              initialCoupon={coupon}
+              onPaid={onPaid}
+              onSubmitted={onSubmitted}
+            />
             <Button variant="ghost" className="w-full" onClick={() => setBuying(false)}>
               Cancelar
             </Button>
