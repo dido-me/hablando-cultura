@@ -7,6 +7,13 @@ CLAUDE.md). La versión publicada se ve en `/version.json`.
 
 ## [Sin publicar]
 
+## [0.1.1] - 2026-10-30
+
+### Corregido
+- El blog, el podcast y el festival muestran el pie con los datos de contacto, las
+  políticas, el Libro de Reclamaciones y el RUC, como pide Culqi.
+- En modo demo el visitante vuelve a ver el botón de compra (lleva a ingresar).
+
 ## [0.1.0] - 2026-10-30
 
 Primera versión del sitio con la plataforma de cursos, para la demo.
