@@ -130,10 +130,11 @@ export default function CourseActions({ course, firstLessonSlug, pagePath }: Pro
               </>
             ) : (
               <>
-                <p className="rounded-2xl bg-violet-50 px-4 py-3 text-center text-sm text-violet-900">Las inscripciones abren pronto.</p>
-                <LinkButton href={`/ingresar?next=${encodeURIComponent(returnPath)}`} variant="secondary" className="w-full">
-                  Ya tengo cuenta: ingresar
+                {/* Sin registro abierto, comprar lleva a ingresar: solo entran las cuentas que ya existen. */}
+                <LinkButton href={`/ingresar?next=${encodeURIComponent(returnPath)}`} className="w-full">
+                  {buyLabel}
                 </LinkButton>
+                <p className="text-center text-sm text-slate-500">Las inscripciones abren pronto. Si ya tienes cuenta, ingresa para comprar.</p>
               </>
             )}
           </>
