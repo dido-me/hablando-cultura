@@ -7,6 +7,8 @@ CLAUDE.md). La versión publicada se ve en `/version.json`.
 
 ## [Sin publicar]
 
+## [0.1.0] - 2026-10-30
+
 Primera versión del sitio con la plataforma de cursos, para la demo.
 
 ### Agregado
