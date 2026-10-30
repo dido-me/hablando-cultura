@@ -2,17 +2,19 @@
 
 import type { Payment } from './types';
 
+// soles da "S/ 35.00". Los espacios de soles y duration son no separables (\u00a0) para que
+// el precio o la duración no se partan en dos líneas.
 export function soles(cents: number) {
-  return `S/ ${(cents / 100).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  return `S/\u00a0${(cents / 100).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
 // duration da "39 min" o "3 h 25 min".
 export function duration(seconds: number) {
   const minutes = Math.round(seconds / 60);
-  if (minutes < 60) return `${minutes} min`;
+  if (minutes < 60) return `${minutes}\u00a0min`;
   const hours = Math.floor(minutes / 60);
   const rest = minutes % 60;
-  return rest ? `${hours} h ${rest} min` : `${hours} h`;
+  return rest ? `${hours}\u00a0h\u00a0${rest}\u00a0min` : `${hours}\u00a0h`;
 }
 
 const dateFormat = new Intl.DateTimeFormat('es-PE', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'America/Lima' });

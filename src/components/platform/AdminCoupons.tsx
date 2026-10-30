@@ -164,7 +164,7 @@ function CouponRow({ coupon, products, onEdit, onChanged }: { coupon: Coupon; pr
           {coupon.note && <p className="text-sm italic text-slate-500">{coupon.note}</p>}
         </div>
 
-        <div className="flex flex-wrap gap-2">
+        <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
           <Button variant="secondary" onClick={() => copy(coupon.code, 'code')}>
             <span className="material-symbols-outlined text-lg">content_copy</span> {copied === 'code' ? 'Copiado' : 'Código'}
           </Button>

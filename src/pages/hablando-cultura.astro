@@ -3,6 +3,7 @@ export const prerender = true;
 
 import Layout from "../layouts/Layout.astro";
 import LegalFooter from "../components/LegalFooter.astro";
+import MobileMenu from "../components/MobileMenu.astro";
 import { getLatestVideos } from "../lib/youtube";
 
 const latestVideos = await getLatestVideos("@hablandocultura", 3);
@@ -11,6 +12,14 @@ function formatDate(dateStr: string): string {
     const date = new Date(dateStr);
     return date.toLocaleDateString("es-ES", { day: "2-digit", month: "short", year: "numeric" });
 }
+
+const menuLinks = [
+    { href: "/", label: "Inicio" },
+    { href: "/cursos", label: "Cursos" },
+    { href: "/blog", label: "Blog" },
+    { href: "#episodios", label: "Episodios" },
+    { href: "#comunidad", label: "Comunidad" },
+];
 ---
 
 <Layout title="Hablando Cultura | Podcast de Arte, Cultura y Emprendimiento">
@@ -28,12 +37,7 @@ function formatDate(dateStr: string): string {
                     <a href="#episodios" class="text-sm font-semibold text-slate-300 hover:text-white transition-colors">Episodios</a>
                     <a href="#comunidad" class="px-5 py-2 bg-[var(--primary)] text-white text-sm font-bold rounded-full hover:bg-purple-500 transition-all">Comunidad</a>
                 </nav>
-                <div class="flex items-center gap-2 md:hidden">
-                    <a href="/" class="text-sm font-semibold text-slate-300 hover:text-white transition-colors flex items-center gap-1">
-                        <span class="material-symbols-outlined text-base">arrow_back</span>
-                        Inicio
-                    </a>
-                </div>
+                <MobileMenu links={menuLinks} theme="dark" />
             </div>
         </div>
     </header>
@@ -109,7 +113,7 @@ function formatDate(dateStr: string): string {
             </div>
 
             <!-- Scroll indicator -->
-            <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-slate-400">
+            <div class="absolute bottom-8 left-1/2 -translate-x-1/2 hidden lg:flex flex-col items-center gap-2 text-slate-400">
                 <span class="text-xs font-semibold tracking-widest uppercase">Descubre más</span>
                 <span class="material-symbols-outlined animate-bounce">expand_more</span>
             </div>
