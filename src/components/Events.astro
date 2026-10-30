@@ -5,12 +5,12 @@ import type { CalendarEvent } from '@/lib/types/google-calendar';
 const events: CalendarEvent[] = await getUpcomingEvents();
 ---
 
-<section class="py-24 bg-slate-900 relative overflow-hidden">
+<section class="py-16 lg:py-24 bg-slate-900 relative overflow-hidden">
     <div class="absolute top-0 right-0 w-96 h-96 bg-[var(--primary)] rounded-full blur-[150px] opacity-20"></div>
     <div class="absolute bottom-0 left-0 w-96 h-96 bg-blue-600 rounded-full blur-[150px] opacity-10"></div>
 
     <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-        <div class="text-center mb-16">
+        <div class="text-center mb-10 lg:mb-16">
             <h2 class="font-display text-4xl lg:text-5xl font-bold text-white mb-6">Próximos Eventos</h2>
             <p class="text-slate-400 max-w-2xl mx-auto text-lg">Únete a experiencias transformadoras que cambiarán tu perspectiva y potenciarán tu crecimiento personal y profesional.</p>
         </div>

@@ -1,0 +1,122 @@
+---
+// Menú de navegación para celulares: un botón hamburguesa que abre un panel bajo el header.
+// Va dentro de un header con position sticky o fixed, que es el que ubica el panel.
+import { SITE_INFO } from '../lib/constants';
+
+export interface MenuLink {
+    href: string;
+    label: string;
+    active?: boolean;
+}
+
+interface Props {
+    links: MenuLink[];
+    // Ancho desde el que el header ya muestra su navegación y el menú se oculta.
+    hideFrom?: 'md' | 'lg';
+    theme?: 'light' | 'dark';
+    // Muestra las redes sociales al final del panel.
+    socials?: boolean;
+}
+
+const { links, hideFrom = 'md', theme = 'light', socials = false } = Astro.props;
+const dark = theme === 'dark';
+
+const socialLinks = [
+    { href: SITE_INFO.social.instagram, label: 'Instagram' },
+    { href: SITE_INFO.social.facebook, label: 'Facebook' },
+    { href: SITE_INFO.social.tiktok, label: 'TikTok' },
+    { href: SITE_INFO.social.linkedin, label: 'LinkedIn' },
+];
+---
+
+<div class={hideFrom === 'lg' ? 'lg:hidden' : 'md:hidden'} data-mobile-menu>
+    <button
+        type="button"
+        class:list={[
+            'flex h-10 w-10 items-center justify-center rounded-xl transition-colors',
+            dark ? 'text-slate-200 hover:bg-white/10' : 'text-slate-700 hover:bg-violet-50',
+        ]}
+        aria-expanded="false"
+        aria-controls="menu-movil"
+        aria-label="Abrir menú"
+        data-mobile-menu-toggle
+    >
+        <svg data-icon="open" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <path d="M4 7h16M4 12h16M4 17h16"></path>
+        </svg>
+        <svg data-icon="close" class="hidden h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <path d="M6 6l12 12M18 6L6 18"></path>
+        </svg>
+    </button>
+
+    <nav
+        id="menu-movil"
+        hidden
+        aria-label="Menú"
+        class:list={[
+            'absolute inset-x-0 top-full max-h-[calc(100dvh-5rem)] overflow-y-auto border-b shadow-xl',
+            dark ? 'border-white/10 bg-[#0f172a]' : 'border-slate-100 bg-white',
+        ]}
+        data-mobile-menu-panel
+    >
+        <ul class="mx-auto max-w-7xl space-y-1 px-6 py-4">
+            {links.map((link) => (
+                <li>
+                    <a
+                        href={link.href}
+                        aria-current={link.active ? 'page' : undefined}
+                        class:list={[
+                            'block rounded-xl px-4 py-3 text-base font-semibold transition-colors',
+                            link.active
+                                ? dark ? 'bg-white/10 text-white' : 'bg-violet-50 text-[var(--primary)]'
+                                : dark ? 'text-slate-300 hover:bg-white/5 hover:text-white' : 'text-slate-700 hover:bg-violet-50 hover:text-[var(--primary)]',
+                        ]}
+                    >
+                        {link.label}
+                    </a>
+                </li>
+            ))}
+        </ul>
+        {socials && (
+            <div class:list={['mx-auto flex max-w-7xl flex-wrap gap-x-6 gap-y-2 border-t px-10 py-4 text-sm', dark ? 'border-white/10 text-slate-400' : 'border-slate-100 text-slate-500']}>
+                {socialLinks.map((social) => (
+                    <a href={social.href} target="_blank" rel="noopener noreferrer" class={dark ? 'hover:text-white' : 'hover:text-[var(--primary)]'}>
+                        {social.label}
+                    </a>
+                ))}
+            </div>
+        )}
+    </nav>
+</div>
+
+<script>
+    for (const root of document.querySelectorAll<HTMLElement>('[data-mobile-menu]')) {
+        const button = root.querySelector<HTMLButtonElement>('[data-mobile-menu-toggle]')!;
+        const panel = root.querySelector<HTMLElement>('[data-mobile-menu-panel]')!;
+        const openIcon = button.querySelector('[data-icon="open"]')!;
+        const closeIcon = button.querySelector('[data-icon="close"]')!;
+
+        const setOpen = (open: boolean) => {
+            panel.hidden = !open;
+            button.setAttribute('aria-expanded', String(open));
+            button.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+            openIcon.classList.toggle('hidden', open);
+            closeIcon.classList.toggle('hidden', !open);
+        };
+
+        button.addEventListener('click', () => setOpen(panel.hidden));
+        // Los enlaces a anclas (/#proyectos) no cambian de página: cerramos el menú al tocarlos.
+        panel.addEventListener('click', (event) => {
+            if ((event.target as HTMLElement).closest('a')) setOpen(false);
+        });
+        document.addEventListener('click', (event) => {
+            if (!panel.hidden && !root.contains(event.target as Node)) setOpen(false);
+        });
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && !panel.hidden) {
+                setOpen(false);
+                button.focus();
+            }
+        });
+    }
+</script>

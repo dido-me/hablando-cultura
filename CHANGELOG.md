@@ -7,6 +7,17 @@ CLAUDE.md). La versión publicada se ve en `/version.json`.
 
 ## [Sin publicar]
 
+### Corregido
+- En el celular todos los headers (home, blog, plataforma, podcast y festival) tienen un
+  menú hamburguesa con todas las secciones; en la home y el blog también las redes.
+- La foto del inicio no se veía en el celular y dejaba un espacio en blanco.
+- Menos espacio vertical entre las secciones de la home en el celular.
+- En el podcast y el festival, «Descubre más» ya no tapa el contenido en el celular.
+- Los precios y las duraciones ya no se parten en dos líneas.
+- Los botones de cada cupón en el panel admin se ordenan en dos columnas en el celular.
+- Las anclas del menú dejan la sección debajo del header y no tapada por él.
+- Los headers del blog usan el mismo header de la home (sus íconos de redes no tenían enlace).
+
 ## [0.1.2] - 2026-10-30
 
 ### Cambiado
