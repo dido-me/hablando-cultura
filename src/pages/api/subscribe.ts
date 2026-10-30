@@ -1,11 +1,10 @@
 import type { APIRoute } from "astro";
-import { render } from "@react-email/render";
-import SubscriptionEmail from "../../emails/SubscriptionEmail";
-import { sendEmail } from "../../lib/email";
 import { InvalidSubscriber, recordSubscriber } from "../../lib/subscribers";
 
 export const prerender = false;
 
+// Newsletter del blog: registra el correo en la API de cursos, que también envía el
+// correo de bienvenida. El frontend ya no envía correos.
 export const POST: APIRoute = async ({ request }) => {
   try {
     const body = await request.json();
@@ -26,27 +25,7 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    // Register in the course platform's subscribers list. If the API is down the
-    // welcome email still goes out, as it did with Google Sheets.
-    try {
-      await recordSubscriber({ email, source: "newsletter-blog" });
-    } catch (error) {
-      if (error instanceof InvalidSubscriber) {
-        return new Response(
-          JSON.stringify({ error: "Email no valido" }),
-          { status: 400, headers: { "Content-Type": "application/json" } }
-        );
-      }
-      console.error("Subscribers API error:", error);
-    }
-
-    // Send welcome email
-    const html = await render(SubscriptionEmail({ email }));
-    await sendEmail(
-      email,
-      "Te damos la bienvenida al newsletter de Hablando Cultura",
-      html
-    );
+    await recordSubscriber({ email, source: "newsletter-blog" });
 
     return new Response(
       JSON.stringify({
@@ -56,6 +35,12 @@ export const POST: APIRoute = async ({ request }) => {
       { status: 200, headers: { "Content-Type": "application/json" } }
     );
   } catch (error) {
+    if (error instanceof InvalidSubscriber) {
+      return new Response(
+        JSON.stringify({ error: "Email no valido" }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
     console.error("Subscribe API error:", error);
     return new Response(
       JSON.stringify({ error: "Error al procesar la suscripcion" }),
