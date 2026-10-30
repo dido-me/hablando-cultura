@@ -74,12 +74,45 @@ export interface Payment {
   user_id: number;
   course_id: number;
   amount_cents: number;
-  method: 'yape' | 'plin' | 'culqi_card' | 'culqi_yape';
+  // coupon: un cupón que hizo gratis el producto.
+  method: 'yape' | 'plin' | 'culqi_card' | 'culqi_yape' | 'coupon';
   operation_number: string;
   status: PaymentStatus;
   reject_reason?: string;
   reviewed_at?: string;
   version: number;
+  // Cupón aplicado: amount_cents es lo pagado ya con el descuento.
+  coupon_code?: string;
+  discount_cents?: number;
+}
+
+// Lo que el alumno paga por un producto: el precio vigente menos el descuento del cupón.
+export interface Price {
+  price_cents: number;
+  discount_cents: number;
+  total_cents: number;
+  coupon?: string;
+}
+
+// Cupón de descuento, como lo administra Karolay en el panel.
+export interface Coupon {
+  id: number;
+  created_at: string;
+  code: string;
+  // percent: value es un porcentaje (1 a 100); amount: value son céntimos.
+  kind: 'percent' | 'amount';
+  value: number;
+  all_courses: boolean;
+  course_ids: number[];
+  starts_at: string | null;
+  // Primer momento en que ya no sirve.
+  ends_at: string | null;
+  max_uses: number | null;
+  active: boolean;
+  note: string;
+  version: number;
+  // Pagos hechos con el cupón, sin contar los rechazados.
+  uses: number;
 }
 
 export interface Viewer {
