@@ -2,7 +2,7 @@
 // comprar, activar la cuenta, comprar, pago en revisión o rechazado, o continuar el curso.
 
 import { useEffect, useState } from 'react';
-import { api, getToken, loadMe } from '../../lib/platform/api';
+import { api, getToken, loadMe, notifyAccountChange } from '../../lib/platform/api';
 import { date, duration, soles } from '../../lib/platform/format';
 import type { Course, CoursePage, Me, Payment, Viewer } from '../../lib/platform/types';
 import Checkout from './Checkout';
@@ -56,6 +56,8 @@ export default function CourseActions({ course, firstLessonSlug, pagePath }: Pro
     setPaid(true);
     setBuying(false);
     refresh();
+    // Los materiales del curso, en otra isla de la página, ya se pueden descargar.
+    notifyAccountChange();
   };
 
   const onSubmitted = (payment: Payment) => {

@@ -3,6 +3,8 @@
 // de compra como isla porque depende de la sesión del alumno.
 import PlatformLayout from '../../../layouts/PlatformLayout.astro';
 import CourseActions from '../../../components/platform/CourseActions';
+import CourseResources from '../../../components/platform/CourseResources';
+import TrailerPlayer from '../../../components/platform/TrailerPlayer';
 import { getCourse } from '../../../lib/platform/server';
 import { duration } from '../../../lib/platform/format';
 
@@ -11,7 +13,7 @@ if (!page) return Astro.redirect('/cursos', 302);
 // El ebook tiene su propia página de venta.
 if (page.course.kind === 'ebook') return Astro.redirect('/ebook', 301);
 
-const { course, lessons } = page;
+const { course, lessons, resources = [] } = page;
 
 // El temario se agrupa por bloque (module_title), como las etapas del curso.
 const modules: { title: string; lessons: typeof lessons }[] = [];
@@ -34,7 +36,15 @@ for (const lesson of lessons) {
 					<span>{duration(course.total_duration_seconds)} de video</span>
 					<span>Con Karolay Ramírez</span>
 				</p>
-				{course.cover_url && <img src={course.cover_url} alt={course.title} class="mt-8 aspect-video w-full rounded-3xl object-cover shadow-lg" />}
+				{course.trailer_playback_id ? (
+					<div class="mt-8 aspect-video overflow-hidden rounded-3xl bg-slate-900 shadow-lg">
+						<TrailerPlayer client:only="react" playbackId={course.trailer_playback_id} title={course.title} poster={course.cover_url}>
+							{course.cover_url && <img slot="fallback" src={course.cover_url} alt={course.title} class="h-full w-full object-cover" />}
+						</TrailerPlayer>
+					</div>
+				) : (
+					course.cover_url && <img src={course.cover_url} alt={course.title} class="mt-8 aspect-video w-full rounded-3xl object-cover shadow-lg" />
+				)}
 			</div>
 			<div class="lg:sticky lg:top-28">
 				<CourseActions client:load course={course} firstLessonSlug={lessons[0]?.slug} />
@@ -109,6 +119,16 @@ for (const lesson of lessons) {
 					))}
 				</div>
 			</section>
+
+			{resources.length > 0 && (
+				<section>
+					<h2 class="font-display text-2xl font-bold text-slate-900">Materiales del curso</h2>
+					<p class="mt-2 text-sm text-slate-500">Para trabajar tu proyecto mientras avanzas en las lecciones.</p>
+					<div class="mt-4">
+						<CourseResources client:visible courseSlug={course.slug} resources={resources} />
+					</div>
+				</section>
+			)}
 		</div>
 	</div>
 </PlatformLayout>

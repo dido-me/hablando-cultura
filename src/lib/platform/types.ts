@@ -22,6 +22,8 @@ export interface Course {
   subtitle?: string;
   description?: string;
   cover_url?: string;
+  // Tráiler en Mux con reproducción pública: lo ve cualquiera en la página del curso.
+  trailer_playback_id?: string;
   objectives?: string[];
   audience?: string[];
   prerequisites?: string;
@@ -45,6 +47,16 @@ export interface Lesson {
   resource_urls?: string[];
   // Texto de refuerzo en Markdown; solo viene en la página de la lección.
   content?: string;
+}
+
+// Material del curso, como el cuaderno de trabajo. La lista es pública; el archivo solo lo
+// descargan los alumnos inscritos.
+export interface CourseResource {
+  slug: string;
+  title: string;
+  description?: string;
+  // Extensión del archivo: "pdf", "docx"…
+  format: string;
 }
 
 export interface LessonProgress {
@@ -82,6 +94,7 @@ export interface Viewer {
 export interface CoursePage {
   course: Course;
   lessons: Lesson[];
+  resources?: CourseResource[];
   viewer?: Viewer;
 }
 
