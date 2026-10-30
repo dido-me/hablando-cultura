@@ -21,6 +21,11 @@ const dateTimeFormat = new Intl.DateTimeFormat('es-PE', { day: 'numeric', month:
 export const date = (iso: string) => dateFormat.format(new Date(iso));
 export const dateTime = (iso: string) => dateTimeFormat.format(new Date(iso));
 
+// discountLabel da "20 %" o "S/ 10.00", según el tipo de cupón.
+export function discountLabel(kind: 'percent' | 'amount', value: number) {
+  return kind === 'percent' ? `${value} %` : soles(value);
+}
+
 // fileFormat da el nombre y el ícono de un archivo según su extensión.
 export function fileFormat(format: string) {
   switch (format) {
@@ -45,6 +50,7 @@ export const methodLabels: Record<Payment['method'], string> = {
   plin: 'Plin (captura)',
   culqi_card: 'Tarjeta (Culqi)',
   culqi_yape: 'Yape (Culqi)',
+  coupon: 'Cupón (gratis)',
 };
 
 export const statusLabels: Record<Payment['status'], string> = {

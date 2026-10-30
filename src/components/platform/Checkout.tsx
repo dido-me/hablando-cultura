@@ -4,12 +4,14 @@
 //   banco pide 3DS, Culqi3DS autentica la tarjeta y la API reintenta el cobro.
 // - Yape o Plin directo, sin comisión: el alumno sube la captura y Karolay lo aprueba.
 //   Está apagado por ahora (ver MANUAL_PAYMENTS en config.ts).
+// Antes de pagar se puede aplicar un cupón: la API calcula el total, y si el cupón cubre
+// todo el precio el producto se obtiene gratis, sin pasar por ningún pago.
 
-import { useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { api, ApiError } from '../../lib/platform/api';
 import { CULQI_PUBLIC_KEY, MANUAL_PAYMENTS, YAPE_HOLDER, YAPE_NUMBER } from '../../lib/platform/config';
 import { soles } from '../../lib/platform/format';
-import type { Payment } from '../../lib/platform/types';
+import type { Payment, Price } from '../../lib/platform/types';
 import { Alert, Button, Field, Spinner } from './ui';
 
 const BRAND = '#6d28d9';
@@ -73,36 +75,198 @@ interface Props {
   courseTitle: string;
   priceCents: number;
   email: string;
+  // Cupón que llegó en el enlace (?cupon=…): se aplica al abrir el pago.
+  initialCoupon?: string;
   onPaid: (payment: Payment) => void;
   onSubmitted: (payment: Payment) => void;
 }
 
+// PayProps es lo que recibe cada medio de pago: el total ya con el cupón.
+type PayProps = Props & { coupon?: string };
+
 export default function Checkout(props: Props) {
   const culqi = Boolean(CULQI_PUBLIC_KEY);
   const [option, setOption] = useState<'culqi' | 'manual'>(culqi ? 'culqi' : 'manual');
+  const [price, setPrice] = useState<Price>({ price_cents: props.priceCents, discount_cents: 0, total_cents: props.priceCents });
 
   if (!culqi && !MANUAL_PAYMENTS) return <Alert tone="warning">Los pagos no están disponibles en este momento. Intenta más tarde.</Alert>;
 
-  // Con un solo medio de pago no hace falta elegir.
-  if (!MANUAL_PAYMENTS) {
+  const pay: PayProps = { ...props, priceCents: price.total_cents, coupon: price.coupon };
+  const reset = () => setPrice({ price_cents: props.priceCents, discount_cents: 0, total_cents: props.priceCents });
+
+  return (
+    <div className="space-y-4">
+      <CouponBox courseSlug={props.courseSlug} initialCoupon={props.initialCoupon} applied={price.coupon} onApply={setPrice} onRemove={reset} />
+      {price.coupon && <PriceSummary price={price} />}
+
+      {price.total_cents === 0 ? (
+        <Redeem {...pay} />
+      ) : !MANUAL_PAYMENTS ? (
+        // Con un solo medio de pago no hace falta elegir.
+        <>
+          <p className="flex items-center gap-2 text-sm text-slate-600">
+            <span className="material-symbols-outlined text-[var(--primary)]">credit_card</span>
+            Paga con tarjeta o Yape y accede al instante.
+          </p>
+          <CulqiPay {...pay} />
+        </>
+      ) : (
+        <>
+          <div className="grid gap-3" role="radiogroup" aria-label="Cómo quieres pagar">
+            {culqi && <Option checked={option === 'culqi'} onSelect={() => setOption('culqi')} icon="credit_card" title="Tarjeta o Yape" detail="Acceso inmediato. Visa, Mastercard, Amex, Diners o Yape." />}
+            <Option checked={option === 'manual'} onSelect={() => setOption('manual')} icon="qr_code_2" title="Yape o Plin directo" detail="Envías la captura y Karolay aprueba tu acceso en unas horas." />
+          </div>
+          {option === 'culqi' ? <CulqiPay {...pay} /> : <ManualPay {...pay} />}
+        </>
+      )}
+    </div>
+  );
+}
+
+interface CouponBoxProps {
+  courseSlug: string;
+  initialCoupon?: string;
+  applied?: string;
+  onApply: (price: Price) => void;
+  onRemove: () => void;
+}
+
+// CouponBox pide el precio a la API con el cupón: así el descuento que se muestra es el
+// mismo que se cobra.
+function CouponBox({ courseSlug, initialCoupon, applied, onApply, onRemove }: CouponBoxProps) {
+  const [open, setOpen] = useState(Boolean(initialCoupon));
+  const [code, setCode] = useState(initialCoupon ?? '');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const apply = async (value: string) => {
+    if (!value.trim()) return setError('Escribe el código de tu cupón.');
+    setLoading(true);
+    setError('');
+    try {
+      const { price } = await api<{ price: Price }>('/v1/payments/quote', { method: 'POST', body: { course: courseSlug, coupon: value.trim() } });
+      onApply(price);
+    } catch (err) {
+      setError(err instanceof ApiError ? (err.fields.coupon ?? err.message) : 'No pudimos revisar el cupón. Intenta de nuevo.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (initialCoupon) apply(initialCoupon);
+  }, []);
+
+  if (applied) {
     return (
-      <div className="space-y-4">
-        <p className="flex items-center gap-2 text-sm text-slate-600">
-          <span className="material-symbols-outlined text-[var(--primary)]">credit_card</span>
-          Paga con tarjeta o Yape y accede al instante.
-        </p>
-        <CulqiPay {...props} />
+      <div className="flex items-center justify-between gap-3 rounded-2xl bg-emerald-50 px-4 py-3 text-sm text-emerald-900 ring-1 ring-emerald-100">
+        <span className="flex items-center gap-2">
+          <span className="material-symbols-outlined text-lg">sell</span>
+          Cupón <strong className="font-mono">{applied}</strong> aplicado
+        </span>
+        <button
+          type="button"
+          className="font-semibold underline hover:text-emerald-700"
+          onClick={() => {
+            setCode('');
+            onRemove();
+          }}
+        >
+          Quitar
+        </button>
       </div>
     );
   }
 
+  if (!open) {
+    return (
+      <button type="button" onClick={() => setOpen(true)} className="flex items-center gap-1.5 text-sm font-semibold text-[var(--primary)] hover:underline">
+        <span className="material-symbols-outlined text-lg">sell</span>
+        ¿Tienes un cupón de descuento?
+      </button>
+    );
+  }
+
   return (
-    <div className="space-y-4">
-      <div className="grid gap-3" role="radiogroup" aria-label="Cómo quieres pagar">
-        {culqi && <Option checked={option === 'culqi'} onSelect={() => setOption('culqi')} icon="credit_card" title="Tarjeta o Yape" detail="Acceso inmediato. Visa, Mastercard, Amex, Diners o Yape." />}
-        <Option checked={option === 'manual'} onSelect={() => setOption('manual')} icon="qr_code_2" title="Yape o Plin directo" detail="Envías la captura y Karolay aprueba tu acceso en unas horas." />
+    <form
+      className="space-y-2"
+      noValidate
+      onSubmit={(event) => {
+        event.preventDefault();
+        apply(code);
+      }}
+    >
+      <div className="flex gap-2">
+        <input
+          name="coupon"
+          aria-label="Código del cupón"
+          placeholder="Código del cupón"
+          autoCapitalize="characters"
+          autoComplete="off"
+          value={code}
+          onChange={(e) => setCode(e.target.value.toUpperCase())}
+          aria-invalid={error ? true : undefined}
+          className={`min-w-0 flex-1 rounded-xl border bg-white px-4 py-2.5 font-mono text-sm uppercase text-slate-900 outline-none transition focus:border-[var(--primary)] focus:ring-2 focus:ring-violet-100 ${error ? 'border-red-400' : 'border-slate-200'}`}
+        />
+        <Button type="submit" variant="secondary" loading={loading} className="py-2.5">
+          Aplicar
+        </Button>
       </div>
-      {option === 'culqi' ? <CulqiPay {...props} /> : <ManualPay {...props} />}
+      {error && <p className="text-xs text-red-600">{error}</p>}
+    </form>
+  );
+}
+
+function PriceSummary({ price }: { price: Price }) {
+  return (
+    <dl className="space-y-1.5 rounded-2xl bg-slate-50 p-4 text-sm">
+      <div className="flex justify-between text-slate-600">
+        <dt>Precio</dt>
+        <dd>{soles(price.price_cents)}</dd>
+      </div>
+      <div className="flex justify-between text-emerald-700">
+        <dt>Cupón {price.coupon}</dt>
+        <dd>−{soles(price.discount_cents)}</dd>
+      </div>
+      <div className="flex justify-between border-t border-slate-200 pt-1.5 font-bold text-slate-900">
+        <dt>Total</dt>
+        <dd>{price.total_cents === 0 ? 'Gratis' : soles(price.total_cents)}</dd>
+      </div>
+    </dl>
+  );
+}
+
+// Redeem: el cupón cubre todo el precio, así que el acceso se pide sin pagar.
+function Redeem({ courseSlug, courseTitle, coupon, onPaid }: PayProps) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const redeem = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const { payment } = await api<{ payment: Payment }>('/v1/payments/redeem', { method: 'POST', body: { course: courseSlug, coupon } });
+      onPaid(payment);
+    } catch (err) {
+      setError(err instanceof ApiError ? (err.fields.coupon ?? err.message) : 'No pudimos activar tu acceso. Intenta de nuevo.');
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="space-y-3">
+      {error && <Alert tone="error">{error}</Alert>}
+      <Button type="button" onClick={redeem} loading={loading} className="w-full">
+        <span className="material-symbols-outlined text-lg">redeem</span>
+        Obtener gratis
+      </Button>
+      <p className="text-center text-xs text-slate-500">
+        Tu cupón cubre todo el precio de {courseTitle}. Al continuar aceptas los{' '}
+        <a href="/terminos" className="underline hover:text-[var(--primary)]">
+          Términos y condiciones
+        </a>
+        .
+      </p>
     </div>
   );
 }
@@ -125,7 +289,7 @@ function Option({ checked, onSelect, icon, title, detail }: { checked: boolean; 
   );
 }
 
-function CulqiPay({ courseSlug, courseTitle, priceCents, email, onPaid }: Props) {
+function CulqiPay({ courseSlug, courseTitle, priceCents, email, coupon, onPaid }: PayProps) {
   const [state, setState] = useState<'idle' | 'opening' | 'charging' | 'authenticating'>('idle');
   const [error, setError] = useState('');
 
@@ -142,6 +306,9 @@ function CulqiPay({ courseSlug, courseTitle, priceCents, email, onPaid }: Props)
         body: {
           course: courseSlug,
           token: tokenId,
+          coupon,
+          // El total que vio el alumno: si cambió, la API no cobra.
+          amount_cents: priceCents,
           device_fingerprint_id: deviceId || undefined,
           authentication_3ds: authentication && {
             eci: String(authentication.eci ?? ''),
@@ -258,7 +425,7 @@ function CulqiPay({ courseSlug, courseTitle, priceCents, email, onPaid }: Props)
   );
 }
 
-function ManualPay({ courseSlug, priceCents, onSubmitted }: Props) {
+function ManualPay({ courseSlug, priceCents, coupon, onSubmitted }: PayProps) {
   const [method, setMethod] = useState<'yape' | 'plin'>('yape');
   const [operation, setOperation] = useState('');
   const [file, setFile] = useState<File | null>(null);
@@ -288,7 +455,7 @@ function ManualPay({ courseSlug, priceCents, onSubmitted }: Props) {
 
       const { payment } = await api<{ payment: Payment }>('/v1/payments', {
         method: 'POST',
-        body: { course: courseSlug, method, operation_number: operation.trim(), receipt_key: upload.key },
+        body: { course: courseSlug, method, operation_number: operation.trim(), receipt_key: upload.key, coupon },
       });
       onSubmitted(payment);
     } catch (err) {

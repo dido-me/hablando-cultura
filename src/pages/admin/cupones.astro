@@ -1,0 +1,10 @@
+---
+import PlatformLayout from '../../layouts/PlatformLayout.astro';
+import AdminCoupons from '../../components/platform/AdminCoupons';
+---
+
+<PlatformLayout title="Cupones" private>
+	<div class="max-w-5xl mx-auto px-6 lg:px-8 py-16">
+		<AdminCoupons client:only="react" />
+	</div>
+</PlatformLayout>

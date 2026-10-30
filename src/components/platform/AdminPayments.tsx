@@ -108,6 +108,7 @@ function PaymentRow({ payment, highlighted, onChanged }: { payment: AdminPayment
   const [error, setError] = useState('');
 
   const isCulqi = payment.method.startsWith('culqi');
+  const hasReceipt = payment.method === 'yape' || payment.method === 'plin';
 
   const act = async (action: 'approve' | 'reject') => {
     setBusy(action);
@@ -152,14 +153,22 @@ function PaymentRow({ payment, highlighted, onChanged }: { payment: AdminPayment
           <p className="text-sm text-slate-600">
             {payment.course_title} · <strong>{soles(payment.amount_cents)}</strong> · {methodLabels[payment.method]}
           </p>
-          <p className="text-xs text-slate-500">
-            {isCulqi ? 'ID del cargo en Culqi' : 'N.º de operación'}: <span className="font-mono">{payment.operation_number}</span>
-          </p>
+          {payment.coupon_code && (
+            <p className="flex items-center gap-1 text-xs text-emerald-700">
+              <span className="material-symbols-outlined text-sm">sell</span>
+              Cupón <span className="font-mono font-semibold">{payment.coupon_code}</span> · descuento de {soles(payment.discount_cents ?? 0)}
+            </p>
+          )}
+          {payment.method !== 'coupon' && (
+            <p className="text-xs text-slate-500">
+              {isCulqi ? 'ID del cargo en Culqi' : 'N.º de operación'}: <span className="font-mono">{payment.operation_number}</span>
+            </p>
+          )}
           {payment.reject_reason && <p className="text-sm text-red-600">Motivo: {payment.reject_reason}</p>}
         </div>
 
         <div className="flex flex-wrap gap-2">
-          {!isCulqi && (
+          {hasReceipt && (
             <Button variant="secondary" loading={busy === 'receipt'} onClick={openReceipt}>
               <span className="material-symbols-outlined text-lg">image</span> Ver captura
             </Button>
