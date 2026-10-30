@@ -3,6 +3,7 @@
 
 import { useCallback, useEffect, useState, type FormEvent, type ReactNode } from 'react';
 import { api, ApiError, safeNext, saveSession } from '../../lib/platform/api';
+import { SIGNUP_OPEN } from '../../lib/platform/config';
 import type { AuthToken } from '../../lib/platform/types';
 import GoogleButton from './GoogleButton';
 import { Alert, Button, Card, Field, LinkButton, Loading } from './ui';
@@ -77,12 +78,14 @@ export function LoginForm() {
       title="Ingresa a tu cuenta"
       subtitle="Para ver tus cursos y continuar donde te quedaste."
       footer={
-        <>
-          ¿Aún no tienes cuenta?{' '}
-          <a className="font-semibold text-[var(--primary)] hover:underline" href={withNext('/registro')}>
-            Crea una gratis
-          </a>
-        </>
+        SIGNUP_OPEN && (
+          <>
+            ¿Aún no tienes cuenta?{' '}
+            <a className="font-semibold text-[var(--primary)] hover:underline" href={withNext('/registro')}>
+              Crea una gratis
+            </a>
+          </>
+        )
       }
     >
       <GoogleButton onSignedIn={goNext} />
@@ -104,6 +107,22 @@ export function LoginForm() {
 }
 
 export function RegisterForm() {
+  return SIGNUP_OPEN ? <OpenRegisterForm /> : <SignupClosed />;
+}
+
+// SignupClosed reemplaza el registro mientras el sitio es una demo.
+function SignupClosed() {
+  return (
+    <AuthCard title="Las inscripciones abren pronto" subtitle="Estamos terminando de preparar la plataforma de cursos.">
+      <p className="text-sm text-slate-600">Si ya tienes una cuenta, puedes ingresar con ella.</p>
+      <LinkButton href={withNext('/ingresar')} className="w-full">
+        Ingresar
+      </LinkButton>
+    </AuthCard>
+  );
+}
+
+function OpenRegisterForm() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

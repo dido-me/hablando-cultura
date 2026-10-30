@@ -4,6 +4,7 @@
 
 import { useEffect, useState } from 'react';
 import { api, getToken, loadMe, notifyAccountChange } from '../../lib/platform/api';
+import { SIGNUP_OPEN } from '../../lib/platform/config';
 import { date, duration, soles } from '../../lib/platform/format';
 import type { Course, CoursePage, Me, Payment, Viewer } from '../../lib/platform/types';
 import Checkout from './Checkout';
@@ -115,15 +116,26 @@ export default function CourseActions({ course, firstLessonSlug, pagePath }: Pro
                 Tu cupón <strong className="font-mono">{coupon}</strong> se aplicará al pagar.
               </p>
             )}
-            <LinkButton href={`/registro?next=${encodeURIComponent(returnPath)}`} className="w-full">
-              {buyLabel}
-            </LinkButton>
-            <p className="text-center text-sm text-slate-500">
-              ¿Ya tienes cuenta?{' '}
-              <a href={`/ingresar?next=${encodeURIComponent(returnPath)}`} className="font-semibold text-[var(--primary)] hover:underline">
-                Ingresa
-              </a>
-            </p>
+            {SIGNUP_OPEN ? (
+              <>
+                <LinkButton href={`/registro?next=${encodeURIComponent(returnPath)}`} className="w-full">
+                  {buyLabel}
+                </LinkButton>
+                <p className="text-center text-sm text-slate-500">
+                  ¿Ya tienes cuenta?{' '}
+                  <a href={`/ingresar?next=${encodeURIComponent(returnPath)}`} className="font-semibold text-[var(--primary)] hover:underline">
+                    Ingresa
+                  </a>
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="rounded-2xl bg-violet-50 px-4 py-3 text-center text-sm text-violet-900">Las inscripciones abren pronto.</p>
+                <LinkButton href={`/ingresar?next=${encodeURIComponent(returnPath)}`} variant="secondary" className="w-full">
+                  Ya tengo cuenta: ingresar
+                </LinkButton>
+              </>
+            )}
           </>
         ) : viewer?.enrolled && isEbook ? (
           <>
