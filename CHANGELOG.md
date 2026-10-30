@@ -7,6 +7,8 @@ CLAUDE.md). La versión publicada se ve en `/version.json`.
 
 ## [Sin publicar]
 
+## [0.1.3] - 2026-10-30
+
 ### Corregido
 - En el celular todos los headers (home, blog, plataforma, podcast y festival) tienen un
   menú hamburguesa con todas las secciones; en la home y el blog también las redes.
