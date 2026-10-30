@@ -1,6 +1,7 @@
 ---
 // Footer Component - Pie de página y contacto
 import TextFlip from './TextFlip';
+import LegalFooter from './LegalFooter.astro';
 ---
 
 <footer class="bg-[#020617] text-white pt-32 pb-12 relative overflow-hidden" id="contacto">
@@ -22,7 +23,7 @@ import TextFlip from './TextFlip';
                         name: 'Spotify',
                         color: '#22c55e',
                         image: '/fotos-karolay/1.webp',
-                        url: 'https://open.spotify.com/show/hablandocultura'
+                        url: 'https://open.spotify.com/show/3pk6ha0G1jMCOPJzxbiUYP'
                     },
                     {
                         name: 'TikTok',
@@ -73,7 +74,8 @@ import TextFlip from './TextFlip';
         <div class="w-full h-px bg-slate-800/50 max-w-lg mx-auto mb-12"></div>
 
         <!-- Copyright -->
-        <p class="text-slate-500 text-sm">&copy; {new Date().getFullYear()} Karolay Ramírez. Todos los derechos reservados.</p>
+        <LegalFooter />
+        <p class="mt-8 text-slate-500 text-sm">&copy; {new Date().getFullYear()} Karolay Ramírez. Todos los derechos reservados.</p>
     </div>
 </footer>
 

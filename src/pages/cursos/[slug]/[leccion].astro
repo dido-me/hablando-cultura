@@ -1,0 +1,18 @@
+---
+// Lección de un curso. El título sale del temario público; el video y el avance los pide
+// la isla con la sesión del alumno.
+import PlatformLayout from '../../../layouts/PlatformLayout.astro';
+import LessonView from '../../../components/platform/LessonView';
+import { getCourse } from '../../../lib/platform/server';
+
+const { slug = '', leccion = '' } = Astro.params;
+const page = await getCourse(slug);
+const lesson = page?.lessons.find((l) => l.slug === leccion);
+if (!page || !lesson) return Astro.redirect(page ? `/cursos/${slug}` : '/cursos', 302);
+---
+
+<PlatformLayout title={`${lesson.title} · ${page.course.title}`} private>
+	<div class="max-w-7xl mx-auto px-6 lg:px-8 py-10">
+		<LessonView client:only="react" courseSlug={slug} lessonSlug={leccion} />
+	</div>
+</PlatformLayout>

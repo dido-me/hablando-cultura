@@ -1,0 +1,134 @@
+---
+// Página de un curso: presentación y temario renderizados en el servidor, y la tarjeta
+// de compra como isla porque depende de la sesión del alumno.
+import PlatformLayout from '../../../layouts/PlatformLayout.astro';
+import CourseActions from '../../../components/platform/CourseActions';
+import CourseResources from '../../../components/platform/CourseResources';
+import TrailerPlayer from '../../../components/platform/TrailerPlayer';
+import { getCourse } from '../../../lib/platform/server';
+import { duration } from '../../../lib/platform/format';
+
+const page = await getCourse(Astro.params.slug ?? '');
+if (!page) return Astro.redirect('/cursos', 302);
+// El ebook tiene su propia página de venta.
+if (page.course.kind === 'ebook') return Astro.redirect('/ebook', 301);
+
+const { course, lessons, resources = [] } = page;
+
+// El temario se agrupa por bloque (module_title), como las etapas del curso.
+const modules: { title: string; lessons: typeof lessons }[] = [];
+for (const lesson of lessons) {
+	const last = modules.at(-1);
+	if (last && last.title === (lesson.module_title ?? '')) last.lessons.push(lesson);
+	else modules.push({ title: lesson.module_title ?? '', lessons: [lesson] });
+}
+---
+
+<PlatformLayout title={course.title} description={course.subtitle ?? course.description}>
+	<section class="bg-[var(--lavender)]">
+		<div class="max-w-7xl mx-auto px-6 lg:px-8 py-14 grid gap-10 lg:grid-cols-[minmax(0,1fr)_24rem] lg:items-start">
+			<div>
+				<a href="/cursos" class="text-sm font-semibold text-slate-500 hover:text-[var(--primary)]">← Cursos</a>
+				<h1 class="mt-4 font-display text-4xl font-bold text-slate-900 md:text-5xl">{course.title}</h1>
+				{course.subtitle && <p class="mt-4 text-xl text-slate-600">{course.subtitle}</p>}
+				<p class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold text-slate-600">
+					<span>{course.lesson_count} lecciones</span>
+					<span>{duration(course.total_duration_seconds)} de video</span>
+					<span>Con Karolay Ramírez</span>
+				</p>
+				{course.trailer_playback_id ? (
+					<div class="mt-8 aspect-video overflow-hidden rounded-3xl bg-slate-900 shadow-lg">
+						<TrailerPlayer client:only="react" playbackId={course.trailer_playback_id} title={course.title} poster={course.cover_url}>
+							{course.cover_url && <img slot="fallback" src={course.cover_url} alt={course.title} class="h-full w-full object-cover" />}
+						</TrailerPlayer>
+					</div>
+				) : (
+					course.cover_url && <img src={course.cover_url} alt={course.title} class="mt-8 aspect-video w-full rounded-3xl object-cover shadow-lg" />
+				)}
+			</div>
+			<div class="lg:sticky lg:top-28">
+				<CourseActions client:load course={course} firstLessonSlug={lessons[0]?.slug} />
+			</div>
+		</div>
+	</section>
+
+	<div class="max-w-7xl mx-auto px-6 lg:px-8 py-14 grid gap-12 lg:grid-cols-[minmax(0,1fr)_24rem]">
+		<div class="space-y-12">
+			{course.description && (
+				<section>
+					<h2 class="font-display text-2xl font-bold text-slate-900">Sobre el curso</h2>
+					<p class="mt-4 whitespace-pre-line text-slate-600 leading-relaxed">{course.description}</p>
+				</section>
+			)}
+
+			{course.objectives && course.objectives.length > 0 && (
+				<section>
+					<h2 class="font-display text-2xl font-bold text-slate-900">Lo que aprenderás</h2>
+					<ul class="mt-4 grid gap-3 sm:grid-cols-2">
+						{course.objectives.map((objective) => (
+							<li class="flex gap-3 rounded-2xl bg-white p-4 text-sm text-slate-700 ring-1 ring-slate-100">
+								<span class="material-symbols-outlined text-[var(--primary)]">check_circle</span>
+								{objective}
+							</li>
+						))}
+					</ul>
+				</section>
+			)}
+
+			{course.audience && course.audience.length > 0 && (
+				<section>
+					<h2 class="font-display text-2xl font-bold text-slate-900">Este curso es para ti si…</h2>
+					<ul class="mt-4 space-y-2 text-slate-600">
+						{course.audience.map((item) => (
+							<li class="flex gap-3"><span class="text-[var(--primary)]">•</span>{item}</li>
+						))}
+					</ul>
+				</section>
+			)}
+
+			{course.prerequisites && (
+				<section>
+					<h2 class="font-display text-2xl font-bold text-slate-900">Antes de empezar</h2>
+					<p class="mt-4 text-slate-600">{course.prerequisites}</p>
+				</section>
+			)}
+
+			<section>
+				<h2 class="font-display text-2xl font-bold text-slate-900">Contenido del curso</h2>
+				<p class="mt-2 text-sm text-slate-500">{lessons.length} lecciones · {duration(course.total_duration_seconds)}</p>
+				<div class="mt-4 space-y-6">
+					{modules.map((module) => (
+						<div class="overflow-hidden rounded-3xl bg-white ring-1 ring-slate-100">
+							{module.title && (
+								<h3 class="border-b border-slate-100 bg-[var(--lavender)] px-6 py-3 text-sm font-bold text-[var(--primary)]">{module.title}</h3>
+							)}
+							<ol class="divide-y divide-slate-100">
+								{module.lessons.map((lesson) => (
+									<li class="flex items-start gap-4 px-6 py-4">
+										<span class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-violet-50 text-sm font-bold text-[var(--primary)]">{lesson.position}</span>
+										<div class="flex-1">
+											<p class="font-semibold text-slate-800">{lesson.title}</p>
+											{lesson.summary && <p class="mt-1 text-sm text-slate-500">{lesson.summary}</p>}
+										</div>
+										<span class="whitespace-nowrap text-sm text-slate-400">{duration(lesson.duration_seconds)}</span>
+										{lesson.is_preview && <a href={`/cursos/${course.slug}/${lesson.slug}`} class="text-sm font-semibold text-[var(--primary)] hover:underline">Ver gratis</a>}
+									</li>
+								))}
+							</ol>
+						</div>
+					))}
+				</div>
+			</section>
+
+			{resources.length > 0 && (
+				<section>
+					<h2 class="font-display text-2xl font-bold text-slate-900">Materiales del curso</h2>
+					<p class="mt-2 text-sm text-slate-500">Para trabajar tu proyecto mientras avanzas en las lecciones.</p>
+					<div class="mt-4">
+						<CourseResources client:visible courseSlug={course.slug} resources={resources} />
+					</div>
+				</section>
+			)}
+		</div>
+	</div>
+</PlatformLayout>

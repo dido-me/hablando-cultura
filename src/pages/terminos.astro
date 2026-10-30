@@ -1,0 +1,78 @@
+---
+// Términos y condiciones de la plataforma de cursos.
+// Borrador para que Karolay lo revise antes de publicar el sitio (en especial devoluciones).
+export const prerender = true;
+
+import PlatformLayout from '../layouts/PlatformLayout.astro';
+
+const updated = '27 de octubre de 2026';
+const contact = 'hablandocultura@gmail.com';
+---
+
+<PlatformLayout title="Términos y condiciones" description="Condiciones de uso de www.hablandocultura.pe y de la compra de cursos.">
+	<article class="max-w-3xl mx-auto px-6 lg:px-8 py-16 prose prose-slate prose-headings:font-display prose-headings:text-slate-900 prose-a:text-[var(--primary)]">
+		<h1>Términos y condiciones</h1>
+		<p class="text-sm text-slate-500">Última actualización: {updated}</p>
+
+		<p>
+			Estos términos regulan el uso de www.hablandocultura.pe y la compra de los cursos de Hablando Cultura, a cargo de
+			Karolay Ramírez. Al crear una cuenta o comprar un curso aceptas estos términos y nuestra
+			<a href="/privacidad">Política de privacidad</a>.
+		</p>
+
+		<h2>Tu cuenta</h2>
+		<ul>
+			<li>Debes registrar datos verdaderos y mantener tu correo actualizado, porque por ahí te enviamos los avisos de tu cuenta y de tus compras.</li>
+			<li>Tu cuenta es personal. Eres responsable de cuidar tu contraseña y de lo que se haga con tu cuenta.</li>
+			<li>Para comprar un curso necesitas activar tu cuenta con el enlace que te enviamos por correo.</li>
+		</ul>
+
+		<h2>Acceso a los cursos</h2>
+		<ul>
+			<li>Al comprar un curso obtienes una licencia personal e intransferible para verlo en línea desde tu cuenta, sin fecha de vencimiento mientras la plataforma esté en funcionamiento.</li>
+			<li>No puedes compartir tu cuenta ni descargar, grabar, copiar, revender o difundir los videos y materiales del curso.</li>
+			<li>Podemos suspender la cuenta de quien incumpla estas reglas, sin derecho a devolución.</li>
+		</ul>
+
+		<h2>Precios y pagos</h2>
+		<ul>
+			<li>Los precios se muestran en soles (S/). El precio de preventa rige solo hasta la fecha indicada en la página del curso.</li>
+			<li>Los pagos con tarjeta o Yape se procesan a través de Culqi. Tu acceso se activa en cuanto Culqi confirma el pago, y te enviamos la confirmación por correo.</li>
+			<li>Si el banco rechaza el pago no se hace ningún cobro y puedes intentarlo con otro medio.</li>
+		</ul>
+
+		<h2>Cambios y devoluciones</h2>
+		<p>
+			Los casos en que puedes pedir la devolución de un curso o un ebook, y cómo hacerlo, están en nuestra
+			<a href="/devoluciones">Política de cambios y devoluciones</a>. Si no estás de acuerdo con una respuesta, puedes
+			usar nuestro <a href="/libro-de-reclamaciones">Libro de Reclamaciones</a>.
+		</p>
+
+		<h2>Propiedad intelectual</h2>
+		<p>
+			Los videos, textos, materiales, marcas y demás contenidos del sitio pertenecen a Karolay Ramírez o a sus titulares y
+			están protegidos por las normas de propiedad intelectual. Comprar un curso no transfiere ningún derecho sobre ellos.
+		</p>
+
+		<h2>Alcance de los cursos</h2>
+		<p>
+			Los cursos tienen fines formativos. Los resultados de tu proyecto, de una postulación a fondos o de una solicitud de
+			financiamiento dependen de cada caso y de las bases de cada convocatoria, que debes revisar en sus fuentes oficiales.
+		</p>
+
+		<h2>Disponibilidad del sitio</h2>
+		<p>
+			Hacemos lo posible para que el sitio esté siempre disponible, pero puede haber interrupciones por mantenimiento o por
+			causas ajenas a nosotros. Si el contenido de un curso cambia, mantendremos tu acceso a la versión vigente.
+		</p>
+
+		<h2>Cambios en estos términos</h2>
+		<p>Podemos actualizar estos términos. Publicaremos la nueva versión en esta página con su fecha de actualización.</p>
+
+		<h2>Ley aplicable y contacto</h2>
+		<p>
+			Estos términos se rigen por las leyes del Perú. Para cualquier consulta o reclamo escríbenos a
+			<a href={`mailto:${contact}`}>{contact}</a>.
+		</p>
+	</article>
+</PlatformLayout>

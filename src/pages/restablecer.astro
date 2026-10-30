@@ -1,0 +1,10 @@
+---
+import PlatformLayout from '../layouts/PlatformLayout.astro';
+import { ResetPasswordForm } from '../components/platform/AuthForms';
+---
+
+<PlatformLayout title="Nueva contraseña" private>
+	<div class="max-w-md mx-auto px-6 lg:px-8 py-16">
+		<ResetPasswordForm client:only="react" />
+	</div>
+</PlatformLayout>

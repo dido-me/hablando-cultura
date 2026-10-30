@@ -1,7 +1,7 @@
 {
   "name": "hablando-cultura-web",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
@@ -12,20 +12,17 @@
     "@astrojs/mdx": "^4.3.13",
     "@astrojs/react": "^4.4.2",
     "@astrojs/vercel": "^9.0.4",
-    "@react-email/components": "^1.0.7",
-    "@react-email/render": "^2.0.4",
+    "@mux/mux-player-react": "3.14.0",
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.1.18",
     "astro": "^5.17.1",
     "glightbox": "^3.3.1",
-    "googleapis": "^171.4.0",
-    "nodemailer": "^8.0.1",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
+    "react-markdown": "10.1.0",
     "tailwindcss": "^4.1.18"
   },
   "devDependencies": {
-    "@types/nodemailer": "^7.0.9",
     "@types/react": "^19.2.9",
     "@types/react-dom": "^19.2.3"
   }

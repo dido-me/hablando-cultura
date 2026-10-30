@@ -1,0 +1,10 @@
+---
+import PlatformLayout from '../layouts/PlatformLayout.astro';
+import { RegisterForm } from '../components/platform/AuthForms';
+---
+
+<PlatformLayout title="Crear cuenta" private>
+	<div class="max-w-md mx-auto px-6 lg:px-8 py-16">
+		<RegisterForm client:only="react" />
+	</div>
+</PlatformLayout>
