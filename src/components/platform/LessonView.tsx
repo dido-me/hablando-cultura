@@ -7,6 +7,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { api, ApiError } from '../../lib/platform/api';
 import { duration } from '../../lib/platform/format';
 import type { CoursePage, LessonPage, LessonProgress } from '../../lib/platform/types';
+import { ResourceList } from './CourseResources';
 import { LessonArticle, LessonOutline, outline } from './LessonContent';
 import { Alert, LinkButton, Loading, ProgressBar } from './ui';
 
@@ -179,6 +180,12 @@ export default function LessonView({ courseSlug, lessonSlug }: Props) {
         <div className="hidden lg:block">
           <LessonOutline sections={sections} />
         </div>
+        {course.viewer?.enrolled && course.resources && course.resources.length > 0 && (
+          <div className="space-y-3">
+            <h2 className="font-display text-lg font-bold text-slate-900">Materiales del curso</h2>
+            <ResourceList courseSlug={courseSlug} resources={course.resources} enrolled />
+          </div>
+        )}
         <div className="rounded-3xl bg-white p-6 ring-1 ring-slate-100">
           <a href={coursePath} className="text-sm font-semibold text-slate-500 hover:text-[var(--primary)]">
             ← {course.course.title}

@@ -21,6 +21,25 @@ const dateTimeFormat = new Intl.DateTimeFormat('es-PE', { day: 'numeric', month:
 export const date = (iso: string) => dateFormat.format(new Date(iso));
 export const dateTime = (iso: string) => dateTimeFormat.format(new Date(iso));
 
+// fileFormat da el nombre y el ícono de un archivo según su extensión.
+export function fileFormat(format: string) {
+  switch (format) {
+    case 'pdf':
+      return { label: 'PDF', icon: 'picture_as_pdf' };
+    case 'doc':
+    case 'docx':
+      return { label: 'Word', icon: 'description' };
+    case 'xls':
+    case 'xlsx':
+      return { label: 'Excel', icon: 'table_chart' };
+    case 'ppt':
+    case 'pptx':
+      return { label: 'PowerPoint', icon: 'slideshow' };
+    default:
+      return { label: format.toUpperCase(), icon: 'draft' };
+  }
+}
+
 export const methodLabels: Record<Payment['method'], string> = {
   yape: 'Yape (captura)',
   plin: 'Plin (captura)',

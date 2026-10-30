@@ -40,6 +40,13 @@ export function clearSession() {
   window.dispatchEvent(new Event(SESSION_EVENT));
 }
 
+// notifyAccountChange avisa a las demás islas de la página que la cuenta cambió, por
+// ejemplo después de comprar un curso.
+export function notifyAccountChange() {
+  mePromise = null;
+  window.dispatchEvent(new Event(SESSION_EVENT));
+}
+
 export function onSessionChange(listener: () => void) {
   window.addEventListener(SESSION_EVENT, listener);
   window.addEventListener('storage', listener);
