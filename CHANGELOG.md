@@ -7,6 +7,13 @@ CLAUDE.md). La versión publicada se ve en `/version.json`.
 
 ## [Sin publicar]
 
+## [0.1.2] - 2026-10-30
+
+### Cambiado
+- La política de privacidad nombra a los proveedores por categoría (pagos, servicios
+  tecnológicos, inicio de sesión, autoridades) en lugar de cada servicio, e incluye al
+  titular con su RUC y los datos del Libro de Reclamaciones.
+
 ## [0.1.1] - 2026-10-30
 
 ### Corregido
