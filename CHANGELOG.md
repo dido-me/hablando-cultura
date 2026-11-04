@@ -7,6 +7,8 @@ CLAUDE.md). La versión publicada se ve en `/version.json`.
 
 ## [Sin publicar]
 
+## [0.2.0] - 2026-11-04
+
 ### Añadido
 - Botón con un ojo para ver u ocultar la contraseña al ingresar, al crear cuenta y al
   crear una nueva contraseña.
