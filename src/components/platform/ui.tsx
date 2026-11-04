@@ -1,7 +1,7 @@
 // Piezas de interfaz compartidas por las islas de la plataforma de cursos, con el estilo
 // del sitio (morado --primary, bordes redondeados, Outfit en títulos).
 
-import type { ButtonHTMLAttributes, InputHTMLAttributes, ReactNode } from 'react';
+import { useId, useState, type ButtonHTMLAttributes, type InputHTMLAttributes, type ReactNode } from 'react';
 
 type Variant = 'primary' | 'secondary' | 'ghost' | 'danger';
 
@@ -37,17 +37,74 @@ export function Spinner({ className = 'h-4 w-4' }: { className?: string }) {
   return <span className={`${className} inline-block animate-spin rounded-full border-2 border-current border-r-transparent`} aria-hidden="true" />;
 }
 
-export function Field({ label, error, hint, ...props }: InputHTMLAttributes<HTMLInputElement> & { label: string; error?: string; hint?: string }) {
+type FieldProps = InputHTMLAttributes<HTMLInputElement> & { label: string; error?: string; hint?: string };
+
+// trailing va dentro del campo, a la derecha (por ejemplo, el botón para ver la contraseña).
+// Queda fuera del <label> para que su texto no se sume al nombre del campo.
+export function Field({ label, error, hint, trailing, id, ...props }: FieldProps & { trailing?: ReactNode }) {
+  const autoId = useId();
+  const inputId = id ?? autoId;
   return (
-    <label className="block">
-      <span className="mb-1.5 block text-sm font-semibold text-slate-700">{label}</span>
-      <input
-        {...props}
-        aria-invalid={error ? true : undefined}
-        className={`w-full rounded-xl border bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[var(--primary)] focus:ring-2 focus:ring-violet-100 ${error ? 'border-red-400' : 'border-slate-200'}`}
-      />
+    <div>
+      <label htmlFor={inputId} className="mb-1.5 block text-sm font-semibold text-slate-700">
+        {label}
+      </label>
+      <div className="relative">
+        <input
+          {...props}
+          id={inputId}
+          aria-invalid={error ? true : undefined}
+          className={`w-full rounded-xl border bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[var(--primary)] focus:ring-2 focus:ring-violet-100 [&::-ms-reveal]:hidden ${trailing ? 'pr-12' : ''} ${error ? 'border-red-400' : 'border-slate-200'}`}
+        />
+        {trailing && <div className="absolute inset-y-0 right-0 flex items-center pr-2">{trailing}</div>}
+      </div>
       {error ? <span className="mt-1 block text-xs text-red-600">{error}</span> : hint && <span className="mt-1 block text-xs text-slate-500">{hint}</span>}
-    </label>
+    </div>
+  );
+}
+
+// PasswordField es un Field de contraseña con un botón para mostrarla u ocultarla.
+export function PasswordField(props: Omit<FieldProps, 'type'>) {
+  const [visible, setVisible] = useState(false);
+  return (
+    <Field
+      {...props}
+      type={visible ? 'text' : 'password'}
+      trailing={
+        <button
+          type="button"
+          onClick={() => setVisible((v) => !v)}
+          // Evita que el campo pierda el foco al hacer clic en el botón.
+          onMouseDown={(e) => e.preventDefault()}
+          aria-label={visible ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+          aria-pressed={visible}
+          title={visible ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+          className="rounded-lg p-2 text-slate-500 transition-colors hover:text-[var(--primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-200"
+        >
+          {visible ? <EyeOffIcon /> : <EyeIcon />}
+        </button>
+      }
+    />
+  );
+}
+
+function EyeIcon() {
+  return (
+    <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  );
+}
+
+function EyeOffIcon() {
+  return (
+    <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M10.6 5.1A10.4 10.4 0 0 1 12 5c6.5 0 10 7 10 7a17.6 17.6 0 0 1-2.4 3.3" />
+      <path d="M6.6 6.6C3.7 8.4 2 12 2 12s3.5 7 10 7a9.7 9.7 0 0 0 5.4-1.6" />
+      <path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" />
+      <path d="m2 2 20 20" />
+    </svg>
   );
 }
 
