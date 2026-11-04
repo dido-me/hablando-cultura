@@ -6,7 +6,7 @@ import { api, ApiError, safeNext, saveSession } from '../../lib/platform/api';
 import { SIGNUP_OPEN } from '../../lib/platform/config';
 import type { AuthToken } from '../../lib/platform/types';
 import GoogleButton from './GoogleButton';
-import { Alert, Button, Card, Field, LinkButton, Loading } from './ui';
+import { Alert, Button, Card, Field, LinkButton, Loading, PasswordField } from './ui';
 
 const nextParam = () => new URLSearchParams(window.location.search).get('next');
 const tokenParam = () => new URLSearchParams(window.location.search).get('token') ?? '';
@@ -92,7 +92,7 @@ export function LoginForm() {
       <form className="space-y-5" onSubmit={submit} noValidate>
         {error && <Alert tone="error">{error}</Alert>}
         <Field label="Correo" type="email" name="email" autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} error={fields.email} />
-        <Field label="Contraseña" type="password" name="password" autoComplete="current-password" required value={password} onChange={(e) => setPassword(e.target.value)} error={fields.password} />
+        <PasswordField label="Contraseña" name="password" autoComplete="current-password" required value={password} onChange={(e) => setPassword(e.target.value)} error={fields.password} />
         <div className="flex justify-end">
           <a href="/recuperar" className="text-sm font-semibold text-[var(--primary)] hover:underline">
             ¿Olvidaste tu contraseña?
@@ -157,9 +157,8 @@ function OpenRegisterForm() {
         {error && <Alert tone="error">{error}</Alert>}
         <Field label="Nombre y apellido" name="name" autoComplete="name" required value={name} onChange={(e) => setName(e.target.value)} error={fields.name} />
         <Field label="Correo" type="email" name="email" autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} error={fields.email} />
-        <Field
+        <PasswordField
           label="Contraseña"
-          type="password"
           name="password"
           autoComplete="new-password"
           required
@@ -243,9 +242,8 @@ export function ResetPasswordForm() {
       ) : (
         <form className="space-y-5" onSubmit={submit} noValidate>
           {(error || fields.token) && <Alert tone="error">{error || fields.token}</Alert>}
-          <Field
+          <PasswordField
             label="Nueva contraseña"
-            type="password"
             name="password"
             autoComplete="new-password"
             required
