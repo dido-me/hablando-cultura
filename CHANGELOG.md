@@ -7,6 +7,15 @@ CLAUDE.md). La versión publicada se ve en `/version.json`.
 
 ## [Sin publicar]
 
+## [1.0.0] - 2026-11-05
+
+Paso a producción: pagos reales con Culqi y registro abierto.
+
+### Cambiado
+- Paso a producción: el checkout usa la llave pública live de Culqi (`pk_live_`) y el
+  registro de cuentas queda visible (`PUBLIC_SIGNUP_OPEN=true`). Se configura en Vercel,
+  sin cambios de código.
+
 ## [0.2.0] - 2026-11-04
 
 ### Añadido
