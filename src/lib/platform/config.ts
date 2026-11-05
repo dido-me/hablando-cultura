@@ -6,8 +6,8 @@ export const CULQI_PUBLIC_KEY = import.meta.env.PUBLIC_CULQI_PUBLIC_KEY as strin
 // Karolay revisa) sigue en el código: PUBLIC_MANUAL_PAYMENTS=true la vuelve a mostrar.
 export const MANUAL_PAYMENTS = import.meta.env.PUBLIC_MANUAL_PAYMENTS === 'true';
 
-// Mientras el sitio es una demo (Culqi en modo prueba) nadie crea cuentas:
-// PUBLIC_SIGNUP_OPEN=false oculta el registro, y la API (SIGNUPS=closed) lo rechaza.
+// Registro abierto salvo PUBLIC_SIGNUP_OPEN=false, que lo oculta (como en la demo, con
+// Culqi en modo prueba); la API lo rechaza con SIGNUPS=closed.
 export const SIGNUP_OPEN = import.meta.env.PUBLIC_SIGNUP_OPEN !== 'false';
 
 export const YAPE_NUMBER = import.meta.env.PUBLIC_YAPE_NUMBER as string | undefined;
