@@ -7,6 +7,12 @@ CLAUDE.md). La versión publicada se ve en `/version.json`.
 
 ## [Sin publicar]
 
+## [1.0.1] - 2026-11-05
+
+### Corregido
+- `/version.json` mostraba 0.2.0 en la versión 1.0.0: faltaba subir `version` en
+  `package.json`.
+
 ## [1.0.0] - 2026-11-05
 
 Paso a producción: pagos reales con Culqi y registro abierto.
