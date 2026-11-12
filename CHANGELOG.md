@@ -7,6 +7,23 @@ CLAUDE.md). La versión publicada se ve en `/version.json`.
 
 ## [Sin publicar]
 
+### Añadido
+- La home promociona el curso «Haz realidad tu proyecto cultural»: sale en la portada con
+  su precio y tiene su propia sección con el tráiler, fotogramas de las clases, el temario
+  y el botón de compra. El curso y el precio se leen de la API al compilar; si la preventa
+  termina antes del siguiente despliegue, la página muestra sola el precio normal.
+- El ebook muestra su precio en la home.
+
+### Cambiado
+- Portada nueva de la home: fondo violeta, titular en mayúsculas, Karolay recortada de un
+  fotograma del curso sobre un bloque rosa y el curso en un panel blanco.
+- La formación de Karolay y sus cifras pasan a una sección «Formación y trayectoria»; los
+  servicios se leen como lista y los proyectos son dos, más grandes (el curso tiene su
+  sección).
+- «Cursos» sube al segundo lugar del menú.
+- Textos grises con más contraste, títulos en el orden correcto y foco de teclado visible
+  en la home.
+
 ## [1.0.1] - 2026-11-05
 
 ### Corregido
