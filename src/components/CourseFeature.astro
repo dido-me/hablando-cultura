@@ -72,7 +72,9 @@ if (live) facts.push(`${course.lesson_count} lecciones`, `${duration(course.tota
         <ul class="mt-16 grid gap-8 sm:grid-cols-3 sm:gap-6 lg:mt-20">
             {shots.map((shot) => (
                 <li>
-                    <img src={shot.src} alt={shot.alt} width="1280" height="720" loading="lazy" class="aspect-video w-full rounded-2xl object-cover" />
+                    <a href={shot.src} class="glightbox group block cursor-zoom-in overflow-hidden rounded-2xl" data-gallery="curso-preview" data-description={shot.caption} aria-label={`Ampliar imagen: ${shot.caption}`}>
+                        <img src={shot.src} alt={shot.alt} width="1280" height="720" loading="lazy" class="aspect-video w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105" />
+                    </a>
                     <p class="mt-3 text-sm text-violet-200">{shot.caption}</p>
                 </li>
             ))}
@@ -103,3 +105,11 @@ if (live) facts.push(`${course.lesson_count} lecciones`, `${duration(course.tota
         )}
     </div>
 </section>
+
+<script>
+    // Los fotogramas se amplían en una vista previa, como las páginas del ebook.
+    import GLightbox from 'glightbox';
+    import 'glightbox/dist/css/glightbox.min.css';
+
+    GLightbox({ selector: '#curso .glightbox', touchNavigation: true, loop: true, zoomable: true, draggable: true });
+</script>

@@ -12,10 +12,12 @@ const { course, live } = Astro.props.featured;
 const offer = presale(course);
 const coursePath = `/cursos/${course.slug}`;
 
+// Logos recortados al ras de su dibujo (los originales traen márgenes distintos, que
+// descuadran el espaciado). Cada uno lleva su alto para que los tres pesen parecido.
 const allies = [
-    { src: '/marcas/Imagotipo_FestivaCine.png', alt: 'FestivaCine' },
-    { src: '/marcas/VMF_PRO_DIGITAL_2.png', alt: 'VMF Pro Digital' },
-    { src: '/marcas/POWERED_BY_VELTRAC_Negro.png', alt: 'Veltrac' },
+    { src: '/marcas/recortes/festival-de-cine-de-ancash.webp', alt: 'Festival de Cine de Áncash', width: 342, height: 176, show: '2.75rem' },
+    { src: '/marcas/recortes/vmf-pro.webp', alt: 'VMF Pro', width: 398, height: 128, show: '2rem' },
+    { src: '/marcas/recortes/veltrac.webp', alt: 'Veltrac', width: 406, height: 96, show: '1.5rem' },
 ];
 ---
 
@@ -85,7 +87,7 @@ const allies = [
             </a>
             <ul class="hero-allies" aria-label="Confían en mí">
                 {allies.map((logo) => (
-                    <li><img src={logo.src} alt={logo.alt} loading="lazy" /></li>
+                    <li><img src={logo.src} alt={logo.alt} width={logo.width} height={logo.height} loading="lazy" style={`height: ${logo.show}`} /></li>
                 ))}
             </ul>
         </div>
@@ -192,10 +194,12 @@ const allies = [
         padding: 2rem 1.5rem;
     }
 
+    /* Los logos se reparten de borde a borde, con el mismo espacio entre uno y otro */
     .hero-allies {
         display: flex;
         align-items: center;
-        gap: 1.75rem;
+        justify-content: space-between;
+        gap: 1rem;
         margin-top: 1.5rem;
         padding-top: 1.5rem;
         border-top: 1px solid #cbd5e1;
@@ -204,13 +208,13 @@ const allies = [
     .hero-allies li {
         display: flex;
         align-items: center;
-        width: 6.5rem;
+        min-width: 0;
         height: 2.75rem;
     }
 
     .hero-allies img {
+        width: auto;
         max-width: 100%;
-        max-height: 100%;
         object-fit: contain;
         filter: grayscale(100%);
         mix-blend-mode: multiply;

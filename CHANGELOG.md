@@ -13,6 +13,7 @@ CLAUDE.md). La versión publicada se ve en `/version.json`.
   y el botón de compra. El curso y el precio se leen de la API al compilar; si la preventa
   termina antes del siguiente despliegue, la página muestra sola el precio normal.
 - El ebook muestra su precio en la home.
+- Los fotogramas del curso se amplían en una vista previa, como las páginas del ebook.
 
 ### Cambiado
 - Portada nueva de la home: fondo violeta, titular en mayúsculas, Karolay recortada de un
@@ -23,6 +24,11 @@ CLAUDE.md). La versión publicada se ve en `/version.json`.
 - «Cursos» sube al segundo lugar del menú.
 - Textos grises con más contraste, títulos en el orden correcto y foco de teclado visible
   en la home.
+
+### Corregido
+- Logos de «Confían en mí» mal espaciados: ahora van recortados al ras de su dibujo y con
+  el mismo espacio entre uno y otro. Sale de la lista el de Cinergia, cuyo archivo es una
+  imagen en blanco.
 
 ## [1.0.1] - 2026-11-05
 
