@@ -1,78 +1,41 @@
 ---
 // Services Component - Servicios Especializados
+const services = [
+    { name: 'Gestión', text: 'Planificación integral y administración de recursos para el éxito de tu iniciativa.' },
+    { name: 'Asesorías', text: 'Mentoría personalizada uno a uno para desbloquear el potencial de tu proyecto.' },
+    { name: 'Docencia', text: 'Programas académicos de alto nivel orientados a la gestión cultural práctica.' },
+    { name: 'Charlas vocacionales', text: 'Inspirando a las nuevas generaciones a ver el arte como un camino profesional viable.', isNew: true },
+    {
+        name: 'Producción cultural',
+        text: 'Ejecución técnica integral para dar vida a tus proyectos artísticos.',
+        areas: ['Eventos', 'Cine', 'Teatro', 'Ferias', 'Festivales'],
+    },
+    { name: 'Marketing cultural', text: 'Estrategias de comunicación para conectar tu obra con la audiencia ideal.' },
+];
 ---
 
 <section class="py-16 lg:py-24 bg-white" id="servicios">
-    <div class="max-w-7xl mx-auto px-6 lg:px-8">
-        <div class="text-center mb-12 lg:mb-20">
-            <h2 class="font-display text-4xl font-bold text-slate-900 mb-4">Servicios Especializados</h2>
-            <p class="text-slate-600">Soluciones a medida para cada etapa de tu camino cultural.</p>
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 grid gap-10 lg:grid-cols-12 lg:gap-16">
+        <div class="lg:col-span-4 lg:sticky lg:top-28 lg:self-start">
+            <h2 class="font-display text-4xl font-bold text-slate-900">Servicios especializados</h2>
+            <p class="mt-4 text-lg text-slate-600">Soluciones a medida para cada etapa de tu camino cultural.</p>
+            <a class="mt-6 inline-flex items-center gap-2 font-bold text-[var(--primary)] underline-offset-4 hover:underline" href="#contacto">
+                Conversemos sobre tu proyecto <span class="material-symbols-outlined" aria-hidden="true">arrow_right_alt</span>
+            </a>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            <!-- Gestión -->
-            <div class="p-8 rounded-3xl border border-slate-100 hover:border-purple-200 hover:bg-purple-50 transition-all group">
-                <span class="material-symbols-outlined text-4xl text-[var(--primary)] mb-6">strategy</span>
-                <h3 class="font-bold text-xl mb-3">Gestión</h3>
-                <p class="text-slate-500 text-sm leading-relaxed">Planificación integral y administración de recursos para el éxito de tu iniciativa.</p>
-            </div>
-            
-            <!-- Asesorías -->
-            <div class="p-8 rounded-3xl border border-slate-100 hover:border-purple-200 hover:bg-purple-50 transition-all group">
-                <span class="material-symbols-outlined text-4xl text-[var(--primary)] mb-6">partner_reports</span>
-                <h3 class="font-bold text-xl mb-3">Asesorías</h3>
-                <p class="text-slate-500 text-sm leading-relaxed">Mentoría personalizada uno a uno para desbloquear el potencial de tu proyecto.</p>
-            </div>
-            
-            <!-- Docencia -->
-            <div class="p-8 rounded-3xl border border-slate-100 hover:border-purple-200 hover:bg-purple-50 transition-all group">
-                <span class="material-symbols-outlined text-4xl text-[var(--primary)] mb-6">history_edu</span>
-                <h3 class="font-bold text-xl mb-3">Docencia</h3>
-                <p class="text-slate-500 text-sm leading-relaxed">Programas académicos de alto nivel orientados a la gestión cultural práctica.</p>
-            </div>
-            
-            <!-- Charlas Vocacionales -->
-            <div class="p-8 rounded-3xl border border-slate-100 hover:border-purple-200 hover:bg-purple-50 transition-all group relative">
-                <span class="absolute top-4 right-4 bg-[var(--secondary)] text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-tighter">Nuevo</span>
-                <span class="material-symbols-outlined text-4xl text-[var(--primary)] mb-6">diversity_3</span>
-                <h3 class="font-bold text-xl mb-3">Charlas Vocacionales</h3>
-                <p class="text-slate-500 text-sm leading-relaxed">Inspirando a las nuevas generaciones a ver el arte como un camino profesional viable.</p>
-            </div>
-            
-            <!-- Producción Cultural -->
-            <div class="p-8 rounded-3xl border border-slate-100 hover:border-purple-200 hover:bg-purple-50 transition-all group">
-                <span class="material-symbols-outlined text-4xl text-[var(--primary)] mb-6">movie_edit</span>
-                <h3 class="font-bold text-xl mb-3">Producción Cultural</h3>
-                <p class="text-slate-500 text-sm leading-relaxed mb-4">Ejecución técnica integral para dar vida a tus proyectos artísticos.</p>
-                <div class="flex flex-wrap gap-2">
-                    <span class="inline-flex items-center gap-1 text-xs font-medium text-purple-700 bg-purple-100 px-2.5 py-1 rounded-full">
-                        <span class="material-symbols-outlined text-sm">celebration</span>
-                        Eventos
-                    </span>
-                    <span class="inline-flex items-center gap-1 text-xs font-medium text-purple-700 bg-purple-100 px-2.5 py-1 rounded-full">
-                        <span class="material-symbols-outlined text-sm">movie</span>
-                        Cine
-                    </span>
-                    <span class="inline-flex items-center gap-1 text-xs font-medium text-purple-700 bg-purple-100 px-2.5 py-1 rounded-full">
-                        <span class="material-symbols-outlined text-sm">theater_comedy</span>
-                        Teatro
-                    </span>
-                    <span class="inline-flex items-center gap-1 text-xs font-medium text-purple-700 bg-purple-100 px-2.5 py-1 rounded-full">
-                        <span class="material-symbols-outlined text-sm">storefront</span>
-                        Ferias
-                    </span>
-                    <span class="inline-flex items-center gap-1 text-xs font-medium text-purple-700 bg-purple-100 px-2.5 py-1 rounded-full">
-                        <span class="material-symbols-outlined text-sm">festival</span>
-                        Festivales
-                    </span>
+        <dl class="lg:col-span-8 border-b border-slate-200">
+            {services.map((service) => (
+                <div class="grid gap-2 border-t border-slate-200 py-6 sm:grid-cols-[18rem_1fr] sm:gap-8">
+                    <dt class="font-display text-xl font-bold text-slate-900">
+                        {service.name}
+                        {service.isNew && <span class="ml-2 inline-block rounded-full bg-[var(--secondary)] px-2.5 py-0.5 align-middle font-sans text-xs font-bold">Nuevo</span>}
+                    </dt>
+                    <dd class="text-slate-600 leading-relaxed">
+                        {service.text}
+                        {service.areas && <span class="mt-2 block text-sm font-semibold text-violet-700">{service.areas.join(' · ')}</span>}
+                    </dd>
                 </div>
-            </div>
-            
-            <!-- Marketing Cultural -->
-            <div class="p-8 rounded-3xl border border-slate-100 hover:border-purple-200 hover:bg-purple-50 transition-all group">
-                <span class="material-symbols-outlined text-4xl text-[var(--primary)] mb-6">ads_click</span>
-                <h3 class="font-bold text-xl mb-3">Marketing Cultural</h3>
-                <p class="text-slate-500 text-sm leading-relaxed">Estrategias de comunicación para conectar tu obra con la audiencia ideal.</p>
-            </div>
-        </div>
+            ))}
+        </dl>
     </div>
 </section>
