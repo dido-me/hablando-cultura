@@ -1,21 +1,47 @@
 ---
 // Ebook Component - Sección promocional del E-book
+import { soles } from '../lib/platform/format';
+import { presale } from '../lib/platform/featured';
+import type { Course } from '../lib/platform/types';
+
+interface Props {
+    // El ebook del catálogo, para mostrar su precio; sin él la sección sale sin precio.
+    ebook?: Course | null;
+}
+
+const { ebook } = Astro.props;
+const offer = ebook ? presale(ebook) : null;
 ---
 
-<section class="py-16 lg:py-24 bg-white" id="ebook">
-    <div class="max-w-7xl mx-auto px-6 lg:px-8">
-        <div class="bg-purple-50 rounded-[3rem] p-8 lg:p-20 flex flex-col lg:flex-row items-center gap-10 lg:gap-16 overflow-hidden relative">
-            <div class="absolute -top-10 -right-10 w-64 h-64 bg-purple-100 rounded-full blur-3xl opacity-50"></div>
-            <div class="w-full lg:w-1/2">
-                <img alt="Ebook Cover" class="w-full h-auto rounded-2xl shadow-2xl rotate-2" src="/ebook/1.png" />
-            </div>
-            <div class="w-full lg:w-1/2 space-y-8 relative">
-                <div>
-                    <span class="inline-block px-4 py-1 bg-[var(--secondary)] text-[10px] font-black uppercase tracking-widest rounded-full mb-4">Precio especial</span>
-                    <h2 class="font-display text-4xl font-bold text-slate-900 mb-4">10 Pasos para tu Proyecto Cultural</h2>
-                    <p class="text-slate-600">Empieza hoy mismo con la metodología que he perfeccionado en más de 10 años de carrera.</p>
-                </div>
-                <a href="/ebook" class="inline-block w-full text-center px-8 py-4 bg-[var(--primary)] text-white font-bold rounded-full shadow-lg hover:bg-purple-800 transition-all">
+<section class="py-16 lg:py-24 bg-[var(--lavender)]" id="ebook">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
+        <div class="lg:col-span-4">
+            <img
+                alt="Portada del ebook 10 Pasos para tu Proyecto Cultural"
+                class="mx-auto w-full max-w-[17rem] rounded-2xl rotate-2 shadow-[0_30px_50px_-20px_rgba(46,16,101,0.5)]"
+                src="/ebook/1.png"
+                loading="lazy"
+            />
+        </div>
+        <div class="lg:col-span-8">
+            <h2 class="font-display text-4xl lg:text-5xl font-bold text-slate-900">10 Pasos para tu Proyecto Cultural</h2>
+            <p class="mt-5 max-w-xl text-lg text-violet-950/75">Empieza hoy mismo con la metodología que he perfeccionado en más de 10 años de carrera.</p>
+            <div class="mt-8 flex flex-wrap items-center gap-x-8 gap-y-6">
+                {ebook && offer && (offer.active ? (
+                    <p data-presale-until={offer.until}>
+                        <span data-price="presale">
+                            <span class="font-display text-4xl font-extrabold text-slate-900">{soles(ebook.current_price_cents)}</span>
+                            <s class="ml-2 text-lg text-violet-950/75">{soles(ebook.price_cents)}</s>
+                            <span class="mt-1 block text-sm font-semibold text-violet-950/75">Precio especial</span>
+                        </span>
+                        <span data-price="regular" hidden>
+                            <span class="font-display text-4xl font-extrabold text-slate-900">{soles(ebook.price_cents)}</span>
+                        </span>
+                    </p>
+                ) : (
+                    <p class="font-display text-4xl font-extrabold text-slate-900">{soles(ebook.current_price_cents)}</p>
+                ))}
+                <a href="/ebook" class="px-8 py-4 bg-[var(--primary)] text-white font-bold rounded-full transition-colors hover:bg-violet-800">
                     Quiero mi ebook
                 </a>
             </div>

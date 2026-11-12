@@ -1,0 +1,15 @@
+---
+// La home se genera al compilar, así que lleva el precio de preventa y el normal. Este
+// script deja el normal en cuanto la preventa termina, sin esperar a otro despliegue.
+// Uso: un elemento con data-presale-until="<fecha ISO>" que contiene un hijo
+// data-price="presale" y otro data-price="regular" (este con el atributo hidden).
+---
+
+<script>
+    document.querySelectorAll<HTMLElement>('[data-presale-until]').forEach((offer) => {
+        const until = Date.parse(offer.dataset.presaleUntil ?? '');
+        if (Number.isNaN(until) || until > Date.now()) return;
+        offer.querySelectorAll<HTMLElement>('[data-price="presale"]').forEach((node) => (node.hidden = true));
+        offer.querySelectorAll<HTMLElement>('[data-price="regular"]').forEach((node) => (node.hidden = false));
+    });
+</script>

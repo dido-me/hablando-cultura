@@ -1,49 +1,47 @@
 ---
 // Projects Component - Proyectos Impactantes
+const projects = [
+    {
+        href: '/hablando-cultura',
+        title: 'Hablando Cultura',
+        text: 'Podcast para quienes viven, crean y emprenden desde el arte y la cultura.',
+        image: '/fotos-karolay/3.webp',
+        alt: 'Karolay Ramírez entrevista a un invitado en el set del podcast Hablando Cultura',
+        action: 'Ver el podcast',
+        position: 'object-center',
+    },
+    {
+        href: '/festival-de-cine-de-ancash',
+        title: 'Festival de Cine de Áncash',
+        text: 'Plataforma de exhibición y fomento de la cinematografía en el Callejón de Huaylas.',
+        image: '/blogs/img/533231717_18049803017540207_2819876465897566719_n.jpg',
+        alt: 'Festival de Cine de Áncash',
+        action: 'Ver el festival',
+        // El afiche es vertical: el recorte muestra al personaje y no el texto de las fechas.
+        position: 'object-[50%_66%]',
+    },
+];
 ---
 
-<section class="py-16 lg:py-24 bg-[var(--lavender)]" id="proyectos">
+<section class="py-16 lg:py-24 bg-white" id="proyectos">
     <div class="max-w-7xl mx-auto px-6 lg:px-8">
-        <div class="mb-10 lg:mb-16">
-            <h2 class="font-display text-4xl font-bold text-slate-900 mb-4">Proyectos Impactantes</h2>
-            <p class="text-slate-600 max-w-xl">Iniciativas que transforman el panorama cultural en la región.</p>
+        <div class="mb-10 lg:mb-14">
+            <h2 class="font-display text-4xl font-bold text-slate-900">Proyectos impactantes</h2>
+            <p class="mt-4 max-w-xl text-lg text-slate-600">Iniciativas que transforman el panorama cultural en la región.</p>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <!-- Proyecto 1: Podcast -->
-            <a href="/hablando-cultura" class="group relative bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 block">
-                <span class="absolute top-4 left-4 z-10 px-3 py-1 bg-[var(--secondary)] text-xs font-bold rounded-full">Podcast</span>
-                <div class="aspect-video overflow-hidden">
-                    <img alt="Hablando Cultura Podcast" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="/fotos-karolay/2.webp" />
-                </div>
-                <div class="p-8">
-                    <h3 class="font-display font-bold text-xl mb-2 text-slate-900">Hablando Cultura</h3>
-                    <p class="text-sm text-slate-500 line-clamp-2">Podcast para quienes viven, crean y emprenden desde el arte y la cultura.</p>
-                </div>
-            </a>
-            
-            <!-- Proyecto 2: Festival -->
-            <a href="/festival-de-cine-de-ancash" class="group relative bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 block">
-                <span class="absolute top-4 left-4 z-10 px-3 py-1 bg-[var(--secondary)] text-xs font-bold rounded-full">Evento</span>
-                <div class="aspect-video overflow-hidden">
-                    <img alt="Festival de Cine de Áncash" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="/blogs/img/533231717_18049803017540207_2819876465897566719_n.jpg" />
-                </div>
-                <div class="p-8">
-                    <h3 class="font-display font-bold text-xl mb-2 text-slate-900">Festival de Cine de Áncash</h3>
-                    <p class="text-sm text-slate-500 line-clamp-2">Plataforma de exhibición y fomento de la cinematografía en el Callejón de Huaylas.</p>
-                </div>
-            </a>
-            
-            <!-- Proyecto 3: Curso -->
-            <a href="/cursos/haz-realidad-tu-proyecto-cultural" class="group relative bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 block">
-                <span class="absolute top-4 left-4 z-10 px-3 py-1 bg-[var(--secondary)] text-xs font-bold rounded-full">Curso en video</span>
-                <div class="aspect-video overflow-hidden">
-                    <img alt="Haz realidad tu proyecto cultural" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="/portadas/haz-realidad-tu-proyecto-cultural.jpg" />
-                </div>
-                <div class="p-8">
-                    <h3 class="font-display font-bold text-xl mb-2 text-slate-900">Haz realidad tu proyecto cultural</h3>
-                    <p class="text-sm text-slate-500 line-clamp-2">Convierte tu idea cultural en un proyecto real. Curso formativo para emprender en arte y cultura.</p>
-                </div>
-            </a>
+        <div class="grid gap-12 md:grid-cols-2 md:gap-10">
+            {projects.map((project) => (
+                <a href={project.href} class="group block">
+                    <div class="aspect-[3/2] overflow-hidden rounded-3xl bg-[var(--lavender)]">
+                        <img alt={project.alt} class:list={["h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105", project.position]} src={project.image} loading="lazy" />
+                    </div>
+                    <h3 class="mt-6 font-display text-2xl font-bold text-slate-900 transition-colors group-hover:text-[var(--primary)]">{project.title}</h3>
+                    <p class="mt-2 max-w-md text-slate-600">{project.text}</p>
+                    <span class="mt-4 inline-flex items-center gap-2 font-bold text-[var(--primary)]">
+                        {project.action} <span class="material-symbols-outlined transition-transform duration-300 ease-out group-hover:translate-x-1" aria-hidden="true">arrow_right_alt</span>
+                    </span>
+                </a>
+            ))}
         </div>
     </div>
 </section>

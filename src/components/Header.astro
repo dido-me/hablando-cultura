@@ -11,10 +11,10 @@ interface Props {
 const { active } = Astro.props;
 const links = [
     { href: '/#inicio', label: 'Inicio' },
-    { href: '/#proyectos', label: 'Proyectos' },
-    { href: '/#ebook', label: 'E-book' },
-    { href: '/#servicios', label: 'Servicios' },
     { href: '/cursos', label: 'Cursos' },
+    { href: '/#servicios', label: 'Servicios' },
+    { href: '/#ebook', label: 'E-book' },
+    { href: '/#proyectos', label: 'Proyectos' },
     { href: '/blog', label: 'Blog', active: active === 'blog' },
     { href: '/#contacto', label: 'Contacto' },
 ];
