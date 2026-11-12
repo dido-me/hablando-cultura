@@ -1,83 +1,66 @@
 ---
 // Clients Component - Logos de clientes/aliados
+// Los logos están recortados al ras de su dibujo (public/marcas/recortes): los originales
+// traen márgenes distintos, que descuadraban el espaciado. Cada uno lleva su alto para
+// que todos pesen parecido aunque sus proporciones sean muy distintas.
 const logos = [
-    { src: "/marcas/Imagotipo_FestivaCine.png", alt: "FestivaCine" },
-    { src: "/marcas/LOGOTIPOS_Mesa.png", alt: "Logotipos Mesa" },
-    { src: "/marcas/POWERED_BY_VELTRAC_Negro.png", alt: "Powered by Veltrac" },
-    { src: "/marcas/VMF_PRO_DIGITAL_2.png", alt: "VMF Pro Digital" },
-    { src: "/marcas/LA MAYU.png", alt: "La Mayu" },
-    { src: "/marcas/CINERGIA.jpeg", alt: "Cinergia" },
+    { src: "/marcas/recortes/festival-de-cine-de-ancash.webp", alt: "Festival de Cine de Áncash", width: 342, height: 176, show: 3.5 },
+    { src: "/marcas/recortes/lima-docs.webp", alt: "Lima Docs", width: 280, height: 160, show: 3.25 },
+    { src: "/marcas/recortes/veltrac.webp", alt: "Veltrac", width: 406, height: 96, show: 2.25 },
+    { src: "/marcas/recortes/vmf-pro.webp", alt: "VMF Pro", width: 398, height: 128, show: 2.75 },
+    { src: "/marcas/recortes/la-mayu.webp", alt: "La Mayu", width: 180, height: 192, show: 4.5 },
 ];
 ---
 
 <section class="py-16 bg-slate-50">
     <div class="max-w-7xl mx-auto px-6 lg:px-8">
         <h2 class="text-center text-slate-500 text-sm font-bold uppercase tracking-widest mb-12">Confían en mí</h2>
-        <div class="logos-grid">
+        <ul class="logos">
             {logos.map((logo) => (
-                <div class="logo-cell">
-                    <img src={logo.src} alt={logo.alt} loading="lazy" />
-                </div>
+                <li>
+                    <img src={logo.src} alt={logo.alt} width={logo.width} height={logo.height} loading="lazy" style={`--logo-height: ${logo.show}rem`} />
+                </li>
             ))}
-        </div>
+        </ul>
     </div>
 </section>
 
 <style>
-    .logos-grid {
+    /* El mismo espacio entre logo y logo, centrados; en pantallas chicas pasan a otra fila */
+    .logos {
+        --logo-scale: 0.75;
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
         align-items: center;
-        gap: 1.5rem 2rem;
+        gap: 2rem 2.5rem;
     }
 
-    .logo-cell {
-        flex: 0 0 auto;
-        width: 120px;
-        height: 48px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .logo-cell img {
-        max-width: 100%;
-        max-height: 100%;
-        object-fit: contain;
+    .logos img {
+        height: calc(var(--logo-height) * var(--logo-scale));
+        width: auto;
         filter: grayscale(100%);
         opacity: 0.6;
         mix-blend-mode: multiply;
         transition: filter 0.3s ease, opacity 0.3s ease;
     }
 
-    .logo-cell img:hover {
+    .logos img:hover {
         filter: grayscale(0%);
         opacity: 1;
     }
 
-    /* Tablet */
-    @media (min-width: 640px) {
-        .logos-grid {
-            flex-wrap: nowrap;
-            gap: 2.5rem;
-        }
-
-        .logo-cell {
-            width: 140px;
-            height: 56px;
+    @media (min-width: 768px) {
+        .logos {
+            --logo-scale: 0.9;
+            gap: 2.5rem 3.5rem;
         }
     }
 
-    /* Desktop */
     @media (min-width: 1024px) {
-        .logos-grid {
-            gap: 3.5rem;
-        }
-
-        .logo-cell {
-            width: 160px;
-            height: 60px;
+        .logos {
+            --logo-scale: 1;
+            gap: 3rem 5rem;
         }
     }
 </style>
