@@ -24,6 +24,7 @@ CLAUDE.md). La versión publicada se ve en `/version.json`.
 - «Cursos» sube al segundo lugar del menú.
 - Textos grises con más contraste, títulos en el orden correcto y foco de teclado visible
   en la home.
+- En «Formación y trayectoria», el Diplomado en Gestión Cultural indica dónde se cursó (UARM).
 - La «Vista previa» del ebook ocupa todo el ancho: el texto a la izquierda y las tres
   páginas (portada, contenido y autora) más grandes a la derecha, cada una con su nombre.
   En el móvil las páginas se deslizan de lado.
