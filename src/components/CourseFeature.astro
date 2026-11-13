@@ -1,7 +1,8 @@
 ---
 // CourseFeature Component - Promoción del curso en la home: tráiler, precio y temario
+import PriceOffer from './PriceOffer.astro';
 import TrailerFacade from './platform/TrailerFacade';
-import { duration, soles } from '../lib/platform/format';
+import { duration } from '../lib/platform/format';
 import { presale, type FeaturedCourse } from '../lib/platform/featured';
 
 interface Props {
@@ -35,22 +36,11 @@ if (live) facts.push(`${course.lesson_count} lecciones`, `${duration(course.tota
                 {course.description && <p class="mt-4 max-w-[60ch] text-violet-200 leading-relaxed">{course.description}</p>}
 
                 <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-6">
-                    {live && (offer.active ? (
-                        <p data-presale-until={offer.until}>
-                            <span data-price="presale">
-                                <span class="font-display text-4xl font-extrabold">{soles(course.current_price_cents)}</span>
-                                <s class="ml-2 text-lg text-violet-300">{soles(course.price_cents)}</s>
-                                <span class="mt-1 block text-sm text-violet-200">
-                                    Precio de preventa{offer.untilLabel && ` hasta el ${offer.untilLabel}`}
-                                </span>
-                            </span>
-                            <span data-price="regular" hidden>
-                                <span class="font-display text-4xl font-extrabold">{soles(course.price_cents)}</span>
-                            </span>
+                    {live && (
+                        <p>
+                            <PriceOffer product={course} tone="dark" note={offer.active ? `Precio de preventa${offer.untilLabel ? ` hasta el ${offer.untilLabel}` : ''}` : undefined} />
                         </p>
-                    ) : (
-                        <p class="font-display text-4xl font-extrabold">{soles(course.current_price_cents)}</p>
-                    ))}
+                    )}
                     <a class="px-8 py-4 bg-[var(--secondary)] text-violet-950 font-bold rounded-full transition-colors hover:bg-yellow-300" href={coursePath}>
                         Quiero el curso
                     </a>

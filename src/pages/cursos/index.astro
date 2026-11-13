@@ -34,10 +34,10 @@ try {
 					<div class="p-8">
 						<h2 class="font-display text-xl font-bold text-slate-900">{course.title}</h2>
 						{course.subtitle && <p class="mt-2 line-clamp-2 text-sm text-slate-500">{course.subtitle}</p>}
-						<div class="mt-6 flex items-center justify-between">
+						<div class="mt-6 flex items-center justify-between gap-4">
 							<span class="text-sm text-slate-500">{course.kind === 'ebook' ? 'Ebook en PDF' : `${course.lesson_count} lecciones · ${duration(course.total_duration_seconds)}`}</span>
-							<span class="text-right">
-								{course.current_price_cents < course.price_cents && <span class="mr-2 text-sm text-slate-400 line-through">{soles(course.price_cents)}</span>}
+							<span class="shrink-0 text-right">
+								{course.current_price_cents < course.price_cents && <s class="mr-2 font-display text-lg font-semibold text-slate-500 decoration-[0.07em]"><span class="sr-only">Precio normal: </span>{soles(course.price_cents)}</s>}
 								<span class="font-display text-lg font-extrabold text-[var(--primary)]">{soles(course.current_price_cents)}</span>
 							</span>
 						</div>
