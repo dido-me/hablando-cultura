@@ -1,138 +1,387 @@
 ---
-// Hero Component - Sección principal de bienvenida con carrusel
-const images = [
-    { src: "/fotos-karolay/1.webp", alt: "Karolay Ramírez - Foto 1" },
-    { src: "/fotos-karolay/2.webp", alt: "Karolay Ramírez - Foto 2" },
-    { src: "/fotos-karolay/3.webp", alt: "Karolay Ramírez - Foto 3" },
+// Hero Component - Portada de la home: el titular, Karolay recortada de un fotograma del
+// curso sobre un bloque rosa, el curso en un panel blanco y su tarjeta de presentación.
+import { duration, soles } from '../lib/platform/format';
+import { presale, type FeaturedCourse } from '../lib/platform/featured';
+
+interface Props {
+    featured: FeaturedCourse;
+}
+
+const { course, live } = Astro.props.featured;
+const offer = presale(course);
+const coursePath = `/cursos/${course.slug}`;
+
+// Logos recortados al ras de su dibujo (los originales traen márgenes distintos, que
+// descuadran el espaciado). Cada uno lleva su alto para que los tres pesen parecido.
+const allies = [
+    { src: '/marcas/recortes/festival-de-cine-de-ancash.webp', alt: 'Festival de Cine de Áncash', width: 342, height: 176, show: '2.75rem' },
+    { src: '/marcas/recortes/vmf-pro.webp', alt: 'VMF Pro', width: 398, height: 128, show: '2rem' },
+    { src: '/marcas/recortes/veltrac.webp', alt: 'Veltrac', width: 406, height: 96, show: '1.5rem' },
 ];
 ---
 
-<section class="relative pt-10 pb-16 lg:pt-16 lg:pb-32 overflow-hidden bg-white" id="inicio">
-    <div class="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
-        <div class="flex-1 text-center lg:text-left">
-            <div class="flex flex-wrap gap-2 justify-center lg:justify-start mb-6">
-                <span class="px-3 py-1 text-xs font-semibold uppercase tracking-wider text-[var(--primary)] bg-purple-50 rounded-full">Comunicadora Audiovisual</span>
-                <span class="px-3 py-1 text-xs font-semibold uppercase tracking-wider text-[var(--primary)] bg-purple-50 rounded-full">Gestora Cultural</span>
-                <span class="px-3 py-1 text-xs font-semibold uppercase tracking-wider text-[var(--primary)] bg-purple-50 rounded-full">Docente</span>
-            </div>
-            <h1 class="font-display text-5xl lg:text-7xl font-extrabold tracking-tight text-slate-900 leading-[1.1] mb-6">
-                Atrévete a <span class="text-[var(--primary)]">emprender</span> en arte y cultura
+<section class="hero on-dark" id="inicio">
+    <div class="hero-inner">
+        <div class="hero-copy">
+            <h1 class="hero-title font-display font-extrabold uppercase">
+                Atrévete a emprender en arte y cultura
             </h1>
-            <p class="text-xl lg:text-2xl text-slate-600 mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+            <p class="hero-lead">
                 Yo te acompaño para hacer realidad tu sueño. Estrategia y gestión para proyectos que impactan.
             </p>
-            <p class="text-sm text-slate-400 font-medium mb-10 max-w-xl mx-auto lg:mx-0">
-                Comunicadora Audiovisual · PUCP Perú &nbsp;·&nbsp; Diplomado en Gestión Cultural &nbsp;·&nbsp; Magíster en Teatro y Artes Escénicas · UCM Madrid &nbsp;·&nbsp; Máster en Distribución y Negocio en la Industria Audiovisual · ECAM &nbsp;·&nbsp; Fundadora y Directora del Festival de Cine de Áncash &nbsp;·&nbsp; Creadora del podcast Hablando Cultura
-            </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <a class="px-8 py-4 bg-[var(--primary)] text-white font-bold rounded-full hover:shadow-xl hover:scale-105 transition-all" href="#proyectos">
-                    Conoce mis proyectos
-                </a>
-                <a class="px-8 py-4 border-2 border-[var(--primary)] text-[var(--primary)] font-bold rounded-full hover:bg-purple-50 transition-all" href="#ebook">
-                    Adquiere E-book
-                </a>
-            </div>
+            <a class="hero-action" href="#curso">
+                Conoce el curso
+                <span class="material-symbols-outlined" aria-hidden="true">arrow_downward</span>
+            </a>
         </div>
-        <div class="flex-1 relative w-full max-w-md lg:max-w-none">
-            <div class="hero-carousel relative w-full aspect-[4/5] lg:aspect-square rounded-3xl overflow-hidden shadow-2xl">
-                {images.map((image, index) => (
-                    <img 
-                        alt={image.alt} 
-                        class={`carousel-slide absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${index === 0 ? 'opacity-100' : 'opacity-0'}`}
-                        src={image.src}
-                        data-index={index}
-                    />
+
+        <div class="hero-stage">
+            <div class="hero-block" aria-hidden="true"></div>
+            <div class="hero-stripe hero-stripe-a" aria-hidden="true"></div>
+            <div class="hero-stripe hero-stripe-b" aria-hidden="true"></div>
+            <img class="hero-figure" src="/fotos-karolay/karolay-curso.webp" alt="Karolay Ramírez" width="824" height="962" fetchpriority="high" />
+        </div>
+
+        <a class="hero-card group" href="#proyectos">
+            <img src="/fotos-karolay/1.webp" alt="" width="96" height="96" class="h-24 w-24 flex-none object-cover" />
+            <span class="min-w-0">
+                <span class="block font-display text-lg font-semibold">Karolay Ramírez</span>
+                <span class="mt-1 block text-sm text-violet-200">Comunicadora audiovisual, gestora cultural y docente</span>
+                <span class="mt-2 inline-flex items-center gap-2 font-semibold">
+                    Conoce mis proyectos
+                    <span class="material-symbols-outlined transition-transform duration-300 ease-out group-hover:translate-x-1" aria-hidden="true">arrow_right_alt</span>
+                </span>
+            </span>
+        </a>
+    </div>
+
+    <!-- El curso, a la vista desde el primer pantallazo -->
+    <div class="hero-panel">
+        <div class="hero-panel-inner">
+            <a class="group block" href={coursePath}>
+                <span class="block font-display text-2xl font-bold leading-tight text-slate-900 transition-colors group-hover:text-[var(--primary)]">{course.title}</span>
+                <span class="mt-2 block text-sm text-slate-600">
+                    Curso en video{live && ` · ${course.lesson_count} lecciones · ${duration(course.total_duration_seconds)}`}
+                </span>
+                {live && (offer.active ? (
+                    <span class="mt-4 block" data-presale-until={offer.until}>
+                        <span data-price="presale">
+                            <span class="font-display text-2xl font-extrabold text-[var(--primary)]">{soles(course.current_price_cents)}</span>
+                            <s class="ml-2 text-slate-500">{soles(course.price_cents)}</s>
+                            <span class="mt-1 block text-sm text-slate-600">
+                                Precio de preventa{offer.untilLabel && ` hasta el ${offer.untilLabel}`}
+                            </span>
+                        </span>
+                        <span data-price="regular" hidden>
+                            <span class="font-display text-2xl font-extrabold text-[var(--primary)]">{soles(course.price_cents)}</span>
+                        </span>
+                    </span>
+                ) : (
+                    <span class="mt-4 block font-display text-2xl font-extrabold text-[var(--primary)]">{soles(course.current_price_cents)}</span>
                 ))}
-                <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none"></div>
-                
-                <!-- Indicadores del carrusel -->
-                <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-                    {images.map((_, index) => (
-                        <button 
-                            class={`carousel-dot w-2 h-2 rounded-full transition-all duration-300 ${index === 0 ? 'bg-white w-6' : 'bg-white/50 hover:bg-white/75'}`}
-                            data-index={index}
-                            aria-label={`Ir a imagen ${index + 1}`}
-                        />
-                    ))}
-                </div>
-            </div>
-            <div class="absolute -bottom-6 -left-6 bg-white p-6 rounded-2xl shadow-xl border border-slate-100 hidden md:block">
-                <span class="text-[var(--secondary)] font-black text-4xl block">+10</span>
-                <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Años de Experiencia</span>
-            </div>
+                <span class="mt-5 inline-flex items-center gap-2 font-bold text-[var(--primary)]">
+                    Quiero el curso
+                    <span class="material-symbols-outlined transition-transform duration-300 ease-out group-hover:translate-x-1" aria-hidden="true">arrow_right_alt</span>
+                </span>
+            </a>
+            <ul class="hero-allies" aria-label="Confían en mí">
+                {allies.map((logo) => (
+                    <li><img src={logo.src} alt={logo.alt} width={logo.width} height={logo.height} loading="lazy" style={`height: ${logo.show}`} /></li>
+                ))}
+            </ul>
         </div>
     </div>
 </section>
 
-<script>
-    function initCarousel() {
-        const carousel = document.querySelector('.hero-carousel');
-        if (!carousel) return;
-        
-        const slides = carousel.querySelectorAll('.carousel-slide');
-        const dots = carousel.querySelectorAll('.carousel-dot');
-        let currentIndex = 0;
-        const totalSlides = slides.length;
-        let intervalId: ReturnType<typeof setInterval>;
-
-        function showSlide(index: number) {
-            slides.forEach((slide, i) => {
-                if (i === index) {
-                    slide.classList.remove('opacity-0');
-                    slide.classList.add('opacity-100');
-                } else {
-                    slide.classList.remove('opacity-100');
-                    slide.classList.add('opacity-0');
-                }
-            });
-
-            dots.forEach((dot, i) => {
-                if (i === index) {
-                    dot.classList.remove('bg-white/50', 'w-2');
-                    dot.classList.add('bg-white', 'w-6');
-                } else {
-                    dot.classList.remove('bg-white', 'w-6');
-                    dot.classList.add('bg-white/50', 'w-2');
-                }
-            });
-
-            currentIndex = index;
-        }
-
-        function nextSlide() {
-            const next = (currentIndex + 1) % totalSlides;
-            showSlide(next);
-        }
-
-        function startAutoplay() {
-            intervalId = setInterval(nextSlide, 4000);
-        }
-
-        function stopAutoplay() {
-            clearInterval(intervalId);
-        }
-
-        // Click en indicadores
-        dots.forEach((dot) => {
-            dot.addEventListener('click', () => {
-                const index = parseInt(dot.getAttribute('data-index') || '0');
-                showSlide(index);
-                stopAutoplay();
-                startAutoplay();
-            });
-        });
-
-        // Pausar al hacer hover
-        carousel.addEventListener('mouseenter', stopAutoplay);
-        carousel.addEventListener('mouseleave', startAutoplay);
-
-        // Iniciar autoplay
-        startAutoplay();
+<style>
+    .hero {
+        --hero-pink: #f0abfc;
+        position: relative;
+        overflow: hidden;
+        background: var(--violet-deep);
+        color: #fff;
     }
 
-    // Ejecutar cuando el DOM esté listo
-    document.addEventListener('DOMContentLoaded', initCarousel);
-    
-    // Para navegación con View Transitions de Astro
-    document.addEventListener('astro:after-swap', initCarousel);
-</script>
+    .hero-inner {
+        position: relative;
+        z-index: 1;
+        max-width: 80rem;
+        margin: 0 auto;
+        padding: 3rem 1.5rem 0;
+    }
+
+    .hero-title {
+        font-size: clamp(2.75rem, 12.5vw, 4.5rem);
+        line-height: 0.95;
+        letter-spacing: -0.02em;
+    }
+
+    .hero-lead {
+        margin-top: 1.5rem;
+        max-width: 26rem;
+        font-size: 1.125rem;
+        line-height: 1.6;
+        color: #ddd6fe;
+    }
+
+    .hero-action {
+        margin-top: 2rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 1rem 1.5rem 1rem 2rem;
+        border-radius: 9999px;
+        background: var(--secondary);
+        color: #2e1065;
+        font-weight: 700;
+        transition: background-color 0.2s ease-out;
+    }
+
+    .hero-action:hover {
+        background: #fde047;
+    }
+
+    /* Karolay sobre el bloque rosa: la figura sale por arriba del bloque */
+    .hero-stage {
+        position: relative;
+        height: 22rem;
+        margin-top: 1rem;
+    }
+
+    .hero-block {
+        position: absolute;
+        inset: auto 0 0 0;
+        height: 12rem;
+        background: var(--hero-pink);
+    }
+
+    .hero-stripe {
+        display: none;
+        position: absolute;
+        bottom: 0;
+        width: 1.5rem;
+        background: var(--hero-pink);
+        opacity: 0.6;
+    }
+
+    .hero-figure {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        height: 100%;
+        width: auto;
+        max-width: none;
+        transform: translateX(-50%);
+    }
+
+    .hero-card {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 2rem 0;
+    }
+
+    .hero-panel {
+        position: relative;
+        z-index: 1;
+        background: #fff;
+    }
+
+    .hero-panel-inner {
+        max-width: 80rem;
+        margin: 0 auto;
+        padding: 2rem 1.5rem;
+    }
+
+    /* Los logos se reparten de borde a borde, con el mismo espacio entre uno y otro */
+    .hero-allies {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #cbd5e1;
+    }
+
+    .hero-allies li {
+        display: flex;
+        align-items: center;
+        min-width: 0;
+        height: 2.75rem;
+    }
+
+    .hero-allies img {
+        width: auto;
+        max-width: 100%;
+        object-fit: contain;
+        filter: grayscale(100%);
+        mix-blend-mode: multiply;
+    }
+
+    @media (min-width: 640px) {
+        .hero-inner {
+            padding-top: 4rem;
+        }
+
+        .hero-stage {
+            height: 26rem;
+        }
+
+        .hero-block {
+            height: 14rem;
+        }
+    }
+
+    /* Escritorio: todo en un solo pantallazo, con el panel blanco pegado arriba a la derecha */
+    @media (min-width: 1024px) {
+        .hero {
+            --hero-height: 44rem;
+            --block-height: 14rem;
+            --block-bottom: 5rem;
+            min-height: var(--hero-height);
+        }
+
+        /* El contenedor queda encima del panel blanco: solo sus piezas reciben el clic */
+        .hero-inner {
+            display: flex;
+            flex-direction: column;
+            min-height: var(--hero-height);
+            padding: 4rem 2rem 3rem;
+            pointer-events: none;
+        }
+
+        .hero-copy,
+        .hero-card {
+            pointer-events: auto;
+        }
+
+        .hero-copy {
+            max-width: 28rem;
+        }
+
+        .hero-title {
+            font-size: 4.25rem;
+        }
+
+        .hero-lead {
+            max-width: 19rem;
+            font-size: 1rem;
+        }
+
+        .hero-action {
+            align-self: flex-start;
+        }
+
+        .hero-stage {
+            position: absolute;
+            z-index: -1;
+            left: 24rem;
+            right: 2rem;
+            bottom: var(--block-bottom);
+            height: 26rem;
+            margin: 0;
+        }
+
+        .hero-block {
+            right: 5rem;
+            height: var(--block-height);
+        }
+
+        .hero-stripe {
+            display: block;
+            height: var(--block-height);
+        }
+
+        .hero-stripe-a {
+            right: 2.5rem;
+        }
+
+        .hero-stripe-b {
+            right: 0;
+        }
+
+        .hero-figure {
+            left: 0;
+            transform: none;
+        }
+
+        .hero-card {
+            margin-top: auto;
+            max-width: 20rem;
+            padding: 0;
+        }
+
+        .hero-panel {
+            position: absolute;
+            z-index: 0;
+            top: 0;
+            right: 0;
+            left: calc(50% + 9rem);
+            height: calc(var(--hero-height) - var(--block-bottom) - var(--block-height));
+        }
+
+        .hero-panel-inner {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            max-width: 27rem;
+            margin: 0;
+            padding: 2.5rem 2rem 2rem 2.5rem;
+        }
+
+        .hero-allies {
+            margin-top: auto;
+        }
+    }
+
+    @media (min-width: 1280px) {
+        .hero {
+            --hero-height: 49rem;
+            --block-height: 16rem;
+        }
+
+        .hero-copy {
+            max-width: 35rem;
+        }
+
+        .hero-title {
+            font-size: 5rem;
+        }
+
+        .hero-lead {
+            max-width: 23rem;
+            font-size: 1.125rem;
+        }
+
+        .hero-stage {
+            left: 30rem;
+            height: 30rem;
+        }
+
+        .hero-block {
+            right: 6rem;
+        }
+
+        .hero-stripe-a {
+            right: 3rem;
+        }
+
+        .hero-figure {
+            left: 1rem;
+        }
+
+        .hero-card {
+            max-width: 24rem;
+        }
+
+        .hero-panel {
+            left: calc(50% + 13rem);
+        }
+
+        .hero-panel-inner {
+            padding-left: 3rem;
+        }
+    }
+</style>
