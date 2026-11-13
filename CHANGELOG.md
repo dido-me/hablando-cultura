@@ -7,6 +7,8 @@ CLAUDE.md). La versión publicada se ve en `/version.json`.
 
 ## [Sin publicar]
 
+## [1.2.0] - 2026-11-13
+
 ### Cambiado
 - La rebaja se nota más: el precio normal va tachado al mismo tamaño que el precio final y
   una etiqueta dice cuánto se ahorra («Ahorras S/ 15.00»). Vale para la portada y las
