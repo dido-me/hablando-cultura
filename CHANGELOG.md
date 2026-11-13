@@ -7,6 +7,8 @@ CLAUDE.md). La versión publicada se ve en `/version.json`.
 
 ## [Sin publicar]
 
+## [1.1.0] - 2026-11-13
+
 ### Añadido
 - La home promociona el curso «Haz realidad tu proyecto cultural»: sale en la portada con
   su precio y tiene su propia sección con el tráiler, fotogramas de las clases, el temario
