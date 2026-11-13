@@ -1,7 +1,8 @@
 ---
 // Hero Component - Portada de la home: el titular, Karolay recortada de un fotograma del
 // curso sobre un bloque rosa, el curso en un panel blanco y su tarjeta de presentación.
-import { duration, soles } from '../lib/platform/format';
+import PriceOffer from './PriceOffer.astro';
+import { duration } from '../lib/platform/format';
 import { presale, type FeaturedCourse } from '../lib/platform/featured';
 
 interface Props {
@@ -64,22 +65,11 @@ const allies = [
                 <span class="mt-2 block text-sm text-slate-600">
                     Curso en video{live && ` · ${course.lesson_count} lecciones · ${duration(course.total_duration_seconds)}`}
                 </span>
-                {live && (offer.active ? (
-                    <span class="mt-4 block" data-presale-until={offer.until}>
-                        <span data-price="presale">
-                            <span class="font-display text-2xl font-extrabold text-[var(--primary)]">{soles(course.current_price_cents)}</span>
-                            <s class="ml-2 text-slate-500">{soles(course.price_cents)}</s>
-                            <span class="mt-1 block text-sm text-slate-600">
-                                Precio de preventa{offer.untilLabel && ` hasta el ${offer.untilLabel}`}
-                            </span>
-                        </span>
-                        <span data-price="regular" hidden>
-                            <span class="font-display text-2xl font-extrabold text-[var(--primary)]">{soles(course.price_cents)}</span>
-                        </span>
+                {live && (
+                    <span class="mt-5 block">
+                        <PriceOffer product={course} tone="light" size="md" note={offer.active ? `Precio de preventa${offer.untilLabel ? ` hasta el ${offer.untilLabel}` : ''}` : undefined} />
                     </span>
-                ) : (
-                    <span class="mt-4 block font-display text-2xl font-extrabold text-[var(--primary)]">{soles(course.current_price_cents)}</span>
-                ))}
+                )}
                 <span class="mt-5 inline-flex items-center gap-2 font-bold text-[var(--primary)]">
                     Quiero el curso
                     <span class="material-symbols-outlined transition-transform duration-300 ease-out group-hover:translate-x-1" aria-hidden="true">arrow_right_alt</span>
@@ -237,7 +227,7 @@ const allies = [
     /* Escritorio: todo en un solo pantallazo, con el panel blanco pegado arriba a la derecha */
     @media (min-width: 1024px) {
         .hero {
-            --hero-height: 44rem;
+            --hero-height: 46rem;
             --block-height: 14rem;
             --block-bottom: 5rem;
             min-height: var(--hero-height);

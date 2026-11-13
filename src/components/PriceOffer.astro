@@ -1,0 +1,51 @@
+---
+// PriceOffer Component - Precio de un producto. Con rebaja muestra el precio normal tachado
+// al mismo tamaño que el final, y cuánto se ahorra, para que la rebaja se vea de un vistazo.
+// Solo usa <span>, así puede ir dentro de un enlace.
+import { soles } from '../lib/platform/format';
+import { presale } from '../lib/platform/featured';
+import type { Course } from '../lib/platform/types';
+
+interface Props {
+    product: Course;
+    // Fondo sobre el que va: blanco, violeta oscuro o lavanda.
+    tone?: 'light' | 'dark' | 'lavender';
+    size?: 'md' | 'lg';
+    // Texto bajo el precio rebajado, por ejemplo hasta cuándo dura la preventa.
+    note?: string;
+}
+
+const { product, tone = 'light', size = 'lg', note } = Astro.props;
+const offer = presale(product);
+const saving = product.price_cents - product.current_price_cents;
+
+const scale = size === 'lg' ? 'text-4xl' : 'text-3xl';
+const tones = {
+    light: { final: 'text-[var(--primary)]', before: 'text-slate-500', note: 'text-slate-600' },
+    dark: { final: 'text-white', before: 'text-violet-300', note: 'text-violet-200' },
+    lavender: { final: 'text-slate-900', before: 'text-violet-950/60', note: 'text-violet-950/75' },
+}[tone];
+const finalClass = `font-display ${scale} font-extrabold leading-none ${tones.final}`;
+---
+
+{offer.active ? (
+    <span class="block" data-presale-until={offer.until}>
+        <span class="block" data-price="presale">
+            <span class="flex flex-wrap items-center gap-x-3 gap-y-3">
+                <s class={`font-display ${scale} font-semibold leading-none decoration-[0.07em] ${tones.before}`}>
+                    <span class="sr-only">Precio normal: </span>{soles(product.price_cents)}
+                </s>
+                <span class={finalClass}>
+                    <span class="sr-only">Precio con rebaja: </span>{soles(product.current_price_cents)}
+                </span>
+                <span class="rounded-full bg-[var(--secondary)] px-3 py-1 text-sm font-bold whitespace-nowrap text-violet-950">
+                    Ahorras {soles(saving)}
+                </span>
+            </span>
+            {note && <span class={`mt-3 block text-sm ${tones.note}`}>{note}</span>}
+        </span>
+        <span class={`block ${finalClass}`} data-price="regular" hidden>{soles(product.price_cents)}</span>
+    </span>
+) : (
+    <span class={`block ${finalClass}`}>{soles(product.current_price_cents)}</span>
+)}
