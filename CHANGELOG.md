@@ -7,6 +7,12 @@ CLAUDE.md). La versión publicada se ve en `/version.json`.
 
 ## [Sin publicar]
 
+### Cambiado
+- La rebaja se nota más: el precio normal va tachado al mismo tamaño que el precio final y
+  una etiqueta dice cuánto se ahorra («Ahorras S/ 15.00»). Vale para la portada y las
+  secciones del curso y del ebook en la home, la caja de compra del curso y del ebook, y
+  las tarjetas de «Cursos y ebooks».
+
 ## [1.1.0] - 2026-11-13
 
 ### Añadido
