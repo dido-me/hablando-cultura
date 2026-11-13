@@ -77,11 +77,25 @@ export default function CourseActions({ course, firstLessonSlug, pagePath }: Pro
 
   return (
     <div className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-100 sm:p-8">
-      <div className="flex items-baseline gap-3">
-        <span className="font-display text-4xl font-extrabold text-slate-900">{soles(course.current_price_cents)}</span>
-        {presale && <span className="text-lg text-slate-400 line-through">{soles(course.price_cents)}</span>}
+      {/* Con rebaja, el precio normal va tachado al mismo tamaño que el final, y cuánto se ahorra. */}
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-3">
+        {presale && (
+          <s className="font-display text-3xl font-semibold leading-none text-slate-500 decoration-[0.07em]">
+            <span className="sr-only">Precio normal: </span>
+            {soles(course.price_cents)}
+          </s>
+        )}
+        <span className="font-display text-3xl font-extrabold leading-none text-slate-900">
+          {presale && <span className="sr-only">Precio con rebaja: </span>}
+          {soles(course.current_price_cents)}
+        </span>
+        {presale && (
+          <span className="rounded-full bg-[var(--secondary)] px-3 py-1 text-sm font-bold whitespace-nowrap text-violet-950">
+            Ahorras {soles(course.price_cents - course.current_price_cents)}
+          </span>
+        )}
       </div>
-      {presale && <p className="mt-1 text-sm font-semibold text-amber-700">{isEbook ? 'Precio especial' : `Precio de preventa hasta el ${date(course.presale_until!)}`}</p>}
+      {presale && <p className="mt-3 text-sm font-semibold text-amber-700">{isEbook ? 'Precio especial' : `Precio de preventa hasta el ${date(course.presale_until!)}`}</p>}
 
       <ul className="mt-5 space-y-2 text-sm text-slate-600">
         {(isEbook
