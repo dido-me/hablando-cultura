@@ -7,6 +7,8 @@
     --secondary: #facc15;
     --lavender: #f5f3ff;
     --dark-bg: #0f172a;
+    /* Fondo violeta de la portada y del curso en la home */
+    --violet-deep: #3b1a7a;
     --card-glass: rgba(255, 255, 255, 0.03);
 }
 
@@ -17,6 +19,32 @@ body {
 
 .font-display {
     font-family: 'Outfit', sans-serif;
+}
+
+/* Los títulos reparten sus líneas parejas y los párrafos no dejan una palabra suelta */
+h1, h2, h3 {
+    text-wrap: balance;
+}
+
+p {
+    text-wrap: pretty;
+}
+
+::selection {
+    background: var(--primary);
+    color: #fff;
+}
+
+/* Foco de teclado en la home: violeta sobre claro, amarillo sobre las secciones oscuras */
+.home a:focus-visible,
+.home button:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 3px;
+}
+
+.home .on-dark a:focus-visible,
+.home .on-dark button:focus-visible {
+    outline-color: var(--secondary);
 }
 
 /* Material Icons */

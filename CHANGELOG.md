@@ -7,6 +7,35 @@ CLAUDE.md). La versión publicada se ve en `/version.json`.
 
 ## [Sin publicar]
 
+## [1.1.0] - 2026-11-13
+
+### Añadido
+- La home promociona el curso «Haz realidad tu proyecto cultural»: sale en la portada con
+  su precio y tiene su propia sección con el tráiler, fotogramas de las clases, el temario
+  y el botón de compra. El curso y el precio se leen de la API al compilar; si la preventa
+  termina antes del siguiente despliegue, la página muestra sola el precio normal.
+- El ebook muestra su precio en la home.
+- Los fotogramas del curso se amplían en una vista previa, como las páginas del ebook.
+
+### Cambiado
+- Portada nueva de la home: fondo violeta, titular en mayúsculas, Karolay recortada de un
+  fotograma del curso sobre un bloque rosa y el curso en un panel blanco.
+- La formación de Karolay y sus cifras pasan a una sección «Formación y trayectoria»; los
+  servicios se leen como lista y los proyectos son dos, más grandes (el curso tiene su
+  sección).
+- «Cursos» sube al segundo lugar del menú.
+- Textos grises con más contraste, títulos en el orden correcto y foco de teclado visible
+  en la home.
+- En «Formación y trayectoria», el Diplomado en Gestión Cultural indica dónde se cursó (UARM).
+- La «Vista previa» del ebook ocupa todo el ancho: el texto a la izquierda y las tres
+  páginas (portada, contenido y autora) más grandes a la derecha, cada una con su nombre.
+  En el móvil las páginas se deslizan de lado.
+
+### Corregido
+- Logos de «Confían en mí» mal espaciados: ahora van recortados al ras de su dibujo y con
+  el mismo espacio entre uno y otro. Sale de la lista el de Cinergia, cuyo archivo es una
+  imagen en blanco.
+
 ## [1.0.1] - 2026-11-05
 
 ### Corregido

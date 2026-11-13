@@ -1,0 +1,115 @@
+---
+// CourseFeature Component - Promoción del curso en la home: tráiler, precio y temario
+import TrailerFacade from './platform/TrailerFacade';
+import { duration, soles } from '../lib/platform/format';
+import { presale, type FeaturedCourse } from '../lib/platform/featured';
+
+interface Props {
+    featured: FeaturedCourse;
+}
+
+const { course, lessons, live } = Astro.props.featured;
+const offer = presale(course);
+const coursePath = `/cursos/${course.slug}`;
+
+// Fotogramas de las clases, para mostrar cómo se ve el curso por dentro.
+const shots = [
+    { src: `/cursos/${course.slug}/clase-en-el-set.webp`, alt: 'Karolay Ramírez dicta una clase en el set de Hablando Cultura', caption: 'Clases grabadas en el set de Hablando Cultura' },
+    { src: `/cursos/${course.slug}/esquema-del-proyecto.webp`, alt: 'Lámina del curso con las cuatro etapas del proyecto cultural', caption: 'Esquemas para formular tu proyecto, etapa por etapa' },
+    { src: `/cursos/${course.slug}/analisis-pestel.webp`, alt: 'Lámina del curso sobre el análisis PESTEL', caption: 'Herramientas como el análisis PESTEL y el FODA' },
+];
+
+const facts = ['Curso en video'];
+if (live) facts.push(`${course.lesson_count} lecciones`, `${duration(course.total_duration_seconds)} de video`);
+---
+
+<section class="on-dark bg-[var(--violet-deep)] text-white" id="curso">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 py-20 lg:py-28">
+        <div class="grid gap-12 lg:grid-cols-12 lg:gap-16 lg:items-center">
+            <div class="lg:col-span-5">
+                <h2 class="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.05]">{course.title}</h2>
+                <ul class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm font-bold uppercase tracking-wide text-[var(--secondary)]">
+                    {facts.map((fact) => <li>{fact}</li>)}
+                </ul>
+                {course.subtitle && <p class="mt-6 text-xl lg:text-2xl text-violet-50">{course.subtitle}</p>}
+                {course.description && <p class="mt-4 max-w-[60ch] text-violet-200 leading-relaxed">{course.description}</p>}
+
+                <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-6">
+                    {live && (offer.active ? (
+                        <p data-presale-until={offer.until}>
+                            <span data-price="presale">
+                                <span class="font-display text-4xl font-extrabold">{soles(course.current_price_cents)}</span>
+                                <s class="ml-2 text-lg text-violet-300">{soles(course.price_cents)}</s>
+                                <span class="mt-1 block text-sm text-violet-200">
+                                    Precio de preventa{offer.untilLabel && ` hasta el ${offer.untilLabel}`}
+                                </span>
+                            </span>
+                            <span data-price="regular" hidden>
+                                <span class="font-display text-4xl font-extrabold">{soles(course.price_cents)}</span>
+                            </span>
+                        </p>
+                    ) : (
+                        <p class="font-display text-4xl font-extrabold">{soles(course.current_price_cents)}</p>
+                    ))}
+                    <a class="px-8 py-4 bg-[var(--secondary)] text-violet-950 font-bold rounded-full transition-colors hover:bg-yellow-300" href={coursePath}>
+                        Quiero el curso
+                    </a>
+                </div>
+                {course.prerequisites && <p class="mt-6 max-w-[60ch] text-sm text-violet-200">{course.prerequisites}</p>}
+            </div>
+
+            <div class="lg:col-span-7">
+                <div class="aspect-video overflow-hidden rounded-3xl bg-violet-950 shadow-[0_30px_60px_-20px_rgba(0,0,0,0.7)]">
+                    {course.trailer_playback_id ? (
+                        <TrailerFacade client:visible playbackId={course.trailer_playback_id} title={course.title} poster={course.cover_url} />
+                    ) : (
+                        course.cover_url && <img src={course.cover_url} alt="" class="h-full w-full object-cover" />
+                    )}
+                </div>
+            </div>
+        </div>
+
+        <ul class="mt-16 grid gap-8 sm:grid-cols-3 sm:gap-6 lg:mt-20">
+            {shots.map((shot) => (
+                <li>
+                    <a href={shot.src} class="glightbox group block cursor-zoom-in overflow-hidden rounded-2xl" data-gallery="curso-preview" data-description={shot.caption} aria-label={`Ampliar imagen: ${shot.caption}`}>
+                        <img src={shot.src} alt={shot.alt} width="1280" height="720" loading="lazy" class="aspect-video w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105" />
+                    </a>
+                    <p class="mt-3 text-sm text-violet-200">{shot.caption}</p>
+                </li>
+            ))}
+        </ul>
+
+        {lessons.length > 0 && (
+            <div class="mt-16 lg:mt-20">
+                <div class="flex flex-wrap items-end justify-between gap-4">
+                    <h3 class="font-display text-2xl lg:text-3xl font-bold">Contenido del curso</h3>
+                    <a class="inline-flex items-center gap-2 font-bold text-[var(--secondary)] underline-offset-4 hover:underline" href={coursePath}>
+                        Ver el temario completo <span class="material-symbols-outlined" aria-hidden="true">arrow_right_alt</span>
+                    </a>
+                </div>
+                <ol class="mt-8 grid sm:grid-cols-2 sm:gap-x-12 lg:grid-cols-3">
+                    {lessons.map((lesson) => (
+                        <li class="flex gap-5 border-t border-white/15 py-5">
+                            <span class="font-display text-xl font-bold tabular-nums text-[var(--secondary)]">{lesson.position}</span>
+                            <div>
+                                <p class="font-semibold leading-snug">{lesson.title}</p>
+                                <p class="mt-1 text-sm text-violet-200">
+                                    {lesson.module_title && `${lesson.module_title} · `}{duration(lesson.duration_seconds)}
+                                </p>
+                            </div>
+                        </li>
+                    ))}
+                </ol>
+            </div>
+        )}
+    </div>
+</section>
+
+<script>
+    // Los fotogramas se amplían en una vista previa, como las páginas del ebook.
+    import GLightbox from 'glightbox';
+    import 'glightbox/dist/css/glightbox.min.css';
+
+    GLightbox({ selector: '#curso .glightbox', touchNavigation: true, loop: true, zoomable: true, draggable: true });
+</script>

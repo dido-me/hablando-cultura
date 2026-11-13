@@ -7,13 +7,16 @@ interface Props {
   playbackId: string;
   title: string;
   poster?: string;
+  // En la home el reproductor aparece después de un clic, así que arranca solo.
+  autoPlay?: boolean;
 }
 
-export default function TrailerPlayer({ playbackId, title, poster }: Props) {
+export default function TrailerPlayer({ playbackId, title, poster, autoPlay = false }: Props) {
   return (
     <MuxPlayer
       playbackId={playbackId}
       poster={poster}
+      autoPlay={autoPlay}
       metadata={{ video_title: `${title} · Tráiler` }}
       streamType="on-demand"
       accentColor="#6d28d9"
