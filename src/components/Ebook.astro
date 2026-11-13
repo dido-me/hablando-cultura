@@ -1,6 +1,6 @@
 ---
 // Ebook Component - Sección promocional del E-book
-import { soles } from '../lib/platform/format';
+import PriceOffer from './PriceOffer.astro';
 import { presale } from '../lib/platform/featured';
 import type { Course } from '../lib/platform/types';
 
@@ -27,20 +27,11 @@ const offer = ebook ? presale(ebook) : null;
             <h2 class="font-display text-4xl lg:text-5xl font-bold text-slate-900">10 Pasos para tu Proyecto Cultural</h2>
             <p class="mt-5 max-w-xl text-lg text-violet-950/75">Empieza hoy mismo con la metodología que he perfeccionado en más de 10 años de carrera.</p>
             <div class="mt-8 flex flex-wrap items-center gap-x-8 gap-y-6">
-                {ebook && offer && (offer.active ? (
-                    <p data-presale-until={offer.until}>
-                        <span data-price="presale">
-                            <span class="font-display text-4xl font-extrabold text-slate-900">{soles(ebook.current_price_cents)}</span>
-                            <s class="ml-2 text-lg text-violet-950/75">{soles(ebook.price_cents)}</s>
-                            <span class="mt-1 block text-sm font-semibold text-violet-950/75">Precio especial</span>
-                        </span>
-                        <span data-price="regular" hidden>
-                            <span class="font-display text-4xl font-extrabold text-slate-900">{soles(ebook.price_cents)}</span>
-                        </span>
+                {ebook && (
+                    <p>
+                        <PriceOffer product={ebook} tone="lavender" note={offer?.active ? 'Precio especial' : undefined} />
                     </p>
-                ) : (
-                    <p class="font-display text-4xl font-extrabold text-slate-900">{soles(ebook.current_price_cents)}</p>
-                ))}
+                )}
                 <a href="/ebook" class="px-8 py-4 bg-[var(--primary)] text-white font-bold rounded-full transition-colors hover:bg-violet-800">
                     Quiero mi ebook
                 </a>
