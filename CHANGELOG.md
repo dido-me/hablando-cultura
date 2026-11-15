@@ -7,6 +7,8 @@ CLAUDE.md). La versión publicada se ve en `/version.json`.
 
 ## [Sin publicar]
 
+## [1.3.0] - 2026-11-15
+
 ### Cambiado
 - Foto nueva de Karolay en la portada de la home: un retrato de estudio, recortado, en
   lugar del fotograma del curso.
