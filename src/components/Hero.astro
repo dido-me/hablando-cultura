@@ -1,6 +1,6 @@
 ---
-// Hero Component - Portada de la home: el titular, Karolay recortada de un fotograma del
-// curso sobre un bloque rosa, el curso en un panel blanco y su tarjeta de presentación.
+// Hero Component - Portada de la home: el titular, el retrato recortado de Karolay sobre
+// un bloque rosa, el curso en un panel blanco y su tarjeta de presentación.
 import PriceOffer from './PriceOffer.astro';
 import { duration } from '../lib/platform/format';
 import { presale, type FeaturedCourse } from '../lib/platform/featured';
@@ -41,7 +41,7 @@ const allies = [
             <div class="hero-block" aria-hidden="true"></div>
             <div class="hero-stripe hero-stripe-a" aria-hidden="true"></div>
             <div class="hero-stripe hero-stripe-b" aria-hidden="true"></div>
-            <img class="hero-figure" src="/fotos-karolay/karolay-curso.webp" alt="Karolay Ramírez" width="824" height="962" fetchpriority="high" />
+            <img class="hero-figure" src="/fotos-karolay/karolay-portada.webp" alt="Karolay Ramírez" width="999" height="895" fetchpriority="high" />
         </div>
 
         <a class="hero-card group" href="#proyectos">
@@ -135,14 +135,14 @@ const allies = [
     /* Karolay sobre el bloque rosa: la figura sale por arriba del bloque */
     .hero-stage {
         position: relative;
-        height: 22rem;
+        height: 19rem;
         margin-top: 1rem;
     }
 
     .hero-block {
         position: absolute;
         inset: auto 0 0 0;
-        height: 12rem;
+        height: 10rem;
         background: var(--hero-pink);
     }
 
@@ -228,7 +228,7 @@ const allies = [
     @media (min-width: 1024px) {
         .hero {
             --hero-height: 46rem;
-            --block-height: 14rem;
+            --block-height: 12rem;
             --block-bottom: 5rem;
             min-height: var(--hero-height);
         }
@@ -270,7 +270,7 @@ const allies = [
             left: 24rem;
             right: 2rem;
             bottom: var(--block-bottom);
-            height: 26rem;
+            height: 22rem;
             margin: 0;
         }
 
@@ -292,8 +292,9 @@ const allies = [
             right: 0;
         }
 
+        /* El retrato es ancho (brazos en jarra): se corre a la izquierda para no tapar el panel */
         .hero-figure {
-            left: 0;
+            left: -0.5rem;
             transform: none;
         }
 
@@ -359,7 +360,7 @@ const allies = [
         }
 
         .hero-figure {
-            left: 1rem;
+            left: -1rem;
         }
 
         .hero-card {
