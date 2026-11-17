@@ -7,6 +7,10 @@ CLAUDE.md). La versión publicada se ve en `/version.json`.
 
 ## [Sin publicar]
 
+### Corregido
+- El retrato de Karolay en la portada ya no muestra un borde claro en el cabello: era el
+  fondo gris del estudio que se colaba en el contorno del recorte.
+
 ## [1.3.0] - 2026-11-15
 
 ### Cambiado
