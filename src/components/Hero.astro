@@ -14,11 +14,12 @@ const offer = presale(course);
 const coursePath = `/cursos/${course.slug}`;
 
 // Logos recortados al ras de su dibujo (los originales traen márgenes distintos, que
-// descuadran el espaciado). Cada uno lleva su alto para que los tres pesen parecido.
+// descuadran el espaciado). Cada uno lleva su alto para que todos pesen parecido.
 const allies = [
-    { src: '/marcas/recortes/festival-de-cine-de-ancash.webp', alt: 'Festival de Cine de Áncash', width: 342, height: 176, show: '2.75rem' },
-    { src: '/marcas/recortes/vmf-pro.webp', alt: 'VMF Pro', width: 398, height: 128, show: '2rem' },
-    { src: '/marcas/recortes/veltrac.webp', alt: 'Veltrac', width: 406, height: 96, show: '1.5rem' },
+    { src: '/marcas/recortes/festival-de-cine-de-ancash.webp', alt: 'Festival de Cine de Áncash', width: 342, height: 176, show: '2.25rem' },
+    { src: '/marcas/recortes/vmf-pro.webp', alt: 'VMF Pro', width: 398, height: 128, show: '1.5rem' },
+    { src: '/marcas/recortes/veltrac.webp', alt: 'Veltrac', width: 406, height: 96, show: '1.25rem' },
+    { src: '/marcas/recortes/antimateria-creative.webp', alt: 'Antimateria+ Creative', width: 249, height: 240, show: '2.25rem' },
 ];
 ---
 
@@ -199,7 +200,7 @@ const allies = [
         display: flex;
         align-items: center;
         min-width: 0;
-        height: 2.75rem;
+        height: 2.25rem;
     }
 
     .hero-allies img {
