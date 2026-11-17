@@ -7,6 +7,8 @@ CLAUDE.md). La versión publicada se ve en `/version.json`.
 
 ## [Sin publicar]
 
+## [1.4.0] - 2026-11-17
+
 ### Añadido
 - Logo de Antimateria+ Creative, con quienes se grabó el curso, entre los aliados de la
   portada y en la sección «Confían en mí».
