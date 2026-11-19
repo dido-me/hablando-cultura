@@ -21,7 +21,8 @@ const fallbackCourse: Course = {
   slug: FEATURED_COURSE_SLUG,
   kind: 'course',
   title: 'Haz realidad tu proyecto cultural',
-  subtitle: 'Convierte tu idea cultural en un proyecto real.',
+  subtitle:
+    'Convierte tu idea cultural en un proyecto estructurado y aprende a prepararlo para postular a concursos, fondos públicos, convocatorias internacionales y oportunidades de patrocinio.',
   description:
     'Curso en video para quienes desean emprender en el arte y la cultura. Recorre paso a paso las cuatro etapas para formular un proyecto cultural (análisis contextual, diagnóstico, producción y evaluación) y prepáralo para presentarlo a fondos públicos, convocatorias internacionales o patrocinadores.',
   cover_url: '/portadas/haz-realidad-tu-proyecto-cultural.jpg',
@@ -72,3 +73,43 @@ export function presale(course: Course) {
     untilLabel: until ? dayMonth.format(new Date(until)) : undefined,
   };
 }
+
+// Lo que la API no guarda del curso destacado y su página muestra: las cuatro etapas del
+// curso y las fotos de quienes ya lo llevaron (en public/cursos/<slug>/alumnos/).
+export interface CoursePhoto {
+  src: string;
+  // Versión pequeña para la grilla; la grande se abre en la vista previa.
+  thumb: string;
+  width: number;
+  height: number;
+  alt: string;
+  caption: string;
+}
+
+export const COURSE_STAGES = [
+  { icon: 'search', label: 'Análisis contextual' },
+  { icon: 'bar_chart', label: 'Diagnóstico del proyecto' },
+  { icon: 'settings', label: 'Producción' },
+  { icon: 'fact_check', label: 'Evaluación' },
+];
+
+const photosDir = `/cursos/${FEATURED_COURSE_SLUG}/alumnos`;
+const photo = (name: string, width: number, height: number, alt: string, caption: string): CoursePhoto => ({
+  src: `${photosDir}/${name}.webp`,
+  thumb: `${photosDir}/${name}-sm.webp`,
+  width,
+  height,
+  alt,
+  caption,
+});
+
+// Primero las que se ven en clase, como pidió Karolay. Medidas de la versión pequeña.
+export const COURSE_PHOTOS: CoursePhoto[] = [
+  photo('01-clase-huaraz', 640, 480, 'Karolay Ramírez explica el diagnóstico del proyecto en la clase presencial de Huaraz', 'Curso presencial en Huaraz'),
+  photo('02-promocion-pucp', 640, 480, 'Alumnos de la PUCP posan con Karolay Ramírez en el aula', 'Promoción de la PUCP'),
+  photo('03-clase-virtual', 1131, 480, 'Clase virtual del curso por Zoom con Karolay Ramírez y sus alumnos', 'Edición virtual'),
+  photo('04-grupo-huaraz', 640, 480, 'Grupo del curso Haz realidad tu proyecto cultural en la Dirección Desconcentrada de Cultura de Áncash', 'Curso presencial en Huaraz'),
+  photo('05-promocion-pucp', 1239, 480, 'Promoción de la PUCP con Karolay Ramírez en el aula', 'Promoción de la PUCP'),
+  photo('06-promocion-pucp', 1008, 480, 'Otra promoción de la PUCP con Karolay Ramírez frente a la pizarra', 'Promoción de la PUCP'),
+  photo('07-taller-virtual', 618, 480, 'Cierre de una edición virtual del curso de formulación de proyectos culturales', 'Edición virtual'),
+];

@@ -1,6 +1,8 @@
 ---
 // Hero Component - Portada de la home: el titular, el retrato recortado de Karolay sobre
-// un bloque rosa, el curso en un panel blanco y su tarjeta de presentación.
+// un bloque rosa, el curso en un panel blanco y, en escritorio, su tarjeta de presentación.
+// En el celular la tarjeta no va: debajo del retrato distraía del curso, y su presentación
+// queda en «Formación y trayectoria».
 import PriceOffer from './PriceOffer.astro';
 import { duration } from '../lib/platform/format';
 import { presale, type FeaturedCourse } from '../lib/platform/featured';
@@ -27,14 +29,14 @@ const allies = [
     <div class="hero-inner">
         <div class="hero-copy">
             <h1 class="hero-title font-display font-extrabold uppercase">
-                Atrévete a emprender en arte y cultura
+                Transforma tus ideas en proyectos
             </h1>
             <p class="hero-lead">
-                Yo te acompaño para hacer realidad tu sueño. Estrategia y gestión para proyectos que impactan.
+                Te acompaño a convertir tus iniciativas en oportunidades.
             </p>
-            <a class="hero-action" href="#curso">
+            <a class="hero-action group" href={coursePath}>
                 Conoce el curso
-                <span class="material-symbols-outlined" aria-hidden="true">arrow_downward</span>
+                <span class="material-symbols-outlined transition-transform duration-300 ease-out group-hover:translate-x-1" aria-hidden="true">arrow_forward</span>
             </a>
         </div>
 
@@ -167,10 +169,9 @@ const allies = [
     }
 
     .hero-card {
-        display: flex;
+        display: none;
         align-items: center;
         gap: 1rem;
-        padding: 2rem 0;
     }
 
     .hero-panel {
@@ -300,9 +301,9 @@ const allies = [
         }
 
         .hero-card {
+            display: flex;
             margin-top: auto;
             max-width: 20rem;
-            padding: 0;
         }
 
         .hero-panel {
