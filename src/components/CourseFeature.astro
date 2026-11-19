@@ -1,9 +1,11 @@
 ---
-// CourseFeature Component - Promoción del curso en la home: tráiler, precio y temario
+// CourseFeature Component - Promoción del curso en la home: tráiler, precio y temario.
+// Poco texto y el botón de compra a la vista: las etapas del curso en lugar de la
+// descripción completa, que queda en la página del curso.
 import PriceOffer from './PriceOffer.astro';
 import TrailerFacade from './platform/TrailerFacade';
 import { duration } from '../lib/platform/format';
-import { presale, type FeaturedCourse } from '../lib/platform/featured';
+import { COURSE_STAGES, presale, type FeaturedCourse } from '../lib/platform/featured';
 
 interface Props {
     featured: FeaturedCourse;
@@ -21,7 +23,7 @@ const shots = [
 ];
 
 const facts = ['Curso en video'];
-if (live) facts.push(`${course.lesson_count} lecciones`, `${duration(course.total_duration_seconds)} de video`);
+if (live) facts.push(`${course.lesson_count} lecciones`, duration(course.total_duration_seconds));
 ---
 
 <section class="on-dark bg-[var(--violet-deep)] text-white" id="curso">
@@ -29,13 +31,27 @@ if (live) facts.push(`${course.lesson_count} lecciones`, `${duration(course.tota
         <div class="grid gap-12 lg:grid-cols-12 lg:gap-16 lg:items-center">
             <div class="lg:col-span-5">
                 <h2 class="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.05]">{course.title}</h2>
-                <ul class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm font-bold uppercase tracking-wide text-[var(--secondary)]">
-                    {facts.map((fact) => <li>{fact}</li>)}
+                <ul class="mt-6 flex flex-wrap items-center gap-y-2 text-xs font-bold uppercase tracking-wide text-[var(--secondary)] sm:text-sm">
+                    {facts.map((fact, i) => (
+                        <li class="flex items-center">
+                            {i > 0 && <span class="mx-2.5 h-3.5 w-px bg-[var(--secondary)]/50 sm:mx-3" aria-hidden="true"></span>}
+                            {fact}
+                        </li>
+                    ))}
                 </ul>
-                {course.subtitle && <p class="mt-6 text-xl lg:text-2xl text-violet-50">{course.subtitle}</p>}
-                {course.description && <p class="mt-4 max-w-[60ch] text-violet-200 leading-relaxed">{course.description}</p>}
+                {course.subtitle && <p class="mt-6 max-w-[48ch] text-lg lg:text-xl text-violet-50 leading-snug">{course.subtitle}</p>}
+                <ul class="mt-6 space-y-2.5" aria-label="Etapas del curso">
+                    {COURSE_STAGES.map((stage) => (
+                        <li class="flex items-center gap-3 font-semibold text-white">
+                            <span class="flex h-8 w-8 flex-none items-center justify-center rounded-lg bg-white/10 ring-1 ring-white/20">
+                                <span class="material-symbols-outlined text-lg text-violet-100" aria-hidden="true">{stage.icon}</span>
+                            </span>
+                            {stage.label}
+                        </li>
+                    ))}
+                </ul>
 
-                <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-6">
+                <div class="mt-8 flex flex-wrap items-center gap-x-8 gap-y-6">
                     {live && (
                         <p>
                             <PriceOffer product={course} tone="dark" note={offer.active ? `Precio de preventa${offer.untilLabel ? ` hasta el ${offer.untilLabel}` : ''}` : undefined} />
@@ -45,7 +61,6 @@ if (live) facts.push(`${course.lesson_count} lecciones`, `${duration(course.tota
                         Quiero el curso
                     </a>
                 </div>
-                {course.prerequisites && <p class="mt-6 max-w-[60ch] text-sm text-violet-200">{course.prerequisites}</p>}
             </div>
 
             <div class="lg:col-span-7">
@@ -74,7 +89,7 @@ if (live) facts.push(`${course.lesson_count} lecciones`, `${duration(course.tota
             <div class="mt-16 lg:mt-20">
                 <div class="flex flex-wrap items-end justify-between gap-4">
                     <h3 class="font-display text-2xl lg:text-3xl font-bold">Contenido del curso</h3>
-                    <a class="inline-flex items-center gap-2 font-bold text-[var(--secondary)] underline-offset-4 hover:underline" href={coursePath}>
+                    <a class="inline-flex items-center gap-2 font-bold text-[var(--secondary)] underline-offset-4 hover:underline" href={`${coursePath}#contenido`}>
                         Ver el temario completo <span class="material-symbols-outlined" aria-hidden="true">arrow_right_alt</span>
                     </a>
                 </div>

@@ -7,6 +7,27 @@ CLAUDE.md). La versión publicada se ve en `/version.json`.
 
 ## [Sin publicar]
 
+### Añadido
+- «Ellos ya llevaron el curso» en la página del curso, debajo de la compra: fotos de las
+  promociones de la PUCP, del curso presencial en Huaraz y de las ediciones virtuales, con
+  las de clase primero. Se amplían en una vista previa.
+- Las cuatro etapas del curso (análisis contextual, diagnóstico, producción y evaluación)
+  con íconos, en la home y en la página del curso.
+- Cierre de la página del curso con el precio y el botón «Quiero el curso».
+
+### Cambiado
+- Portada de la home con el texto que pidió Karolay: «Transforma tus ideas en proyectos» y
+  «Te acompaño a convertir tus iniciativas en oportunidades».
+- «Conoce el curso» lleva directo a la página del curso en lugar de bajar al resumen.
+- En el celular, la tarjeta de presentación de Karolay sale de la portada (distraía del
+  curso) y pasa a «Formación y trayectoria».
+- La sección del curso en la home tiene menos texto: el subtítulo, las etapas, el precio y
+  el botón de compra a la vista.
+- Página del curso con menos texto de corrido: arriba lo justo para decidir y, en el
+  celular, la compra antes del tráiler; las lecciones, lo que aprenderás, para quién es y
+  la descripción se abren con «+».
+- En la tarjeta de compra el botón va junto al precio y lo que incluye, debajo.
+
 ## [1.4.0] - 2026-11-17
 
 ### Añadido
