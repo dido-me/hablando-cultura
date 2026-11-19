@@ -7,6 +7,13 @@ CLAUDE.md). La versión publicada se ve en `/version.json`.
 
 ## [Sin publicar]
 
+## [1.5.2] - 2026-11-19
+
+### Corregido
+- La portada en escritorio ya no deja un vacío grande abajo a la izquierda tras quitar la
+  tarjeta de Karolay: es más baja, el bloque rosa asienta en el borde de abajo como en el
+  celular y el titular con su botón quedan centrados en el alto.
+
 ## [1.5.1] - 2026-11-19
 
 ### Corregido

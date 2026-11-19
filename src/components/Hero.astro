@@ -208,12 +208,14 @@ const allies = [
         }
     }
 
-    /* Escritorio: todo en un solo pantallazo, con el panel blanco pegado arriba a la derecha */
+    /* Escritorio: todo en un solo pantallazo, con el panel blanco pegado arriba a la derecha.
+       El alto alcanza justo para el panel sobre el bloque rosa, que asienta en el borde de
+       abajo como en el celular; el texto se centra en ese alto, sin vacío debajo. */
     @media (min-width: 1024px) {
         .hero {
-            --hero-height: 46rem;
+            --hero-height: 39rem;
             --block-height: 12rem;
-            --block-bottom: 5rem;
+            --block-bottom: 0rem;
             min-height: var(--hero-height);
         }
 
@@ -221,17 +223,15 @@ const allies = [
         .hero-inner {
             display: flex;
             flex-direction: column;
+            justify-content: center;
             min-height: var(--hero-height);
-            padding: 4rem 2rem 3rem;
+            padding: 3rem 2rem;
             pointer-events: none;
         }
 
         .hero-copy {
-            pointer-events: auto;
-        }
-
-        .hero-copy {
             max-width: 28rem;
+            pointer-events: auto;
         }
 
         .hero-title {
@@ -306,7 +306,7 @@ const allies = [
 
     @media (min-width: 1280px) {
         .hero {
-            --hero-height: 49rem;
+            --hero-height: 43rem;
             --block-height: 16rem;
         }
 
