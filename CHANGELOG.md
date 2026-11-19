@@ -7,6 +7,8 @@ CLAUDE.md). La versión publicada se ve en `/version.json`.
 
 ## [Sin publicar]
 
+## [1.5.0] - 2026-11-19
+
 ### Añadido
 - «Ellos ya llevaron el curso» en la página del curso, debajo de la compra: fotos de las
   promociones de la PUCP, del curso presencial en Huaraz y de las ediciones virtuales, con
