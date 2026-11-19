@@ -7,6 +7,13 @@ CLAUDE.md). La versión publicada se ve en `/version.json`.
 
 ## [Sin publicar]
 
+## [1.5.1] - 2026-11-19
+
+### Corregido
+- La tarjeta de presentación de Karolay también sale de la portada en escritorio, como pidió
+  en su revisión: junto al retrato distraía del curso. Ahora abre «Formación y trayectoria»
+  en todos los tamaños.
+
 ## [1.5.0] - 2026-11-19
 
 ### Añadido
