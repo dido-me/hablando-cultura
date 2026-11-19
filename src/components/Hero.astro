@@ -1,8 +1,7 @@
 ---
 // Hero Component - Portada de la home: el titular, el retrato recortado de Karolay sobre
-// un bloque rosa, el curso en un panel blanco y, en escritorio, su tarjeta de presentación.
-// En el celular la tarjeta no va: debajo del retrato distraía del curso, y su presentación
-// queda en «Formación y trayectoria».
+// un bloque rosa y el curso en un panel blanco. Su tarjeta de presentación ya no va aquí:
+// junto al retrato distraía del curso (revisión de Karolay); está en «Formación y trayectoria».
 import PriceOffer from './PriceOffer.astro';
 import { duration } from '../lib/platform/format';
 import { presale, type FeaturedCourse } from '../lib/platform/featured';
@@ -47,17 +46,6 @@ const allies = [
             <img class="hero-figure" src="/fotos-karolay/karolay-portada.webp" alt="Karolay Ramírez" width="999" height="895" fetchpriority="high" />
         </div>
 
-        <a class="hero-card group" href="#proyectos">
-            <img src="/fotos-karolay/1.webp" alt="" width="96" height="96" class="h-24 w-24 flex-none object-cover" />
-            <span class="min-w-0">
-                <span class="block font-display text-lg font-semibold">Karolay Ramírez</span>
-                <span class="mt-1 block text-sm text-violet-200">Comunicadora audiovisual, gestora cultural y docente</span>
-                <span class="mt-2 inline-flex items-center gap-2 font-semibold">
-                    Conoce mis proyectos
-                    <span class="material-symbols-outlined transition-transform duration-300 ease-out group-hover:translate-x-1" aria-hidden="true">arrow_right_alt</span>
-                </span>
-            </span>
-        </a>
     </div>
 
     <!-- El curso, a la vista desde el primer pantallazo -->
@@ -168,12 +156,6 @@ const allies = [
         transform: translateX(-50%);
     }
 
-    .hero-card {
-        display: none;
-        align-items: center;
-        gap: 1rem;
-    }
-
     .hero-panel {
         position: relative;
         z-index: 1;
@@ -244,8 +226,7 @@ const allies = [
             pointer-events: none;
         }
 
-        .hero-copy,
-        .hero-card {
+        .hero-copy {
             pointer-events: auto;
         }
 
@@ -298,12 +279,6 @@ const allies = [
         .hero-figure {
             left: -0.5rem;
             transform: none;
-        }
-
-        .hero-card {
-            display: flex;
-            margin-top: auto;
-            max-width: 20rem;
         }
 
         .hero-panel {
@@ -363,10 +338,6 @@ const allies = [
 
         .hero-figure {
             left: -1rem;
-        }
-
-        .hero-card {
-            max-width: 24rem;
         }
 
         .hero-panel {
