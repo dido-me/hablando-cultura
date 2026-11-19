@@ -1,12 +1,18 @@
 ---
 // Página de un curso: presentación y temario renderizados en el servidor, y la tarjeta
 // de compra como isla porque depende de la sesión del alumno.
+// Arriba va lo justo para decidir (qué es, sus etapas, el precio y el botón de compra) y,
+// debajo de la compra, las fotos de quienes ya lo llevaron. El resto del detalle se abre
+// con «+», para quien quiera leerlo.
 import PlatformLayout from '../../../layouts/PlatformLayout.astro';
 import CourseActions from '../../../components/platform/CourseActions';
 import CourseResources from '../../../components/platform/CourseResources';
 import TrailerPlayer from '../../../components/platform/TrailerPlayer';
+import CoursePhotos from '../../../components/CoursePhotos.astro';
+import PriceOffer from '../../../components/PriceOffer.astro';
 import { getCourse } from '../../../lib/platform/server';
 import { duration } from '../../../lib/platform/format';
+import { COURSE_PHOTOS, COURSE_STAGES, FEATURED_COURSE_SLUG, presale } from '../../../lib/platform/featured';
 
 const page = await getCourse(Astro.params.slug ?? '');
 if (!page) return Astro.redirect('/cursos', 302);
@@ -14,6 +20,8 @@ if (!page) return Astro.redirect('/cursos', 302);
 if (page.course.kind === 'ebook') return Astro.redirect('/ebook', 301);
 
 const { course, lessons, resources = [] } = page;
+const featured = course.slug === FEATURED_COURSE_SLUG;
+const offer = presale(course);
 
 // El temario se agrupa por bloque (module_title), como las etapas del curso.
 const modules: { title: string; lessons: typeof lessons }[] = [];
@@ -22,113 +30,158 @@ for (const lesson of lessons) {
 	if (last && last.title === (lesson.module_title ?? '')) last.lessons.push(lesson);
 	else modules.push({ title: lesson.module_title ?? '', lessons: [lesson] });
 }
+
+const facts = ['Curso en video', `${course.lesson_count} lecciones`, duration(course.total_duration_seconds)];
+
+// Secciones que se abren con «+».
+const more = [
+	course.objectives?.length && { title: 'Lo que aprenderás', items: course.objectives, icon: 'check_circle' },
+	course.audience?.length && { title: 'Este curso es para ti si…', items: course.audience, icon: 'arrow_right_alt' },
+].filter(Boolean) as { title: string; items: string[]; icon: string }[];
+const about = [course.description, course.prerequisites].filter(Boolean) as string[];
 ---
 
 <PlatformLayout title={course.title} description={course.subtitle ?? course.description}>
-	<section class="bg-[var(--lavender)]">
-		<div class="max-w-7xl mx-auto px-6 lg:px-8 py-14 grid gap-10 lg:grid-cols-[minmax(0,1fr)_24rem] lg:items-start">
-			<div>
-				<a href="/cursos" class="text-sm font-semibold text-slate-500 hover:text-[var(--primary)]">← Cursos</a>
-				<h1 class="mt-4 font-display text-4xl font-bold text-slate-900 md:text-5xl">{course.title}</h1>
-				{course.subtitle && <p class="mt-4 text-xl text-slate-600">{course.subtitle}</p>}
-				<p class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold text-slate-600">
-					<span>{course.lesson_count} lecciones</span>
-					<span>{duration(course.total_duration_seconds)} de video</span>
-					<span>Con Karolay Ramírez</span>
-				</p>
+	<section class="on-dark bg-[var(--violet-deep)] text-white">
+		<div class="max-w-7xl mx-auto px-6 lg:px-8 pt-8 pb-10 lg:py-14 grid gap-8 lg:grid-cols-[minmax(0,1fr)_24rem] lg:gap-x-12">
+			<div class="lg:col-start-1">
+				<a href="/cursos" class="mb-4 hidden text-sm font-semibold text-violet-200 hover:text-white sm:inline-block">← Cursos</a>
+				<h1 class="font-display text-4xl font-extrabold tracking-tight leading-[1.05] md:text-5xl">{course.title}</h1>
+				<ul class="mt-5 flex flex-wrap items-center gap-y-2 text-xs font-bold uppercase tracking-wide text-[var(--secondary)] sm:text-sm">
+					{facts.map((fact, i) => (
+						<li class="flex items-center">
+							{i > 0 && <span class="mx-2.5 h-3.5 w-px bg-[var(--secondary)]/50 sm:mx-3" aria-hidden="true"></span>}
+							{fact}
+						</li>
+					))}
+				</ul>
+				{course.subtitle && <p class="mt-5 max-w-[52ch] text-lg leading-snug text-violet-50 lg:text-xl">{course.subtitle}</p>}
+				{featured && (
+					<ul class="mt-6 space-y-2.5" aria-label="Etapas del curso">
+						{COURSE_STAGES.map((stage) => (
+							<li class="flex items-center gap-3 font-semibold">
+								<span class="flex h-8 w-8 flex-none items-center justify-center rounded-lg bg-white/10 ring-1 ring-white/20">
+									<span class="material-symbols-outlined text-lg text-violet-100" aria-hidden="true">{stage.icon}</span>
+								</span>
+								{stage.label}
+							</li>
+						))}
+					</ul>
+				)}
+			</div>
+
+			<!-- En el celular la compra va antes del tráiler, para que el botón se vea pronto -->
+			<div id="comprar" class="scroll-mt-24 lg:sticky lg:top-28 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-start">
+				<CourseActions client:load course={course} firstLessonSlug={lessons[0]?.slug} />
+			</div>
+
+			<div class="lg:col-start-1">
 				{course.trailer_playback_id ? (
-					<div class="mt-8 aspect-video overflow-hidden rounded-3xl bg-slate-900 shadow-lg">
+					<div class="aspect-video overflow-hidden rounded-3xl bg-violet-950 shadow-[0_30px_60px_-20px_rgba(0,0,0,0.7)]">
 						<TrailerPlayer client:only="react" playbackId={course.trailer_playback_id} title={course.title} poster={course.cover_url}>
 							{course.cover_url && <img slot="fallback" src={course.cover_url} alt={course.title} class="h-full w-full object-cover" />}
 						</TrailerPlayer>
 					</div>
 				) : (
-					course.cover_url && <img src={course.cover_url} alt={course.title} class="mt-8 aspect-video w-full rounded-3xl object-cover shadow-lg" />
+					course.cover_url && <img src={course.cover_url} alt={course.title} class="aspect-video w-full rounded-3xl object-cover shadow-lg" />
 				)}
-			</div>
-			<div class="lg:sticky lg:top-28">
-				<CourseActions client:load course={course} firstLessonSlug={lessons[0]?.slug} />
 			</div>
 		</div>
 	</section>
 
-	<div class="max-w-7xl mx-auto px-6 lg:px-8 py-14 grid gap-12 lg:grid-cols-[minmax(0,1fr)_24rem]">
-		<div class="space-y-12">
-			{course.description && (
-				<section>
-					<h2 class="font-display text-2xl font-bold text-slate-900">Sobre el curso</h2>
-					<p class="mt-4 whitespace-pre-line text-slate-600 leading-relaxed">{course.description}</p>
-				</section>
-			)}
+	{featured && <CoursePhotos photos={COURSE_PHOTOS} />}
 
-			{course.objectives && course.objectives.length > 0 && (
-				<section>
-					<h2 class="font-display text-2xl font-bold text-slate-900">Lo que aprenderás</h2>
-					<ul class="mt-4 grid gap-3 sm:grid-cols-2">
-						{course.objectives.map((objective) => (
-							<li class="flex gap-3 rounded-2xl bg-white p-4 text-sm text-slate-700 ring-1 ring-slate-100">
-								<span class="material-symbols-outlined text-[var(--primary)]">check_circle</span>
-								{objective}
-							</li>
-						))}
-					</ul>
-				</section>
-			)}
-
-			{course.audience && course.audience.length > 0 && (
-				<section>
-					<h2 class="font-display text-2xl font-bold text-slate-900">Este curso es para ti si…</h2>
-					<ul class="mt-4 space-y-2 text-slate-600">
-						{course.audience.map((item) => (
-							<li class="flex gap-3"><span class="text-[var(--primary)]">•</span>{item}</li>
-						))}
-					</ul>
-				</section>
-			)}
-
-			{course.prerequisites && (
-				<section>
-					<h2 class="font-display text-2xl font-bold text-slate-900">Antes de empezar</h2>
-					<p class="mt-4 text-slate-600">{course.prerequisites}</p>
-				</section>
-			)}
-
-			<section>
-				<h2 class="font-display text-2xl font-bold text-slate-900">Contenido del curso</h2>
-				<p class="mt-2 text-sm text-slate-500">{lessons.length} lecciones · {duration(course.total_duration_seconds)}</p>
-				<div class="mt-4 space-y-6">
-					{modules.map((module) => (
-						<div class="overflow-hidden rounded-3xl bg-white ring-1 ring-slate-100">
-							{module.title && (
-								<h3 class="border-b border-slate-100 bg-[var(--lavender)] px-6 py-3 text-sm font-bold text-[var(--primary)]">{module.title}</h3>
-							)}
-							<ol class="divide-y divide-slate-100">
-								{module.lessons.map((lesson) => (
-									<li class="flex items-start gap-4 px-6 py-4">
-										<span class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-violet-50 text-sm font-bold text-[var(--primary)]">{lesson.position}</span>
-										<div class="flex-1">
-											<p class="font-semibold text-slate-800">{lesson.title}</p>
-											{lesson.summary && <p class="mt-1 text-sm text-slate-500">{lesson.summary}</p>}
+	<div class="max-w-4xl mx-auto px-6 lg:px-8 py-14 space-y-12">
+		<section id="contenido" class="scroll-mt-24">
+			<h2 class="font-display text-2xl font-bold text-slate-900 lg:text-3xl">Contenido del curso</h2>
+			<p class="mt-2 text-sm text-slate-500">{lessons.length} lecciones · {duration(course.total_duration_seconds)} · Abre cada lección con «+» para ver de qué trata</p>
+			<div class="mt-6 space-y-6">
+				{modules.map((module) => (
+					<div class="overflow-hidden rounded-3xl bg-white ring-1 ring-slate-100">
+						{module.title && (
+							<h3 class="border-b border-slate-100 bg-[var(--lavender)] px-6 py-3 text-sm font-bold text-[var(--primary)]">{module.title}</h3>
+						)}
+						<ol class="divide-y divide-slate-100">
+							{module.lessons.map((lesson) => (
+								<li>
+									<details class="group">
+										<summary class="flex cursor-pointer list-none items-center gap-4 px-6 py-4 hover:bg-slate-50 [&::-webkit-details-marker]:hidden">
+											<span class="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-violet-50 text-sm font-bold text-[var(--primary)]">{lesson.position}</span>
+											<span class="flex-1 font-semibold text-slate-800">{lesson.title}</span>
+											<span class="whitespace-nowrap text-sm text-slate-400">{duration(lesson.duration_seconds)}</span>
+											<span class="material-symbols-outlined text-[var(--primary)] transition-transform duration-200 group-open:rotate-45" aria-hidden="true">add</span>
+										</summary>
+										<div class="px-6 pb-5 pl-[4.5rem] text-sm text-slate-600">
+											{lesson.summary && <p class="leading-relaxed">{lesson.summary}</p>}
+											{lesson.is_preview && <a href={`/cursos/${course.slug}/${lesson.slug}`} class="mt-2 inline-block font-semibold text-[var(--primary)] hover:underline">Ver gratis</a>}
 										</div>
-										<span class="whitespace-nowrap text-sm text-slate-400">{duration(lesson.duration_seconds)}</span>
-										{lesson.is_preview && <a href={`/cursos/${course.slug}/${lesson.slug}`} class="text-sm font-semibold text-[var(--primary)] hover:underline">Ver gratis</a>}
+									</details>
+								</li>
+							))}
+						</ol>
+					</div>
+				))}
+			</div>
+		</section>
+
+		{(more.length > 0 || about.length > 0) && (
+			<section>
+				<h2 class="font-display text-2xl font-bold text-slate-900 lg:text-3xl">Más sobre el curso</h2>
+				<div class="mt-6 divide-y divide-slate-200 border-y border-slate-200">
+					{more.map((block) => (
+						<details class="group">
+							<summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-5 font-display text-lg font-semibold text-slate-900 [&::-webkit-details-marker]:hidden">
+								{block.title}
+								<span class="material-symbols-outlined text-[var(--primary)] transition-transform duration-200 group-open:rotate-45" aria-hidden="true">add</span>
+							</summary>
+							<ul class="grid gap-3 pb-6 sm:grid-cols-2">
+								{block.items.map((item) => (
+									<li class="flex gap-3 text-slate-600">
+										<span class="material-symbols-outlined text-xl text-[var(--primary)]" aria-hidden="true">{block.icon}</span>
+										{item}
 									</li>
 								))}
-							</ol>
-						</div>
+							</ul>
+						</details>
 					))}
+					{about.length > 0 && (
+						<details class="group">
+							<summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-5 font-display text-lg font-semibold text-slate-900 [&::-webkit-details-marker]:hidden">
+								Sobre el curso
+								<span class="material-symbols-outlined text-[var(--primary)] transition-transform duration-200 group-open:rotate-45" aria-hidden="true">add</span>
+							</summary>
+							<div class="space-y-4 pb-6 leading-relaxed text-slate-600">
+								{about.map((text) => <p class="whitespace-pre-line">{text}</p>)}
+							</div>
+						</details>
+					)}
 				</div>
 			</section>
+		)}
 
-			{resources.length > 0 && (
-				<section>
-					<h2 class="font-display text-2xl font-bold text-slate-900">Materiales del curso</h2>
-					<p class="mt-2 text-sm text-slate-500">Para trabajar tu proyecto mientras avanzas en las lecciones.</p>
-					<div class="mt-4">
-						<CourseResources client:visible courseSlug={course.slug} resources={resources} />
-					</div>
-				</section>
-			)}
-		</div>
+		{resources.length > 0 && (
+			<section>
+				<h2 class="font-display text-2xl font-bold text-slate-900 lg:text-3xl">Materiales del curso</h2>
+				<p class="mt-2 text-sm text-slate-500">Para trabajar tu proyecto mientras avanzas en las lecciones.</p>
+				<div class="mt-4">
+					<CourseResources client:visible courseSlug={course.slug} resources={resources} />
+				</div>
+			</section>
+		)}
 	</div>
+
+	<!-- Cierre: el precio y el botón otra vez, para no tener que volver arriba -->
+	<section class="on-dark bg-[var(--violet-deep)] text-white">
+		<div class="max-w-4xl mx-auto px-6 lg:px-8 py-14 flex flex-col gap-8 sm:flex-row sm:items-center sm:justify-between">
+			<div>
+				<h2 class="font-display text-3xl font-extrabold tracking-tight">{course.title}</h2>
+				<p class="mt-4">
+					<PriceOffer product={course} tone="dark" size="md" note={offer.active && offer.untilLabel ? `Precio de preventa hasta el ${offer.untilLabel}` : undefined} />
+				</p>
+			</div>
+			<a class="flex-none self-start rounded-full bg-[var(--secondary)] px-8 py-4 font-bold text-violet-950 transition-colors hover:bg-yellow-300 sm:self-auto" href="#comprar">
+				Quiero el curso
+			</a>
+		</div>
+	</section>
 </PlatformLayout>
