@@ -97,26 +97,7 @@ export default function CourseActions({ course, firstLessonSlug, pagePath }: Pro
       </div>
       {presale && <p className="mt-3 text-sm font-semibold text-amber-700">{isEbook ? 'Precio especial' : `Precio de preventa hasta el ${date(course.presale_until!)}`}</p>}
 
-      <ul className="mt-5 space-y-2 text-sm text-slate-600">
-        {(isEbook
-          ? [
-              ['picture_as_pdf', 'Ebook en PDF'],
-              ['download', 'Descarga inmediata después del pago'],
-              ['all_inclusive', 'Disponible siempre en Mi cuenta'],
-            ]
-          : [
-              ['play_circle', `${course.lesson_count} lecciones en video · ${duration(course.total_duration_seconds)}`],
-              ['all_inclusive', 'Acceso sin fecha de vencimiento'],
-              ['subtitles', 'Subtítulos en español'],
-            ]
-        ).map(([icon, text]) => (
-          <li key={icon} className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-lg text-[var(--primary)]">{icon}</span>
-            {text}
-          </li>
-        ))}
-      </ul>
-
+      {/* El botón va pegado al precio y lo que incluye, debajo: así se ve sin bajar. */}
       <div className="mt-6 space-y-3">
         {loading ? (
           <div className="flex justify-center py-3">
@@ -226,6 +207,26 @@ export default function CourseActions({ course, firstLessonSlug, pagePath }: Pro
           </>
         )}
       </div>
+
+      <ul className="mt-6 space-y-2 border-t border-slate-100 pt-5 text-sm text-slate-600">
+        {(isEbook
+          ? [
+              ['picture_as_pdf', 'Ebook en PDF'],
+              ['download', 'Descarga inmediata después del pago'],
+              ['all_inclusive', 'Disponible siempre en Mi cuenta'],
+            ]
+          : [
+              ['play_circle', `${course.lesson_count} lecciones en video · ${duration(course.total_duration_seconds)}`],
+              ['all_inclusive', 'Acceso sin fecha de vencimiento'],
+              ['subtitles', 'Subtítulos en español'],
+            ]
+        ).map(([icon, text]) => (
+          <li key={icon} className="flex items-center gap-2">
+            <span className="material-symbols-outlined text-lg text-[var(--primary)]">{icon}</span>
+            {text}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

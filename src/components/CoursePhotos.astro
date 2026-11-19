@@ -1,0 +1,76 @@
+---
+// CoursePhotos Component - Fotos de quienes ya llevaron el curso, debajo de la compra.
+// Solo fotos, para no distraer: el texto de cada una aparece al pasar el cursor y en la
+// vista previa. Las panorámicas ocupan dos columnas; en el celular la grilla rellena los
+// huecos con la siguiente foto que quepa.
+import type { CoursePhoto } from '../lib/platform/featured';
+
+interface Props {
+    photos: CoursePhoto[];
+}
+
+const { photos } = Astro.props;
+---
+
+<section class="bg-white" id="alumnos">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 py-14 lg:py-20">
+        <h2 class="font-display text-3xl lg:text-4xl font-bold text-slate-900">Ellos ya llevaron el curso</h2>
+        <p class="mt-3 max-w-[60ch] text-lg text-slate-600">
+            Tres promociones de la PUCP, un curso presencial en Huaraz y tres ediciones virtuales.
+        </p>
+        <ul class="photo-grid mt-8">
+            {photos.map((photo) => (
+                <li class={photo.width / photo.height > 1.8 ? 'is-wide' : undefined}>
+                    <a href={photo.src} class="glightbox group relative block h-full cursor-zoom-in overflow-hidden rounded-2xl bg-slate-100" data-gallery="alumnos" data-description={photo.caption} aria-label={`Ampliar foto: ${photo.caption}`}>
+                        <img src={photo.thumb} alt={photo.alt} width={photo.width} height={photo.height} loading="lazy" class="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105" />
+                        <span class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent px-4 pb-3 pt-10 text-sm font-semibold text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100" aria-hidden="true">
+                            {photo.caption}
+                        </span>
+                    </a>
+                </li>
+            ))}
+        </ul>
+    </div>
+</section>
+
+<style>
+    .photo-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-auto-rows: 8rem;
+        grid-auto-flow: row dense;
+        gap: 0.5rem;
+    }
+
+    .photo-grid .is-wide {
+        grid-column: span 2;
+    }
+
+    @media (min-width: 640px) {
+        .photo-grid {
+            grid-auto-rows: 12rem;
+        }
+    }
+
+    /* Cinco columnas: las siete fotos llenan dos filas exactas, en su orden */
+    @media (min-width: 1024px) {
+        .photo-grid {
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            grid-auto-rows: 9.5rem;
+            gap: 0.75rem;
+        }
+    }
+
+    @media (min-width: 1280px) {
+        .photo-grid {
+            grid-auto-rows: 11rem;
+        }
+    }
+</style>
+
+<script>
+    import GLightbox from 'glightbox';
+    import 'glightbox/dist/css/glightbox.min.css';
+
+    GLightbox({ selector: '#alumnos .glightbox', touchNavigation: true, loop: true, zoomable: true, draggable: true });
+</script>
